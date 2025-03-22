@@ -2,6 +2,7 @@
 import { Clock, Users, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 export interface CourseCardProps {
   id: string;
@@ -18,6 +19,7 @@ export interface CourseCardProps {
 }
 
 const CourseCard = ({
+  id,
   title,
   description,
   image,
@@ -87,8 +89,13 @@ const CourseCard = ({
           <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-secondary">
             {level}
           </span>
-          <Button size="sm" variant="outline" className="group-hover:bg-primary group-hover:text-white transition-colors">
-            View Course
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="group-hover:bg-primary group-hover:text-white transition-colors"
+            asChild
+          >
+            <Link to={`/course/${id}`}>View Course</Link>
           </Button>
         </div>
       </div>
