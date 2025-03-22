@@ -26,7 +26,7 @@ const Features = () => {
     {
       icon: Users,
       title: 'Expert-Led Masterclasses & AI Mentorship',
-      description: 'Industry Expert Webinars – Live expert sessions on JEE GATE Engineering exams, Govt exams and preparation, machine AI, Cybersecurity, Leadership, and Career Growth.'
+      description: 'Industry Expert Webinars – Live expert sessions on JEE GATE Engineering exams, Govt exams and preparation, machine AI.'
     },
     {
       icon: FileCode,
