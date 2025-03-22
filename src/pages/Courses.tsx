@@ -118,7 +118,7 @@ const Courses = () => {
                 Explore Our Courses
               </h1>
               <p className="text-muted-foreground text-lg">
-                Discover our comprehensive course catalog designed to help MP Board students develop 
+                Discover our comprehensive course catalog designed to help Students develop 
                 essential skills for academic and professional success.
               </p>
             </div>

@@ -16,7 +16,7 @@ const Hero = () => {
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <div className="animate-fade-in">
             <div className="inline-block mb-4 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
-              Empowering MP Board Students with Digital Skills
+              Empowering Students with Digital Skills
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-balance">
               Transform Your Future with
@@ -26,7 +26,7 @@ const Hero = () => {
           
           <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto animate-fade-in [animation-delay:200ms]">
             Gain essential skills in MS Office, coding, public speaking, and career development 
-            through interactive courses designed for MP Board students.
+            through interactive courses designed for Students.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-fade-in [animation-delay:400ms]">

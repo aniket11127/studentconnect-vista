@@ -7,7 +7,7 @@ import {
   FileCode, 
   MicVocal, 
   FileEdit, 
-  Award, // Changed from Certificate to Award
+  Award,
   Lightbulb 
 } from 'lucide-react';
 
@@ -64,7 +64,7 @@ const Features = () => {
           </h2>
           <p className="text-muted-foreground text-lg">
             Our platform offers comprehensive tools and resources tailored specifically 
-            for MP Board students to excel in their academic and professional journeys.
+            for Students to excel in their academic and professional journeys.
           </p>
         </div>
 

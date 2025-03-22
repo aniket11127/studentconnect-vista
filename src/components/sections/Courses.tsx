@@ -66,7 +66,7 @@ const Courses = () => {
               Popular Courses to Boost Your Skills
             </h2>
             <p className="text-muted-foreground text-lg">
-              Explore our most sought-after courses designed specifically for MP Board students 
+              Explore our most sought-after courses designed specifically for Students 
               to excel in academics and build career-ready skills.
             </p>
           </div>

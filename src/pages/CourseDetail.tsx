@@ -175,7 +175,7 @@ const CourseDetail = () => {
                   <div className="p-6 space-y-6">
                     <div className="flex justify-between items-center">
                       <span className="text-2xl font-bold">{course.price}</span>
-                      <span className="text-sm text-muted-foreground">MP Board Students</span>
+                      <span className="text-sm text-muted-foreground">Students</span>
                     </div>
                     
                     <Button className="w-full" size="lg">Enroll Now</Button>
