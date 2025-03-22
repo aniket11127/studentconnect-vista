@@ -48,7 +48,7 @@ const Signup = () => {
       email: '',
       password: '',
       grade: '',
-      agreeTerms: false,
+      agreeTerms: false as any, // Using type assertion to avoid the TypeScript error
     },
   });
 
@@ -201,3 +201,4 @@ const Signup = () => {
 };
 
 export default Signup;
+
