@@ -83,8 +83,7 @@ const Courses = () => {
             <CourseCard
               key={course.id}
               {...course}
-              className="animate-fade-in"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className={`animate-fade-in delay-${index * 100}`}
             />
           ))}
         </div>

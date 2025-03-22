@@ -7,7 +7,7 @@ import {
   FileCode, 
   MicVocal, 
   FileEdit, 
-  Certificate, 
+  Award, // Changed from Certificate to Award
   Lightbulb 
 } from 'lucide-react';
 
@@ -44,7 +44,7 @@ const Features = () => {
       description: 'Create impressive resumes and LinkedIn profiles with AI-powered tools and expert tips.'
     },
     {
-      icon: Certificate,
+      icon: Award, // Changed from Certificate to Award
       title: 'Recognized Certification',
       description: 'Earn industry-recognized certificates validated by IIT Bombay and other institutions.'
     },
@@ -75,8 +75,7 @@ const Features = () => {
               title={feature.title}
               description={feature.description}
               icon={feature.icon}
-              className="animate-fade-in"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className={`animate-fade-in delay-${index * 100}`}
             />
           ))}
         </div>

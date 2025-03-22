@@ -22,7 +22,7 @@ const FeatureCard = ({
         className
       )}
     >
-      <div className="feature-icon group-hover:bg-primary/20 transition-colors">
+      <div className="p-3 rounded-lg bg-secondary group-hover:bg-primary/20 transition-colors">
         <Icon size={24} />
       </div>
       <div className="space-y-2">
