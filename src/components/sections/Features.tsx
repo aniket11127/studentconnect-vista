@@ -25,8 +25,8 @@ const Features = () => {
     },
     {
       icon: Users,
-      title: 'Live Sessions',
-      description: 'Participate in live classes and workshops with industry experts and experienced mentors.'
+      title: 'Expert-Led Masterclasses & AI Mentorship',
+      description: 'Industry Expert Webinars – Live expert sessions on JEE GATE Engineering exams, Govt exams and preparation, machine AI, Cybersecurity, Leadership, and Career Growth.'
     },
     {
       icon: FileCode,
@@ -44,7 +44,7 @@ const Features = () => {
       description: 'Create impressive resumes and LinkedIn profiles with AI-powered tools and expert tips.'
     },
     {
-      icon: Award, // Changed from Certificate to Award
+      icon: Award,
       title: 'Recognized Certification',
       description: 'Earn industry-recognized certificates validated by IIT Bombay and other institutions.'
     },
