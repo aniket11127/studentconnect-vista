@@ -70,12 +70,20 @@ const Courses = () => {
               to excel in academics and build career-ready skills.
             </p>
           </div>
-          <Button variant="outline" size="lg" asChild>
-            <Link to="/courses">
-              View All Courses
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/courses">
+                View All Courses
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" asChild>
+              <Link to="/curriculum">
+                Explore Curriculum
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
