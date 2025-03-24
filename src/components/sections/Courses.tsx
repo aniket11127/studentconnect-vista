@@ -79,7 +79,7 @@ const Courses = () => {
             </Button>
             <Button size="lg" asChild>
               <Link to="/curriculum">
-                Explore Curriculum
+                Interactive Curriculum
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
