@@ -260,7 +260,8 @@ const curriculumData = [
           { weekNumber: 1, title: 'AI Systems', description: 'Understanding language models, capabilities, limitations' },
           { weekNumber: 2, title: 'Effective Prompting', description: 'Structure, clarity, constraints, instructions' },
           { weekNumber: 3, title: 'Advanced Techniques', description: 'Chain of thought, few-shot learning, specialized domains' }
-        ]
+        ],
+        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
       }
     ]
   },
