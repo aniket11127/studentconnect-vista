@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -225,19 +224,6 @@ const curriculumData = [
         ]
       },
       { 
-        name: 'Web Application Development', 
-        description: 'Build dynamic web applications with modern frameworks.',
-        modules: 20,
-        projects: 8,
-        progress: 0,
-        topics: ['React', 'State Management', 'Backend Integration', 'Deployment'],
-        weeks: [
-          { weekNumber: 1, title: 'React Deep Dive', description: 'Hooks, context, advanced components' },
-          { weekNumber: 2, title: 'State Management', description: 'Redux, MobX, React Query' },
-          { weekNumber: 3, title: 'Full Stack Development', description: 'Connecting React with APIs, authentication' }
-        ]
-      },
-      { 
         name: 'Data Science Fundamentals', 
         description: 'Data analysis, visualization, and introduction to machine learning.',
         modules: 16,
@@ -318,19 +304,6 @@ const curriculumData = [
           { weekNumber: 1, title: 'AI Productivity Suite', description: 'Note-taking, summarization, research tools' },
           { weekNumber: 2, title: 'Content Creation', description: 'Image generation, text creation, editing tools' },
           { weekNumber: 3, title: 'Specialized Tools', description: 'Coding assistants, data analysis, domain-specific AI' }
-        ]
-      },
-      { 
-        name: 'Full Stack Development', 
-        description: 'Build complete web applications with modern frameworks and best practices.',
-        modules: 20,
-        projects: 8,
-        progress: 0,
-        topics: ['Frontend Excellence', 'Backend Systems', 'Authentication', 'Deployment'],
-        weeks: [
-          { weekNumber: 1, title: 'Modern Frontend', description: 'Advanced React, state management, performance' },
-          { weekNumber: 2, title: 'Backend Architecture', description: 'REST API design, databases, authentication' },
-          { weekNumber: 3, title: 'Deployment & DevOps', description: 'CI/CD, cloud services, monitoring' }
         ]
       },
       { 
