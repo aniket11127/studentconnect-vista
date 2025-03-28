@@ -12,6 +12,9 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CourseDetail from "./pages/CourseDetail";
+import VipSessions from "./pages/VipSessions";
+import VipSessionDetail from "./pages/VipSessionDetail";
+import MyCertificates from "./pages/MyCertificates";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +35,9 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/course/:id" element={<CourseDetail />} />
           <Route path="/module/:name" element={<CourseDetail />} />
+          <Route path="/vip-sessions" element={<VipSessions />} />
+          <Route path="/vip-sessions/:id" element={<VipSessionDetail />} />
+          <Route path="/certificates" element={<MyCertificates />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

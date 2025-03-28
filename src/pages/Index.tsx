@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
 import Courses from '@/components/sections/Courses';
+import VipSessions from '@/components/sections/VipSessions';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Briefcase, GraduationCap, BarChart3 } from 'lucide-react';
 import ProgressBar from '@/components/ui/ProgressBar';
@@ -18,6 +19,7 @@ const Index = () => {
         <Hero />
         <Features />
         <Courses />
+        <VipSessions />
         
         {/* Why Choose SGK14 Section */}
         <section className="py-20 relative overflow-hidden">
