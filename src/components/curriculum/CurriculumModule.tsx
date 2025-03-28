@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, BookOpen, FileText, Code, Database, Award } from 'lucide-react';
+import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -15,6 +16,7 @@ const iconMap = {
   'SQL': Database,
   'Professional Development': Award,
   'AI Tools': BookOpen,
+  'Prompt Engineering': Brain,
   default: BookOpen
 };
 
@@ -44,6 +46,8 @@ const CurriculumModule = ({
   image
 }: CurriculumModuleProps) => {
   const [isImageExpanded, setIsImageExpanded] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
+  
   const Icon = Object.entries(iconMap).find(
     ([key]) => name.includes(key)
   )?.[1] || iconMap.default;
@@ -97,7 +101,28 @@ const CurriculumModule = ({
 
         <CollapsibleContent>
           <CardContent className="pt-4 border-t">
-            {topics.length > 0 && (
+            <div className="flex border-b mb-4">
+              <button 
+                className={`px-4 py-2 text-sm font-medium ${activeTab === 'overview' ? 'border-b-2 border-primary' : ''}`}
+                onClick={() => setActiveTab('overview')}
+              >
+                Overview
+              </button>
+              <button 
+                className={`px-4 py-2 text-sm font-medium ${activeTab === 'schedule' ? 'border-b-2 border-primary' : ''}`}
+                onClick={() => setActiveTab('schedule')}
+              >
+                Schedule
+              </button>
+              <button 
+                className={`px-4 py-2 text-sm font-medium ${activeTab === 'projects' ? 'border-b-2 border-primary' : ''}`}
+                onClick={() => setActiveTab('projects')}
+              >
+                Projects
+              </button>
+            </div>
+
+            {activeTab === 'overview' && topics.length > 0 && (
               <div className="mb-4">
                 <h4 className="text-sm font-medium mb-2">Key Topics</h4>
                 <ul className="text-sm space-y-1">
@@ -111,7 +136,7 @@ const CurriculumModule = ({
               </div>
             )}
 
-            {weeks.length > 0 && (
+            {activeTab === 'schedule' && weeks.length > 0 && (
               <div>
                 <h4 className="text-sm font-medium mb-2">Weekly Schedule</h4>
                 <div className="space-y-3">
@@ -121,6 +146,41 @@ const CurriculumModule = ({
                       <p className="text-xs text-muted-foreground">{week.description}</p>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'projects' && (
+              <div>
+                <h4 className="text-sm font-medium mb-2">Course Projects</h4>
+                <div className="space-y-3">
+                  <div className="border rounded-md p-3">
+                    <h5 className="text-sm font-medium flex items-center gap-2">
+                      <Edit size={14} />
+                      AI Assistant Design
+                    </h5>
+                    <p className="text-xs text-muted-foreground">Create a functioning AI assistant with effective prompts</p>
+                    <div className="mt-2 flex justify-between items-center">
+                      <span className="text-xs bg-secondary px-2 py-0.5 rounded">Project 1</span>
+                      <Button variant="outline" size="sm" className="h-7 text-xs">
+                        Submit Project
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="border rounded-md p-3">
+                    <h5 className="text-sm font-medium flex items-center gap-2">
+                      <BookCheck size={14} />
+                      Prompt Engineering Guide
+                    </h5>
+                    <p className="text-xs text-muted-foreground">Develop a comprehensive guide for effective prompting</p>
+                    <div className="mt-2 flex justify-between items-center">
+                      <span className="text-xs bg-secondary px-2 py-0.5 rounded">Project 2</span>
+                      <Button variant="outline" size="sm" className="h-7 text-xs">
+                        Submit Project
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

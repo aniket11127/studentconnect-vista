@@ -255,13 +255,14 @@ const curriculumData = [
         modules: 8,
         projects: 4,
         progress: 0,
-        topics: ['AI Interaction', 'Prompt Design', 'ChatGPT', 'DALL-E'],
+        topics: ['AI Interaction Models', 'Prompt Design Principles', 'ChatGPT Techniques', 'DALL-E & Midjourney', 'Specialized Domain Prompting'],
         weeks: [
-          { weekNumber: 1, title: 'AI Systems', description: 'Understanding language models, capabilities, limitations' },
-          { weekNumber: 2, title: 'Effective Prompting', description: 'Structure, clarity, constraints, instructions' },
-          { weekNumber: 3, title: 'Advanced Techniques', description: 'Chain of thought, few-shot learning, specialized domains' }
+          { weekNumber: 1, title: 'AI Systems & Capabilities', description: 'Understanding language models, capabilities, limitations, and interaction patterns' },
+          { weekNumber: 2, title: 'Effective Prompting Strategies', description: 'Structure, clarity, constraints, instructions, and contextual elements' },
+          { weekNumber: 3, title: 'Advanced Techniques', description: 'Chain of thought prompting, few-shot learning, specialized domain applications' },
+          { weekNumber: 4, title: 'Multimodal Prompting', description: 'Text-to-image models, combining text with visual elements, creative applications' }
         ],
-        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
+        image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
       }
     ]
   },
@@ -434,6 +435,7 @@ const Curriculum = () => {
                           progress={subject.progress}
                           topics={subject.topics}
                           weeks={subject.weeks}
+                          image={subject.image}
                         />
                       ))
                     ) : (
