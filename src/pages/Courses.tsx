@@ -108,7 +108,7 @@ const allCourses = [
     id: '9',
     title: 'Prompt Engineering for AI',
     description: 'Learn the art of crafting effective prompts for AI tools like ChatGPT to get better, more accurate results.',
-    image: 'https://images.unsplash.com/photo-1677442135136-760c813ba761?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+    image: 'public/lovable-uploads/1a079d3d-ac21-49e6-8815-aa595702602b.png',
     category: 'AI Skills',
     level: 'Beginner' as const,
     duration: '15 hours',

@@ -73,6 +73,71 @@ const courseDetails = [
       }
     ]
   },
+  // Add "Prompt Engineering for AI" course
+  {
+    id: '9',
+    title: 'Prompt Engineering for AI',
+    description: 'Learn the art of crafting effective prompts for AI tools like ChatGPT to get better, more accurate results. Master the techniques to communicate with AI systems effectively for various applications from content creation to problem-solving.',
+    image: 'public/lovable-uploads/1a079d3d-ac21-49e6-8815-aa595702602b.png',
+    category: 'AI Skills',
+    level: 'Beginner',
+    price: 'Free',
+    duration: '15 hours',
+    students: 1850,
+    lessons: 18,
+    featured: false,
+    instructor: 'Dr. Rajiv Kumar',
+    instructorTitle: 'AI Research Specialist',
+    instructorImage: 'https://randomuser.me/api/portraits/men/32.jpg',
+    lastUpdated: 'June 2023',
+    language: 'English, Hindi',
+    sections: [
+      {
+        title: 'Introduction to Prompt Engineering',
+        lessons: [
+          'Understanding AI Language Models',
+          'How AI Interprets Prompts',
+          'The Importance of Clear Communication with AI'
+        ]
+      },
+      {
+        title: 'Basic Prompt Techniques',
+        lessons: [
+          'Structuring Effective Prompts',
+          'Using Context to Improve Responses',
+          'Specifying Output Formats',
+          'Practice Session: Basic Prompting'
+        ]
+      },
+      {
+        title: 'Advanced Prompt Strategies',
+        lessons: [
+          'Chain-of-Thought Prompting',
+          'Role-Based Prompting',
+          'Few-Shot Learning Techniques',
+          'Handling Complex Instructions',
+          'Project: Creating a Custom Assistant'
+        ]
+      },
+      {
+        title: 'Domain-Specific Applications',
+        lessons: [
+          'Prompting for Creative Writing',
+          'Prompting for Code Generation',
+          'Prompting for Data Analysis',
+          'Prompting for Educational Content'
+        ]
+      },
+      {
+        title: 'Final Project',
+        lessons: [
+          'Designing a Comprehensive Prompt System',
+          'Testing and Iterating Prompts',
+          'Presentation and Peer Review'
+        ]
+      }
+    ]
+  },
   // Additional course details would be added here
 ];
 
@@ -238,45 +303,93 @@ const CourseDetail = () => {
                 <h2 className="text-2xl font-bold mb-6">What You'll Learn</h2>
                 
                 <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
-                      <BarChart2 size={16} />
-                    </div>
-                    <span>Create professional documents, spreadsheets, and presentations</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
-                      <BarChart2 size={16} />
-                    </div>
-                    <span>Master essential Excel functions for data analysis</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
-                      <BarChart2 size={16} />
-                    </div>
-                    <span>Design engaging presentations with multimedia elements</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
-                      <BarChart2 size={16} />
-                    </div>
-                    <span>Build basic databases to organize information</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
-                      <BarChart2 size={16} />
-                    </div>
-                    <span>Complete practical projects relevant to academic requirements</span>
-                  </li>
+                  {course.id === '9' ? (
+                    <>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Craft effective prompts that generate accurate, relevant AI responses</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Understand how AI language models interpret and process instructions</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Apply advanced techniques like chain-of-thought and role-based prompting</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Develop domain-specific prompting strategies for various applications</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Design comprehensive prompt systems for complex tasks</span>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Create professional documents, spreadsheets, and presentations</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Master essential Excel functions for data analysis</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Design engaging presentations with multimedia elements</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Build basic databases to organize information</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <div className="p-1 rounded-full bg-primary/10 text-primary mt-0.5">
+                          <BarChart2 size={16} />
+                        </div>
+                        <span>Complete practical projects relevant to academic requirements</span>
+                      </li>
+                    </>
+                  )}
                 </ul>
                 
                 <div className="mt-8 p-6 bg-secondary/30 rounded-xl">
                   <h3 className="font-medium mb-4">Requirements</h3>
                   <ul className="space-y-2 text-sm">
-                    <li>• Basic computer skills</li>
-                    <li>• Computer with Windows/Mac/Linux</li>
-                    <li>• MS Office installed (2016 or newer)</li>
-                    <li>• Internet connection for some exercises</li>
+                    {course.id === '9' ? (
+                      <>
+                        <li>• Basic computer literacy</li>
+                        <li>• Internet connection</li>
+                        <li>• Access to AI tools like ChatGPT</li>
+                        <li>• No prior AI experience required</li>
+                      </>
+                    ) : (
+                      <>
+                        <li>• Basic computer skills</li>
+                        <li>• Computer with Windows/Mac/Linux</li>
+                        <li>• MS Office installed (2016 or newer)</li>
+                        <li>• Internet connection for some exercises</li>
+                      </>
+                    )}
                   </ul>
                 </div>
               </div>
