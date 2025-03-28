@@ -1,56 +1,7 @@
 
-import { ArrowRight, Calendar, Clock, Award, MessageSquare, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-// Sample VIP session data
-const vipSessions = [
-  {
-    id: '1',
-    title: 'How AI is Changing the Future?',
-    expert: 'Dr. Rajesh Sharma',
-    expertRole: 'AI Scientist, IIT Bombay',
-    date: 'April 10, 2025',
-    image: 'https://images.unsplash.com/photo-1677442135888-8bae225cd8c4?q=80&w=1932&auto=format&fit=crop',
-    category: 'AI & Future Tech',
-    status: 'Open',
-  },
-  {
-    id: '2',
-    title: 'Mastering React.js & Web 3.0',
-    expert: 'Neha Kapoor',
-    expertRole: 'Senior Developer, Google',
-    date: 'April 15, 2025',
-    image: 'https://images.unsplash.com/photo-1573495612937-f02b92648e5c?q=80&w=2069&auto=format&fit=crop',
-    category: 'Web Development Mastery',
-    status: 'Open',
-  },
-  {
-    id: '3',
-    title: 'How to Stay Safe Online?',
-    expert: 'Rahul Mehta',
-    expertRole: 'Cybersecurity Analyst, Microsoft',
-    date: 'April 20, 2025',
-    image: 'https://images.unsplash.com/photo-1614064548237-096d7f2aea8d?q=80&w=2070&auto=format&fit=crop',
-    category: 'Cybersecurity Essentials',
-    status: 'Open',
-  },
-];
+import { Calendar, Clock, Award, MessageSquare, Briefcase } from 'lucide-react';
 
 const VipSessions = () => {
   return (
@@ -79,7 +30,6 @@ const VipSessions = () => {
             <Button size="lg" asChild>
               <Link to="/vip-sessions">
                 View All Sessions
-                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -108,69 +58,10 @@ const VipSessions = () => {
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold mb-8 text-center">Upcoming VIP Sessions</h3>
-        
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent>
-            {vipSessions.map((session) => (
-              <CarouselItem key={session.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                <Card className="h-full flex flex-col">
-                  <div className="relative">
-                    <img 
-                      src={session.image} 
-                      alt={session.title} 
-                      className="w-full h-44 object-cover rounded-t-lg"
-                    />
-                    <div className="absolute top-3 left-3 px-3 py-1 bg-primary/90 text-white text-xs font-medium rounded-full">
-                      {session.category}
-                    </div>
-                    <div className="absolute top-3 right-3 px-3 py-1 bg-green-500/90 text-white text-xs font-medium rounded-full">
-                      {session.status}
-                    </div>
-                  </div>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">{session.title}</CardTitle>
-                    <CardDescription>
-                      <div className="flex items-center mt-1 text-sm font-medium">
-                        <span className="text-primary">{session.expert}</span>
-                      </div>
-                      <div className="text-xs text-muted-foreground">{session.expertRole}</div>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pb-4 pt-0">
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Calendar className="mr-2 h-4 w-4 text-primary" />
-                      {session.date}
-                    </div>
-                  </CardContent>
-                  <CardFooter className="mt-auto pt-2">
-                    <Button className="w-full" asChild>
-                      <Link to={`/vip-sessions/${session.id}`}>
-                        Register Now
-                      </Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex justify-center gap-2 mt-8">
-            <CarouselPrevious className="static transform-none mx-2" />
-            <CarouselNext className="static transform-none mx-2" />
-          </div>
-        </Carousel>
-
         <div className="mt-12 text-center">
           <Button size="lg" variant="outline" asChild>
             <Link to="/vip-sessions">
               Explore All VIP Sessions
-              <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
