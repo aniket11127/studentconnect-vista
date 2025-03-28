@@ -1,4 +1,3 @@
-
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -6,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Clock, Users, BookOpen, Award, BarChart2 } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-// Sample course details - in a real app, this would come from an API
 const courseDetails = [
   {
     id: '1',
@@ -73,12 +71,11 @@ const courseDetails = [
       }
     ]
   },
-  // Add "Prompt Engineering for AI" course
   {
     id: '9',
     title: 'Prompt Engineering for AI',
     description: 'Learn the art of crafting effective prompts for AI tools like ChatGPT to get better, more accurate results. Master the techniques to communicate with AI systems effectively for various applications from content creation to problem-solving.',
-    image: 'public/lovable-uploads/1a079d3d-ac21-49e6-8815-aa595702602b.png',
+    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
     category: 'AI Skills',
     level: 'Beginner',
     price: 'Free',
@@ -137,17 +134,14 @@ const courseDetails = [
         ]
       }
     ]
-  },
-  // Additional course details would be added here
+  }
 ];
 
 const CourseDetail = () => {
   const { id } = useParams();
   
-  // Find the course with the matching ID
   const course = courseDetails.find(course => course.id === id);
   
-  // Handle case where course is not found
   if (!course) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -175,11 +169,9 @@ const CourseDetail = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 pt-24">
-        {/* Course Header */}
         <section className="bg-secondary/30 py-12">
           <div className="container">
             <div className="flex flex-col lg:flex-row gap-8">
-              {/* Course Info */}
               <div className="lg:w-2/3 space-y-6">
                 <div>
                   <Link to="/courses" className="inline-flex items-center text-sm text-primary hover:underline mb-4">
@@ -229,7 +221,6 @@ const CourseDetail = () => {
                 </div>
               </div>
               
-              {/* Enrollment Card */}
               <div className="lg:w-1/3">
                 <div className="bg-card border border-border rounded-2xl overflow-hidden">
                   <img 
@@ -269,11 +260,9 @@ const CourseDetail = () => {
           </div>
         </section>
         
-        {/* Course Content */}
         <section className="py-12">
           <div className="container">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Course Curriculum */}
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-bold mb-6">Course Curriculum</h2>
                 
@@ -298,7 +287,6 @@ const CourseDetail = () => {
                 </Accordion>
               </div>
               
-              {/* Course Benefits */}
               <div>
                 <h2 className="text-2xl font-bold mb-6">What You'll Learn</h2>
                 
