@@ -48,15 +48,15 @@ const Navbar = () => {
           onClick={closeMenu}
           aria-label="SGK14 - Home"
         >
-          <div className="h-10 w-10 overflow-hidden rounded-md">
+          <div className="h-12 w-auto relative">
             <img 
-              src="/logo.png" 
+              src="/lovable-uploads/02174cfd-bb30-416f-90c8-8968b3544810.png" 
               alt="SGK14 Logo" 
-              className="h-full w-full object-contain"
+              className="h-full w-auto object-contain"
               loading="eager"
             />
           </div>
-          <span>SGK14</span>
+          <span className="hidden lg:inline-block ml-2">SKILL GROWTH & KNOWLEDGE</span>
         </Link>
 
         {/* Desktop Navigation */}
