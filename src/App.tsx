@@ -3,7 +3,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import Courses from "./pages/Courses";
 import Curriculum from "./pages/Curriculum";
@@ -19,12 +20,95 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// ScrollToTop component to ensure page scrolls to top on navigation
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
+// Add structured data for the website
+const StructuredData = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    // Organization structured data
+    const organizationData = {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "SGK14 EdTech",
+      "url": "https://sgk14.com",
+      "logo": "https://sgk14.com/logo.png",
+      "sameAs": [
+        "https://facebook.com/sgk14",
+        "https://twitter.com/sgk14_edtech",
+        "https://instagram.com/sgk14_edtech",
+        "https://linkedin.com/company/sgk14-edtech"
+      ],
+      "description": "SGK14 EdTech provides essential skills in MS Office, coding, public speaking, and career development through interactive courses designed for students."
+    };
+
+    // Add organization schema
+    const organizationScript = document.createElement('script');
+    organizationScript.type = 'application/ld+json';
+    organizationScript.text = JSON.stringify(organizationData);
+    document.head.appendChild(organizationScript);
+
+    // Add breadcrumb schema based on current path
+    if (pathname !== '/') {
+      const pathSegments = pathname.split('/').filter(Boolean);
+      const breadcrumbItems = [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://sgk14.com"
+        }
+      ];
+
+      pathSegments.forEach((segment, index) => {
+        breadcrumbItems.push({
+          "@type": "ListItem",
+          "position": index + 2,
+          "name": segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),
+          "item": `https://sgk14.com/${pathSegments.slice(0, index + 1).join('/')}`
+        });
+      });
+
+      const breadcrumbData = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbItems
+      };
+
+      const breadcrumbScript = document.createElement('script');
+      breadcrumbScript.type = 'application/ld+json';
+      breadcrumbScript.text = JSON.stringify(breadcrumbData);
+      document.head.appendChild(breadcrumbScript);
+    }
+
+    return () => {
+      // Clean up scripts when component unmounts
+      const scripts = document.querySelectorAll('script[type="application/ld+json"]');
+      scripts.forEach(script => script.remove());
+    };
+  }, [pathname]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
+        <StructuredData />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/courses" element={<Courses />} />

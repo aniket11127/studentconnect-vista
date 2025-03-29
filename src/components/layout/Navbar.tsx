@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, BookOpen, User } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Navbar = () => {
@@ -46,8 +46,16 @@ const Navbar = () => {
           to="/" 
           className="flex items-center gap-2 font-bold text-xl tracking-tight"
           onClick={closeMenu}
+          aria-label="SGK14 - Home"
         >
-          <BookOpen className="h-6 w-6 text-primary" />
+          <img 
+            src="/logo.png" 
+            alt="SGK14 Logo" 
+            width="40" 
+            height="40" 
+            className="h-10 w-auto"
+            loading="eager"
+          />
           <span>SGK14</span>
         </Link>
 
@@ -58,6 +66,7 @@ const Navbar = () => {
               key={link.name}
               to={link.path}
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+              aria-label={`Navigate to ${link.name}`}
             >
               {link.name}
             </Link>
@@ -94,6 +103,7 @@ const Navbar = () => {
                     to={link.path}
                     className="text-lg font-medium hover:text-primary transition-colors"
                     onClick={closeMenu}
+                    aria-label={`Navigate to ${link.name}`}
                   >
                     {link.name}
                   </Link>

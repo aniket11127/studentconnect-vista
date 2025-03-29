@@ -1,14 +1,11 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
 
 User-agent: *
 Allow: /
+
+# Block admin and test pages
+Disallow: /admin/
+Disallow: /test/
+Disallow: /development/
+
+# Allow all bots to access sitemap
+Sitemap: https://sgk14.com/sitemap.xml
