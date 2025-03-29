@@ -101,6 +101,14 @@ export default {
 				'pulse-subtle': {
 					'0%, 100%': { opacity: '1' },
 					'50%': { opacity: '0.85' }
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'shimmer': {
+					'0%': { backgroundPosition: '-200% 0' },
+					'100%': { backgroundPosition: '200% 0' }
 				}
 			},
 			animation: {
@@ -110,7 +118,9 @@ export default {
 				'fade-out': 'fade-out 0.4s ease-out',
 				'slide-up': 'slide-up 0.4s ease-out',
 				'slide-down': 'slide-down 0.4s ease-out',
-				'pulse-subtle': 'pulse-subtle 3s infinite ease-in-out'
+				'pulse-subtle': 'pulse-subtle 3s infinite ease-in-out',
+				'float': 'float 6s ease-in-out infinite',
+				'shimmer': 'shimmer 3s infinite linear'
 			}
 		}
 	},
