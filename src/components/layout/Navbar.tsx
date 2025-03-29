@@ -48,14 +48,14 @@ const Navbar = () => {
           onClick={closeMenu}
           aria-label="SGK14 - Home"
         >
-          <img 
-            src="/logo.png" 
-            alt="SGK14 Logo" 
-            width="40" 
-            height="40" 
-            className="h-10 w-auto"
-            loading="eager"
-          />
+          <div className="h-10 w-10 overflow-hidden rounded-md">
+            <img 
+              src="/logo.png" 
+              alt="SGK14 Logo" 
+              className="h-full w-full object-contain"
+              loading="eager"
+            />
+          </div>
           <span>SGK14</span>
         </Link>
 

@@ -2,12 +2,15 @@
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Hero = () => {
   const textRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    setIsVisible(true);
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -29,19 +32,21 @@ const Hero = () => {
 
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden" aria-labelledby="hero-heading">
-      {/* Background decoration */}
+      {/* Animated Background decoration */}
       <div className="absolute inset-0 z-[-1] opacity-40" aria-hidden="true">
-        <div className="absolute top-1/3 right-0 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 w-60 h-60 bg-blue-400/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 right-0 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse-subtle" />
+        <div className="absolute bottom-1/4 left-1/4 w-60 h-60 bg-blue-400/20 rounded-full blur-3xl animate-float" />
+        <div className="absolute top-1/2 left-2/3 w-40 h-40 bg-primary/10 rounded-full blur-2xl animate-float [animation-delay:2s]" />
       </div>
 
       <div className="container">
         <div className="max-w-3xl mx-auto text-center space-y-8">
-          <div className="animate-fade-in">
+          <div className={`transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div 
               ref={textRef}
-              className="inline-block mb-4 px-6 py-2.5 rounded-full bg-primary/10 text-primary text-base font-medium relative overflow-hidden group animate-on-scroll"
+              className="inline-block mb-4 px-6 py-2.5 rounded-full bg-gradient-to-r from-primary/10 to-blue-400/10 text-primary text-base font-medium relative overflow-hidden group animate-on-scroll"
             >
+              <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-15 -translate-x-full group-hover:animate-shimmer"></span>
               <span className="relative z-10 bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent font-semibold">
                 Empowering Young Minds
               </span>
@@ -50,7 +55,10 @@ const Hero = () => {
             </div>
             <h1 id="hero-heading" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-balance">
               Transform Your Future with
-              <span className="text-primary animate-pulse-subtle"> SGK14</span> EdTech
+              <span className="relative">
+                <span className="relative z-10 text-primary animate-pulse-subtle"> SGK14</span>
+                <span className="absolute -inset-1 bg-primary/10 blur-sm rounded-lg -z-10 animate-pulse-subtle [animation-delay:300ms]"></span>
+              </span> EdTech
             </h1>
           </div>
           
@@ -75,9 +83,10 @@ const Hero = () => {
           </div>
 
           <div className="pt-8 flex flex-col md:flex-row items-center justify-center gap-8 animate-fade-in [animation-delay:600ms]">
-            <div className="flex items-center gap-2 animate-on-scroll">
+            {/* Partnership with IIT Bombay */}
+            <div className="flex items-center gap-2 animate-on-scroll bg-white/10 backdrop-blur-sm p-3 rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/10">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary animate-pulse-subtle">
                   <circle cx="12" cy="8" r="7"></circle>
                   <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
                 </svg>
@@ -87,9 +96,11 @@ const Hero = () => {
                 <div className="text-xs text-muted-foreground">Certification Partner</div>
               </div>
             </div>
-            <div className="flex items-center gap-2 animate-on-scroll [animation-delay:200ms]">
+            
+            {/* Student Count */}
+            <div className="flex items-center gap-2 animate-on-scroll [animation-delay:200ms] bg-white/10 backdrop-blur-sm p-3 rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/10">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary animate-pulse-subtle [animation-delay:400ms]">
                   <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                   <line x1="8" y1="21" x2="16" y2="21"></line>
                   <line x1="12" y1="17" x2="12" y2="21"></line>
@@ -100,9 +111,11 @@ const Hero = () => {
                 <div className="text-xs text-muted-foreground">Students Enrolled</div>
               </div>
             </div>
-            <div className="flex items-center gap-2 animate-on-scroll [animation-delay:400ms]">
+            
+            {/* Placement Rate */}
+            <div className="flex items-center gap-2 animate-on-scroll [animation-delay:400ms] bg-white/10 backdrop-blur-sm p-3 rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/10">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary animate-pulse-subtle [animation-delay:800ms]">
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                 </svg>
               </div>
@@ -122,6 +135,14 @@ const Hero = () => {
           100% { transform: translateY(0px); }
         }
         
+        @keyframes shimmer {
+          100% { transform: translateX(150%); }
+        }
+        
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+        
         .animate-in {
           animation: slide-up 0.6s ease forwards;
           opacity: 0;
@@ -133,6 +154,10 @@ const Hero = () => {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+        
+        .skew-x-15 {
+          transform: skewX(15deg);
         }
         
         .animate-on-scroll:nth-child(1) { animation-delay: 0ms; }
