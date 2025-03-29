@@ -1,5 +1,4 @@
 
-import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, Award, MessageSquare, Briefcase } from 'lucide-react';
 
@@ -26,13 +25,6 @@ const VipSessions = () => {
               and give you real-world insights into your field of interest.
             </p>
           </div>
-          <div>
-            <Button size="lg" asChild>
-              <Link to="/vip-sessions" aria-label="View all expert sessions">
-                View All Sessions
-              </Link>
-            </Button>
-          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
@@ -56,14 +48,6 @@ const VipSessions = () => {
             <h3 className="text-xl font-medium mb-2">Career Guidance</h3>
             <p className="text-muted-foreground">Learn about career paths and opportunities directly from professionals.</p>
           </div>
-        </div>
-
-        <div className="mt-12 text-center">
-          <Button size="lg" variant="outline" asChild>
-            <Link to="/vip-sessions" aria-label="Explore all expert sessions">
-              Explore All VIP Sessions
-            </Link>
-          </Button>
         </div>
       </div>
     </section>
