@@ -41,18 +41,22 @@ const Navbar = () => {
       )}
     >
       <div className="container flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo - Resized and background blended */}
         <Link 
           to="/" 
           className="flex items-center gap-2 font-bold text-xl tracking-tight"
           onClick={closeMenu}
           aria-label="SGK14 - Home"
         >
-          <div className="h-12 w-auto relative">
+          <div className="h-14 w-auto relative flex items-center justify-center">
             <img 
               src="/lovable-uploads/02174cfd-bb30-416f-90c8-8968b3544810.png" 
               alt="SGK14 Logo" 
-              className="h-full w-auto object-contain"
+              className="h-full w-auto object-contain drop-shadow-sm"
+              style={{
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.05))',
+                backgroundColor: 'transparent',
+              }}
               loading="eager"
             />
           </div>
