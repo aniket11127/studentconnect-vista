@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
@@ -618,6 +619,9 @@ const CourseDetail = () => {
     completedProjects: []
   });
   
+  // Find the course by ID
+  const course = courseDetails.find(course => course.id === id);
+  
   // Load user progress from local storage on component mount
   useEffect(() => {
     if (id) {
@@ -787,4 +791,367 @@ const CourseDetail = () => {
                     <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
                       {course.category}
                     </span>
-                    <span className="inline-block px
+                    <span className="inline-block px-3 py-1 bg-muted text-muted-foreground text-sm font-medium rounded-full">
+                      {course.level}
+                    </span>
+                  </div>
+                  <h1 className="text-3xl md:text-4xl font-bold">{course.title}</h1>
+                  <p className="text-muted-foreground mt-2">{course.description}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-primary" />
+                    {course.duration}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-primary" />
+                    {course.students.toLocaleString()} students
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-primary" />
+                    {course.lessons} lessons
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Award className="h-4 w-4 text-primary" />
+                    Certificate of completion
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-flex mb-6">
+                      <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
+                      <TabsTrigger value="exercises">Exercises & Projects</TabsTrigger>
+                      <TabsTrigger value="info">Course Info</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="curriculum" className="space-y-6">
+                      <div className="bg-background rounded-lg p-6 shadow-sm border">
+                        <h3 className="text-xl font-semibold mb-4">Course Modules</h3>
+                        <div className="space-y-4">
+                          {course.modules.map((module, index) => (
+                            <Accordion 
+                              key={index} 
+                              type="single" 
+                              collapsible 
+                              className="bg-card rounded-lg"
+                            >
+                              <AccordionItem value={`module-${index}`} className="border-b-0">
+                                <AccordionTrigger className="px-6 py-4 hover:no-underline">
+                                  <div className="flex flex-col items-start text-left">
+                                    <div className="font-medium">{module.title}</div>
+                                    <div className="text-xs text-muted-foreground mt-1">
+                                      {module.duration} · {module.lessons.length} lessons
+                                    </div>
+                                  </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="px-6 pb-4 pt-0">
+                                  <div className="space-y-2">
+                                    {module.lessons.map((lesson, lessonIndex) => (
+                                      <div 
+                                        key={lessonIndex}
+                                        className="flex items-center justify-between p-3 border rounded-md hover:bg-accent/50 transition-colors"
+                                      >
+                                        <div className="flex items-center gap-3">
+                                          {userProgress.completedLessons.includes(lesson.id) ? (
+                                            <CheckCircle2 className="h-5 w-5 text-primary" />
+                                          ) : (
+                                            <CircleDashed className="h-5 w-5 text-muted-foreground" />
+                                          )}
+                                          <div>
+                                            <div className="font-medium">{lesson.title}</div>
+                                            <div className="text-xs text-muted-foreground">{lesson.duration}</div>
+                                          </div>
+                                        </div>
+                                        <Button 
+                                          variant="ghost" 
+                                          size="sm"
+                                          onClick={() => toggleLessonCompletion(lesson.id)}
+                                        >
+                                          {userProgress.completedLessons.includes(lesson.id) ? 'Mark incomplete' : 'Mark complete'}
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </AccordionContent>
+                              </AccordionItem>
+                            </Accordion>
+                          ))}
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="exercises" className="space-y-6">
+                      <div className="bg-background rounded-lg p-6 shadow-sm border">
+                        <h3 className="text-xl font-semibold mb-4">Practical Exercises</h3>
+                        <div className="space-y-6">
+                          {course.modules.map((module, moduleIndex) => (
+                            module.exercises && module.exercises.length > 0 ? (
+                              <div key={moduleIndex} className="border rounded-lg p-4">
+                                <h4 className="font-medium mb-3">{module.title} - Exercises</h4>
+                                <div className="space-y-3">
+                                  {module.exercises.map((exercise, exerciseIndex) => (
+                                    <Collapsible key={exerciseIndex} className="border rounded-md">
+                                      <div className="flex items-center justify-between p-3">
+                                        <div className="flex items-center gap-3">
+                                          {userProgress.completedExercises.includes(exercise.id) ? (
+                                            <CheckCircle2 className="h-5 w-5 text-primary" />
+                                          ) : (
+                                            <CircleDashed className="h-5 w-5 text-muted-foreground" />
+                                          )}
+                                          <div>
+                                            <div className="font-medium">{exercise.title}</div>
+                                            <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                                              <span className={`px-2 py-0.5 rounded-full ${
+                                                exercise.difficulty === 'easy' 
+                                                  ? 'bg-green-100 text-green-700' 
+                                                  : exercise.difficulty === 'medium'
+                                                  ? 'bg-yellow-100 text-yellow-700'
+                                                  : 'bg-red-100 text-red-700'
+                                              }`}>
+                                                {exercise.difficulty}
+                                              </span>
+                                              <span>{exercise.type}</span>
+                                              <span>{exercise.estimatedTime}</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                          <CollapsibleTrigger asChild>
+                                            <Button variant="ghost" size="sm">
+                                              View details
+                                            </Button>
+                                          </CollapsibleTrigger>
+                                          <Button 
+                                            variant="outline" 
+                                            size="sm"
+                                            onClick={() => toggleExerciseCompletion(exercise.id)}
+                                          >
+                                            {userProgress.completedExercises.includes(exercise.id) ? 'Mark incomplete' : 'Mark complete'}
+                                          </Button>
+                                        </div>
+                                      </div>
+                                      <CollapsibleContent className="px-4 pb-4">
+                                        <div className="border-t pt-3 mt-1">
+                                          <p className="text-sm">{exercise.description}</p>
+                                        </div>
+                                      </CollapsibleContent>
+                                    </Collapsible>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : null
+                          ))}
+                        </div>
+                      </div>
+
+                      {course.projects && course.projects.length > 0 && (
+                        <div className="bg-background rounded-lg p-6 shadow-sm border">
+                          <h3 className="text-xl font-semibold mb-4">Course Projects</h3>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            {course.projects.map((project, index) => (
+                              <Card key={index} className="overflow-hidden">
+                                <CardHeader className="pb-3">
+                                  <div className="flex justify-between items-start">
+                                    <CardTitle className="text-lg">{project.title}</CardTitle>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0 rounded-full"
+                                      onClick={() => toggleProjectCompletion(project.id)}
+                                    >
+                                      {userProgress.completedProjects.includes(project.id) ? (
+                                        <CheckCircle2 className="h-5 w-5 text-primary" />
+                                      ) : (
+                                        <CircleDashed className="h-5 w-5 text-muted-foreground" />
+                                      )}
+                                    </Button>
+                                  </div>
+                                  <div className="flex flex-wrap gap-2 text-xs">
+                                    <span className={`px-2 py-1 rounded-full ${
+                                      project.difficulty === 'beginner' 
+                                        ? 'bg-green-100 text-green-700' 
+                                        : project.difficulty === 'intermediate'
+                                        ? 'bg-yellow-100 text-yellow-700'
+                                        : 'bg-red-100 text-red-700'
+                                    }`}>
+                                      {project.difficulty}
+                                    </span>
+                                    <span className="px-2 py-1 rounded-full bg-muted text-muted-foreground">
+                                      {project.estimatedTime}
+                                    </span>
+                                  </div>
+                                </CardHeader>
+                                <CardContent>
+                                  <p className="text-sm text-muted-foreground">{project.description}</p>
+                                  <div className="mt-3">
+                                    <div className="text-xs text-muted-foreground mb-1">Skills:</div>
+                                    <div className="flex flex-wrap gap-1">
+                                      {project.skills.map((skill, skillIndex) => (
+                                        <span 
+                                          key={skillIndex} 
+                                          className="inline-block px-2 py-1 bg-primary/10 text-xs text-primary rounded-full"
+                                        >
+                                          {skill}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </TabsContent>
+
+                    <TabsContent value="info" className="space-y-6">
+                      <div className="bg-background rounded-lg p-6 shadow-sm border">
+                        <h3 className="text-xl font-semibold mb-4">Course Introduction</h3>
+                        <p className="text-muted-foreground">{course.introduction}</p>
+                        
+                        <h4 className="font-semibold mt-6 mb-3">Learning Objectives</h4>
+                        <ul className="space-y-2">
+                          {course.learningObjectives.map((objective, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <Check className="h-5 w-5 text-primary mt-0.5" />
+                              <span>{objective}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        
+                        {course.outcomes && (
+                          <>
+                            <h4 className="font-semibold mt-6 mb-3">What You'll Learn</h4>
+                            <ul className="space-y-2">
+                              {course.outcomes.map((outcome, index) => (
+                                <li key={index} className="flex items-start gap-2">
+                                  <Check className="h-5 w-5 text-primary mt-0.5" />
+                                  <span>{outcome}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                      </div>
+                      
+                      {relatedSessions.length > 0 && (
+                        <div className="bg-background rounded-lg p-6 shadow-sm border">
+                          <h3 className="text-xl font-semibold mb-4">Related VIP Sessions</h3>
+                          <div className="grid gap-4">
+                            {relatedSessions.map((session, index) => (
+                              <div key={index} className="flex flex-col md:flex-row gap-4 border rounded-lg p-4">
+                                <div className="md:w-1/4 h-40 rounded-md overflow-hidden">
+                                  <img 
+                                    src={session.image} 
+                                    alt={session.title} 
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <div className="md:w-3/4 flex flex-col">
+                                  <div className="flex-1">
+                                    <div className="flex gap-2 mb-2">
+                                      <span className="inline-block px-2 py-1 bg-primary/10 text-xs text-primary rounded-full">
+                                        {session.category}
+                                      </span>
+                                      <span className="inline-block px-2 py-1 bg-muted text-xs text-muted-foreground rounded-full">
+                                        {session.status}
+                                      </span>
+                                    </div>
+                                    <h4 className="font-semibold text-lg">{session.title}</h4>
+                                    <div className="text-sm text-muted-foreground mt-1">
+                                      By {session.expert}, {session.expertRole}
+                                    </div>
+                                    <div className="flex items-center gap-1 text-sm text-muted-foreground mt-3">
+                                      <Calendar className="h-4 w-4" />
+                                      <span>{session.date}</span>
+                                    </div>
+                                  </div>
+                                  <div className="mt-4">
+                                    <Button variant="outline" asChild>
+                                      <Link to={`/vip-sessions/${session.id}`}>
+                                        View details
+                                      </Link>
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              </div>
+
+              <div className="lg:w-1/3 space-y-6">
+                <div className="sticky top-28">
+                  <div className="bg-background rounded-lg shadow-sm border overflow-hidden">
+                    <div className="aspect-video w-full overflow-hidden">
+                      <img 
+                        src={course.image} 
+                        alt={course.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-6 space-y-6">
+                      <div className="flex items-baseline justify-between">
+                        <div className="text-3xl font-bold">
+                          {course.price === 'Free' ? 'Free' : course.price}
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Button className="w-full">Enroll Now</Button>
+                        <Button variant="outline" className="w-full">Add to Wishlist</Button>
+                      </div>
+                      
+                      <div className="border-t pt-6 space-y-4">
+                        <div className="space-y-2">
+                          <div className="text-sm text-muted-foreground">Your Progress</div>
+                          <div className="flex items-center justify-between">
+                            <Progress value={progressPercentage} className="h-2" />
+                            <span className="text-sm font-medium ml-2">{progressPercentage}%</span>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <div className="text-muted-foreground">Course Details</div>
+                          </div>
+                          <div className="space-y-1 text-sm">
+                            <div className="flex justify-between py-1">
+                              <span className="text-muted-foreground">Level</span>
+                              <span className="font-medium">{course.level}</span>
+                            </div>
+                            <div className="flex justify-between py-1">
+                              <span className="text-muted-foreground">Duration</span>
+                              <span className="font-medium">{course.duration}</span>
+                            </div>
+                            <div className="flex justify-between py-1">
+                              <span className="text-muted-foreground">Lessons</span>
+                              <span className="font-medium">{course.lessons}</span>
+                            </div>
+                            <div className="flex justify-between py-1">
+                              <span className="text-muted-foreground">Enrolled</span>
+                              <span className="font-medium">{course.students.toLocaleString()} students</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default CourseDetail;
