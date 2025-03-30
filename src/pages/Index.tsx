@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Briefcase, GraduationCap, BarChart3 } from 'lucide-react';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { Link } from 'react-router-dom';
+import ReviewSection from '@/components/sections/ReviewSection';
 
 const Index = () => {
   return (
@@ -49,9 +50,9 @@ const Index = () => {
                   <div className="space-y-1">
                     <div className="flex justify-between text-sm font-medium">
                       <span>Practical Skill Development</span>
-                      <span>94%</span>
+                      <span>92%</span>
                     </div>
-                    <ProgressBar value={94} size="md" />
+                    <ProgressBar value={92} size="md" />
                   </div>
                   <div className="space-y-1">
                     <div className="flex justify-between text-sm font-medium">
@@ -103,55 +104,8 @@ const Index = () => {
           </div>
         </section>
         
-        {/* Testimonials Section */}
-        <section className="py-20 bg-secondary/50">
-          <div className="container">
-            <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4">
-                What Our Students Say
-              </h2>
-              <p className="text-muted-foreground text-lg">
-                Hear from students who have transformed their careers through our courses
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((item) => (
-                <div key={item} className="p-6 rounded-2xl bg-card border border-border">
-                  <div className="flex items-center gap-2 mb-4">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg 
-                        key={star}
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="16" 
-                        height="16" 
-                        viewBox="0 0 24 24" 
-                        fill="currentColor" 
-                        className="text-primary"
-                      >
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-sm mb-6">
-                    "SGK14's courses have completely transformed my approach to learning. The practical 
-                    projects and personalized feedback helped me build a strong foundation in programming.
-                    Now I'm confident in my skills and ready for future challenges."
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">
-                      {String.fromCharCode(64 + item)}
-                    </div>
-                    <div>
-                      <div className="font-medium">Student Name</div>
-                      <div className="text-xs text-muted-foreground">Grade 11, MP Board</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Reviews Section - New Dynamic Component */}
+        <ReviewSection />
         
         {/* CTA Section */}
         <section className="py-20">
