@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from 'sonner';
+import { allCourses } from '@/data/courses';
 
 // Type definitions for exercises and projects
 type Exercise = {
@@ -108,519 +108,67 @@ const courseRelatedSessions = {
 };
 
 // Enhanced course details with exercises and projects
-const courseDetails = [
-  {
-    id: '1',
-    title: 'Complete MS Office Suite Mastery',
-    description: 'Learn Word, Excel, PowerPoint, and Access with practical exercises designed for school assignments and projects.',
-    introduction: 'This comprehensive course will take you from beginner to proficient in Microsoft Office applications. You\'ll learn how to create professional documents, analyze data efficiently, design engaging presentations, and manage databases effectively. Perfect for students and professionals looking to enhance their productivity and technical skills.',
-    learningObjectives: [
-      'Create professional documents with advanced formatting in Word',
-      'Analyze and visualize data using Excel formulas and charts',
-      'Design compelling presentations with PowerPoint',
-      'Understand the basics of database management with Access'
-    ],
-    image: 'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'Office Skills',
-    level: 'Beginner' as const,
-    duration: '48 hours',
-    students: 3240,
-    lessons: 56,
-    featured: true,
-    price: '₹499',
-    modules: [
-      {
-        title: 'Introduction to MS Word',
-        duration: '4 hours',
-        lessons: [
-          { title: 'Creating Your First Document', duration: '30 mins', id: 'word-1' },
-          { title: 'Formatting Text and Paragraphs', duration: '45 mins', id: 'word-2' },
-          { title: 'Working with Styles', duration: '30 mins', id: 'word-3' },
-          { title: 'Inserting Images and Tables', duration: '45 mins', id: 'word-4' },
-        ],
-        exercises: [
-          {
-            id: 'ex-word-1',
-            title: 'Create a Professional Resume',
-            description: 'Build a well-formatted resume using the techniques learned in this module.',
-            type: 'task',
-            difficulty: 'easy',
-            estimatedTime: '45 mins',
-          },
-          {
-            id: 'ex-word-2',
-            title: 'Format a Research Paper',
-            description: 'Apply various formatting styles to create a properly structured research paper with citations.',
-            type: 'task',
-            difficulty: 'medium',
-            estimatedTime: '60 mins',
-          }
-        ]
-      },
-      {
-        title: 'Excel Fundamentals',
-        duration: '6 hours',
-        lessons: [
-          { title: 'Understanding the Excel Interface', duration: '30 mins', id: 'excel-1' },
-          { title: 'Entering and Formatting Data', duration: '45 mins', id: 'excel-2' },
-          { title: 'Basic Formulas and Functions', duration: '45 mins', id: 'excel-3' },
-          { title: 'Creating Charts and Graphs', duration: '60 mins', id: 'excel-4' },
-        ],
-        exercises: [
-          {
-            id: 'ex-excel-1',
-            title: 'Budget Calculator',
-            description: 'Create a monthly budget calculator using formulas and basic functions.',
-            type: 'task',
-            difficulty: 'easy',
-            estimatedTime: '45 mins',
-          },
-          {
-            id: 'ex-excel-2',
-            title: 'Data Analysis Quiz',
-            description: 'Test your knowledge of Excel formulas and functions with this interactive quiz.',
-            type: 'quiz',
-            difficulty: 'medium',
-            estimatedTime: '30 mins',
-          }
-        ]
-      },
-      {
-        title: 'PowerPoint Presentations',
-        duration: '5 hours',
-        lessons: [
-          { title: 'Creating a New Presentation', duration: '30 mins', id: 'ppt-1' },
-          { title: 'Adding and Formatting Slides', duration: '45 mins', id: 'ppt-2' },
-          { title: 'Working with Themes and Templates', duration: '30 mins', id: 'ppt-3' },
-          { title: 'Adding Animations and Transitions', duration: '60 mins', id: 'ppt-4' },
-        ],
-        exercises: [
-          {
-            id: 'ex-ppt-1',
-            title: 'Create an Engaging Presentation',
-            description: 'Design a 5-slide presentation on a topic of your choice using themes and animations.',
-            type: 'task',
-            difficulty: 'easy',
-            estimatedTime: '60 mins',
-          }
-        ]
-      },
-    ],
-    projects: [
-      {
-        id: 'proj-office-1',
-        title: 'School Event Planning Suite',
-        description: 'Create a complete event planning package including a budget spreadsheet, promotional flyer, and presentation for a school event.',
-        skills: ['Word', 'Excel', 'PowerPoint'],
-        estimatedTime: '3 hours',
-        difficulty: 'beginner',
-      },
-      {
-        id: 'proj-office-2',
-        title: 'Business Proposal Package',
-        description: 'Develop a comprehensive business proposal with a formal document, financial projections, and a pitch presentation.',
-        skills: ['Word', 'Excel', 'PowerPoint'],
-        estimatedTime: '4 hours',
-        difficulty: 'intermediate',
-      }
-    ],
-    outcomes: [
-      'Master the core features of MS Word, Excel, and PowerPoint',
-      'Create professional-looking documents, spreadsheets, and presentations',
-      'Automate tasks and analyze data efficiently with Excel formulas',
-      'Design engaging and effective PowerPoint presentations',
-    ],
-  },
-  {
-    id: '2',
-    title: 'Introduction to Python Programming',
-    description: 'Start your programming journey with Python fundamentals, data structures, and basic algorithms.',
-    introduction: 'Python is one of the most versatile and beginner-friendly programming languages. This course provides a solid foundation in Python programming, covering everything from basic syntax to working with data structures and implementing simple algorithms. You\'ll learn through hands-on coding exercises and practical examples that reinforce core programming concepts.',
-    learningObjectives: [
-      'Understand fundamental programming concepts using Python',
-      'Work with variables, data types, and control structures',
-      'Create and use functions to organize and reuse code',
-      'Implement and manipulate common data structures',
-      'Apply object-oriented programming principles'
-    ],
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'Programming',
-    level: 'Beginner' as const,
-    duration: '36 hours',
-    students: 2850,
-    lessons: 42,
-    featured: true,
-    price: '₹799',
-    modules: [
-      {
-        title: 'Python Basics',
-        duration: '8 hours',
-        lessons: [
-          { title: 'Setting up the Development Environment', duration: '45 mins', id: 'py-1' },
-          { title: 'Variables, Data Types, and Operators', duration: '60 mins', id: 'py-2' },
-          { title: 'Control Flow Statements', duration: '90 mins', id: 'py-3' },
-          { title: 'Functions and Modules', duration: '60 mins', id: 'py-4' },
-        ],
-        exercises: [
-          {
-            id: 'ex-py-1',
-            title: 'Temperature Converter',
-            description: 'Create a simple program that converts temperatures between Celsius and Fahrenheit.',
-            type: 'coding',
-            difficulty: 'easy',
-            estimatedTime: '30 mins',
-          },
-          {
-            id: 'ex-py-2',
-            title: 'Number Guessing Game',
-            description: 'Build a game where the computer generates a random number and the user has to guess it.',
-            type: 'coding',
-            difficulty: 'easy',
-            estimatedTime: '45 mins',
-          }
-        ]
-      },
-      {
-        title: 'Data Structures',
-        duration: '10 hours',
-        lessons: [
-          { title: 'Lists and Tuples', duration: '60 mins', id: 'py-5' },
-          { title: 'Dictionaries and Sets', duration: '90 mins', id: 'py-6' },
-          { title: 'List Comprehensions', duration: '45 mins', id: 'py-7' },
-          { title: 'Working with Strings', duration: '60 mins', id: 'py-8' },
-        ],
-        exercises: [
-          {
-            id: 'ex-py-3',
-            title: 'Contact Book Application',
-            description: 'Create a simple contact book that allows adding, viewing, and deleting contacts using dictionaries.',
-            type: 'coding',
-            difficulty: 'medium',
-            estimatedTime: '60 mins',
-          },
-          {
-            id: 'ex-py-4',
-            title: 'Text Analyzer',
-            description: 'Build a program that analyzes text to count words, characters, and find the most common words.',
-            type: 'coding',
-            difficulty: 'medium',
-            estimatedTime: '60 mins',
-          }
-        ]
-      },
-      {
-        title: 'Object-Oriented Programming',
-        duration: '12 hours',
-        lessons: [
-          { title: 'Classes and Objects', duration: '90 mins', id: 'py-9' },
-          { title: 'Inheritance and Polymorphism', duration: '120 mins', id: 'py-10' },
-          { title: 'Encapsulation and Abstraction', duration: '90 mins', id: 'py-11' },
-          { title: 'Working with Modules and Packages', duration: '60 mins', id: 'py-12' },
-        ],
-        exercises: [
-          {
-            id: 'ex-py-5',
-            title: 'Banking System',
-            description: 'Design a simple banking system with classes for accounts, transactions, and customers.',
-            type: 'coding',
-            difficulty: 'hard',
-            estimatedTime: '90 mins',
-          }
-        ]
-      },
-    ],
-    projects: [
-      {
-        id: 'proj-py-1',
-        title: 'Personal Task Manager',
-        description: 'Create a command-line task manager application that allows users to add, view, update, and delete tasks.',
-        skills: ['Python Basics', 'Data Structures', 'File Handling'],
-        estimatedTime: '4 hours',
-        difficulty: 'beginner',
-      },
-      {
-        id: 'proj-py-2',
-        title: 'Simple Quiz Application',
-        description: 'Build an interactive quiz application that loads questions from a file, presents them to users, and tracks scores.',
-        skills: ['Python Basics', 'OOP', 'File Handling'],
-        estimatedTime: '5 hours',
-        difficulty: 'intermediate',
-      }
-    ],
-    outcomes: [
-      'Understand the fundamentals of Python programming',
-      'Write clean and efficient Python code',
-      'Work with data structures and algorithms',
-      'Apply object-oriented programming principles',
-    ],
-  },
-  {
-    id: '5',
-    title: 'SQL Database Management',
-    description: 'Learn how to create, query, and manage databases using SQL with practical exercises for data handling.',
-    introduction: 'This course provides a comprehensive introduction to SQL and database management. You\'ll learn how to design databases, write efficient queries, and manage data effectively. Whether you\'re aiming to become a database administrator or just need database skills for your development or analysis work, this course will give you the practical knowledge you need.',
-    learningObjectives: [
-      'Design efficient database schemas',
-      'Write complex SQL queries to retrieve and manipulate data',
-      'Understand database normalization principles',
-      'Implement security and performance best practices',
-      'Work with transactions and manage concurrent access'
-    ],
-    image: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'Database',
-    level: 'Intermediate' as const,
-    duration: '30 hours',
-    students: 1760,
-    lessons: 35,
-    featured: true,
-    price: '₹999',
-    modules: [
-      {
-        title: 'Introduction to SQL',
-        duration: '6 hours',
-        lessons: [
-          { title: 'Setting up the Database Environment', duration: '45 mins', id: 'sql-1' },
-          { title: 'Creating and Managing Databases', duration: '60 mins', id: 'sql-2' },
-          { title: 'Understanding Data Types', duration: '45 mins', id: 'sql-3' },
-          { title: 'Basic SQL Queries', duration: '60 mins', id: 'sql-4' },
-        ],
-        exercises: [
-          {
-            id: 'ex-sql-1',
-            title: 'Create a Student Database',
-            description: 'Design and create a simple database schema for a school with tables for students, classes, and grades.',
-            type: 'task',
-            difficulty: 'easy',
-            estimatedTime: '45 mins',
-          },
-          {
-            id: 'ex-sql-2',
-            title: 'Basic Queries Quiz',
-            description: 'Test your knowledge of SELECT, INSERT, UPDATE, and DELETE operations.',
-            type: 'quiz',
-            difficulty: 'easy',
-            estimatedTime: '30 mins',
-          }
-        ]
-      },
-      {
-        title: 'Advanced SQL Queries',
-        duration: '8 hours',
-        lessons: [
-          { title: 'Joining Tables', duration: '60 mins', id: 'sql-5' },
-          { title: 'Using Subqueries', duration: '90 mins', id: 'sql-6' },
-          { title: 'Aggregate Functions', duration: '45 mins', id: 'sql-7' },
-          { title: 'Working with Views', duration: '60 mins', id: 'sql-8' },
-        ],
-        exercises: [
-          {
-            id: 'ex-sql-3',
-            title: 'Complex Joins Practice',
-            description: 'Write queries that use different types of joins to retrieve data from multiple related tables.',
-            type: 'coding',
-            difficulty: 'medium',
-            estimatedTime: '60 mins',
-          },
-          {
-            id: 'ex-sql-4',
-            title: 'Data Analysis with SQL',
-            description: 'Use aggregate functions and GROUP BY to analyze sales data and generate reports.',
-            type: 'coding',
-            difficulty: 'medium',
-            estimatedTime: '60 mins',
-          }
-        ]
-      },
-      {
-        title: 'Database Management',
-        duration: '10 hours',
-        lessons: [
-          { title: 'Transactions and Locking', duration: '90 mins', id: 'sql-9' },
-          { title: 'Backup and Recovery', duration: '120 mins', id: 'sql-10' },
-          { title: 'Performance Tuning', duration: '90 mins', id: 'sql-11' },
-          { title: 'Security and Permissions', duration: '60 mins', id: 'sql-12' },
-        ],
-        exercises: [
-          {
-            id: 'ex-sql-5',
-            title: 'Transaction Management',
-            description: 'Implement a series of operations within transactions, including handling errors and rollbacks.',
-            type: 'coding',
-            difficulty: 'hard',
-            estimatedTime: '75 mins',
-          }
-        ]
-      },
-    ],
-    projects: [
-      {
-        id: 'proj-sql-1',
-        title: 'E-commerce Database',
-        description: 'Design and implement a complete database for an e-commerce platform, including products, customers, orders, and reviews.',
-        skills: ['Database Design', 'SQL Queries', 'Normalization'],
-        estimatedTime: '6 hours',
-        difficulty: 'intermediate',
-      },
-      {
-        id: 'proj-sql-2',
-        title: 'Data Migration Tool',
-        description: 'Create a tool that extracts data from a CSV file and imports it into a properly structured SQL database.',
-        skills: ['SQL', 'Data Processing', 'Error Handling'],
-        estimatedTime: '5 hours',
-        difficulty: 'intermediate',
-      }
-    ],
-    outcomes: [
-      'Create and manage databases using SQL',
-      'Write complex SQL queries to retrieve and manipulate data',
-      'Understand database management principles',
-      'Optimize database performance',
-    ],
-  },
-  {
-    id: '9',
-    title: 'Prompt Engineering for AI',
-    description: 'Learn the art of crafting effective prompts for AI tools like ChatGPT to get better, more accurate results.',
-    introduction: 'As AI tools become increasingly integrated into our daily workflows, knowing how to effectively communicate with these systems is becoming an essential skill. This course teaches you the principles and techniques of prompt engineering—the art of crafting inputs that generate the most useful outputs from AI systems like ChatGPT, DALL-E, and other large language models.',
-    learningObjectives: [
-      'Understand how AI language models process and respond to different types of prompts',
-      'Master key techniques for writing clear, effective prompts',
-      'Learn how to iterate and refine prompts to get better results',
-      'Apply prompt engineering across different AI tools and use cases',
-      'Develop strategies for overcoming common AI limitations through clever prompting'
-    ],
-    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'AI Skills',
-    level: 'Beginner' as const,
-    duration: '15 hours',
-    students: 1850,
-    lessons: 18,
-    featured: true,
-    price: 'Free',
-    modules: [
-      {
-        title: 'Introduction to Prompt Engineering',
-        duration: '3 hours',
-        lessons: [
-          { title: 'Understanding AI Models', duration: '30 mins', id: 'ai-1' },
-          { title: 'The Art of Prompting', duration: '45 mins', id: 'ai-2' },
-          { title: 'Basic Prompting Techniques', duration: '60 mins', id: 'ai-3' },
-          { title: 'Common Mistakes to Avoid', duration: '45 mins', id: 'ai-4' },
-        ],
-        exercises: [
-          {
-            id: 'ex-ai-1',
-            title: 'Rewrite Simple Prompts',
-            description: 'Practice rewriting ineffective prompts to get better results from an AI assistant.',
-            type: 'task',
-            difficulty: 'easy',
-            estimatedTime: '30 mins',
-          },
-          {
-            id: 'ex-ai-2',
-            title: 'Prompt Analysis Quiz',
-            description: 'Analyze different prompts and predict which will produce the most helpful response.',
-            type: 'quiz',
-            difficulty: 'easy',
-            estimatedTime: '20 mins',
-          }
-        ]
-      },
-      {
-        title: 'Advanced Prompting Techniques',
-        duration: '5 hours',
-        lessons: [
-          { title: 'Using Context and Examples', duration: '60 mins', id: 'ai-5' },
-          { title: 'Iterative Prompting', duration: '90 mins', id: 'ai-6' },
-          { title: 'Prompting for Different Tasks', duration: '45 mins', id: 'ai-7' },
-          { title: 'Prompting for Creativity', duration: '60 mins', id: 'ai-8' },
-        ],
-        exercises: [
-          {
-            id: 'ex-ai-3',
-            title: 'Chain-of-Thought Prompting',
-            description: 'Apply chain-of-thought techniques to help AI models solve complex reasoning problems.',
-            type: 'task',
-            difficulty: 'medium',
-            estimatedTime: '45 mins',
-          },
-          {
-            id: 'ex-ai-4',
-            title: 'Creative Writing with AI',
-            description: 'Craft prompts that guide AI to generate creative stories with specific themes and styles.',
-            type: 'task',
-            difficulty: 'medium',
-            estimatedTime: '60 mins',
-          }
-        ]
-      },
-      {
-        title: 'Prompt Engineering for Specific AI Models',
-        duration: '7 hours',
-        lessons: [
-          { title: 'Prompting for ChatGPT', duration: '90 mins', id: 'ai-9' },
-          { title: 'Prompting for Image Generation', duration: '120 mins', id: 'ai-10' },
-          { title: 'Prompting for Code Generation', duration: '90 mins', id: 'ai-11' },
-          { title: 'Prompting for Data Analysis', duration: '60 mins', id: 'ai-12' },
-        ],
-        exercises: [
-          {
-            id: 'ex-ai-5',
-            title: 'Code Helper Prompts',
-            description: 'Create prompts that generate useful code snippets and explain programming concepts.',
-            type: 'task',
-            difficulty: 'hard',
-            estimatedTime: '60 mins',
-          },
-          {
-            id: 'ex-ai-6',
-            title: 'AI Image Creation',
-            description: 'Craft detailed prompts for image generation tools to create specific visual outputs.',
-            type: 'task',
-            difficulty: 'medium',
-            estimatedTime: '45 mins',
-          }
-        ]
-      },
-    ],
-    projects: [
-      {
-        id: 'proj-ai-1',
-        title: 'Personal AI Writing Assistant',
-        description: 'Design a set of template prompts for different writing tasks (emails, essays, creative writing) that can be reused and customized.',
-        skills: ['Prompt Engineering', 'Template Design', 'Writing'],
-        estimatedTime: '3 hours',
-        difficulty: 'beginner',
-      },
-      {
-        id: 'proj-ai-2',
-        title: 'AI Learning Tool',
-        description: 'Create a structured prompt system that turns AI into a personalized tutor for a subject of your choice.',
-        skills: ['Advanced Prompting', 'Educational Design', 'Chain-of-Thought'],
-        estimatedTime: '4 hours',
-        difficulty: 'intermediate',
-      }
-    ],
-    outcomes: [
-      'Understand the principles of prompt engineering',
-      'Craft effective prompts for AI tools',
-      'Improve the accuracy and quality of AI results',
-      'Apply prompt engineering techniques to different AI models',
-    ],
-  },
-];
+const courseDetails = allCourses;
 
 const CourseDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('curriculum');
   const [userProgress, setUserProgress] = useState<UserProgress>({
     completedLessons: [],
     completedExercises: [],
     completedProjects: []
   });
+  const [similarCourses, setSimilarCourses] = useState<any[]>([]);
   
   // Find the course by ID
   const course = courseDetails.find(course => course.id === id);
+  
+  // Generate similar courses based on category if course is found
+  useEffect(() => {
+    if (course) {
+      // Find courses in the same category, excluding the current one
+      const sameCategoryCourses = courseDetails
+        .filter(c => c.category === course.category && c.id !== course.id)
+        .slice(0, 3);
+      
+      // If we need more courses to recommend, add some popular ones
+      let recommendedCourses = [...sameCategoryCourses];
+      if (recommendedCourses.length < 3) {
+        const popularCourses = courseDetails
+          .filter(c => c.id !== course.id && !sameCategoryCourses.some(sc => sc.id === c.id))
+          .sort((a, b) => b.students - a.students)
+          .slice(0, 3 - recommendedCourses.length);
+        
+        recommendedCourses = [...recommendedCourses, ...popularCourses];
+      }
+      
+      setSimilarCourses(recommendedCourses);
+    } else {
+      // If no course is found, show popular courses
+      const topCourses = courseDetails
+        .sort((a, b) => b.students - a.students)
+        .slice(0, 4);
+      
+      setSimilarCourses(topCourses);
+    }
+  }, [course, id]);
+  
+  // Auto-redirect to a similar course if needed (uncomment to enable)
+  /*
+  useEffect(() => {
+    if (!course && similarCourses.length > 0) {
+      const timer = setTimeout(() => {
+        navigate(`/course/${similarCourses[0].id}`);
+        toast("Redirected to a similar course", {
+          description: "The requested course was not found"
+        });
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [course, similarCourses, navigate]);
+  */
   
   // Load user progress from local storage on component mount
   useEffect(() => {
@@ -754,13 +302,61 @@ const CourseDetail = () => {
         <Navbar />
         <main className="flex-1 pt-24">
           <div className="container py-16">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold mb-4">Course Not Found</h2>
-              <p className="text-muted-foreground mb-8">The course you're looking for doesn't exist or has been removed.</p>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl font-bold mb-4">This course is currently unavailable</h2>
+              <p className="text-muted-foreground mb-8">Explore similar courses below that might interest you.</p>
               <Button asChild>
                 <Link to="/courses">Browse All Courses</Link>
               </Button>
             </div>
+            
+            {similarCourses.length > 0 && (
+              <div className="mt-12">
+                <h3 className="text-xl font-semibold mb-6">Recommended Courses</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {similarCourses.map((course, index) => (
+                    <Card key={index} className="overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="h-48 overflow-hidden">
+                        <img 
+                          src={course.image} 
+                          alt={course.title} 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardHeader className="pb-2">
+                        <div className="flex gap-2 mb-2">
+                          <span className="inline-block px-2 py-1 bg-primary/10 text-xs text-primary rounded-full">
+                            {course.category}
+                          </span>
+                          <span className="inline-block px-2 py-1 bg-muted text-xs text-muted-foreground rounded-full">
+                            {course.level}
+                          </span>
+                        </div>
+                        <CardTitle className="text-lg">{course.title}</CardTitle>
+                        <CardDescription className="line-clamp-2">{course.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <div className="flex gap-4 text-xs text-muted-foreground mb-4">
+                          <div className="flex items-center gap-1">
+                            <Clock size={14} className="text-primary" />
+                            <span>{course.duration}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Users size={14} className="text-primary" />
+                            <span>{course.students} students</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        <Button asChild className="w-full">
+                          <Link to={`/course/${course.id}`}>View Course</Link>
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </main>
         <Footer />

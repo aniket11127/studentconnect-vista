@@ -3,60 +3,20 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CourseCard from '@/components/ui/CourseCard';
 import { Link } from 'react-router-dom';
-
-// Sample course data
-const featuredCourses = [
-  {
-    id: '1',
-    title: 'Complete MS Office Suite Mastery',
-    description: 'Learn Word, Excel, PowerPoint, and Access with practical exercises designed for school assignments and projects.',
-    image: 'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'Office Skills',
-    level: 'Beginner' as const,
-    duration: '48 hours',
-    students: 3240,
-    lessons: 56,
-    featured: true,
-  },
-  {
-    id: '2',
-    title: 'Introduction to Python Programming',
-    description: 'Start your programming journey with Python fundamentals, data structures, and basic algorithms.',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'Programming',
-    level: 'Beginner' as const,
-    duration: '36 hours',
-    students: 2850,
-    lessons: 42,
-    featured: true,
-  },
-  {
-    id: '5',
-    title: 'SQL Database Management',
-    description: 'Learn how to create, query, and manage databases using SQL with practical exercises for data handling.',
-    image: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'Database',
-    level: 'Intermediate' as const,
-    duration: '30 hours',
-    students: 1760,
-    lessons: 35,
-    featured: true,
-  },
-  {
-    id: '9',
-    title: 'Prompt Engineering for AI',
-    description: 'Learn the art of crafting effective prompts for AI tools like ChatGPT to get better, more accurate results.',
-    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    category: 'AI Skills',
-    level: 'Beginner' as const,
-    duration: '15 hours',
-    students: 1850,
-    lessons: 18,
-    featured: true,
-  },
-];
+import { allCourses } from '@/data/courses';
 
 const Courses = () => {
+  // Filter to display only featured courses, or first 4 if none are featured
+  const featuredCourses = allCourses.filter(course => course.featured).slice(0, 4);
+  
+  // If we don't have at least 4 featured courses, add the most popular ones
+  const coursesToShow = featuredCourses.length >= 4 
+    ? featuredCourses 
+    : [...featuredCourses, ...allCourses
+        .filter(course => !course.featured)
+        .sort((a, b) => b.students - a.students)
+        .slice(0, 4 - featuredCourses.length)];
+
   return (
     <section className="py-20">
       <div className="container">
@@ -87,7 +47,7 @@ const Courses = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredCourses.map((course, index) => (
+          {coursesToShow.map((course, index) => (
             <CourseCard
               key={course.id}
               {...course}
