@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from 'sonner';
 import { allCourses } from '@/data/courses';
+import { Helmet } from 'react-helmet-async';
 
 // Type definitions for exercises and projects
 type Exercise = {
@@ -114,6 +115,7 @@ const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('curriculum');
+  const [enrollmentPending, setEnrollmentPending] = useState(false);
   const [userProgress, setUserProgress] = useState<UserProgress>({
     completedLessons: [],
     completedExercises: [],
@@ -153,22 +155,6 @@ const CourseDetail = () => {
       setSimilarCourses(topCourses);
     }
   }, [course, id]);
-  
-  // Auto-redirect to a similar course if needed (uncomment to enable)
-  /*
-  useEffect(() => {
-    if (!course && similarCourses.length > 0) {
-      const timer = setTimeout(() => {
-        navigate(`/course/${similarCourses[0].id}`);
-        toast("Redirected to a similar course", {
-          description: "The requested course was not found"
-        });
-      }, 3000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [course, similarCourses, navigate]);
-  */
   
   // Load user progress from local storage on component mount
   useEffect(() => {
@@ -299,13 +285,18 @@ const CourseDetail = () => {
   if (!course) {
     return (
       <div className="min-h-screen flex flex-col">
+        <Helmet>
+          <title>Course Not Available | Student Success Portal</title>
+          <meta name="description" content="This course is currently unavailable. Explore our other courses designed to help students develop essential skills." />
+          <meta name="keywords" content="course unavailable, student courses, alternative courses, education" />
+        </Helmet>
         <Navbar />
         <main className="flex-1 pt-24">
           <div className="container py-16">
             <div className="text-center mb-12">
-              <h2 className="text-2xl font-bold mb-4">This course is currently unavailable</h2>
-              <p className="text-muted-foreground mb-8">Explore similar courses below that might interest you.</p>
-              <Button asChild>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">This course is currently unavailable</h2>
+              <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">We're currently updating this course to provide you with the best learning experience. Explore similar courses below that might interest you.</p>
+              <Button asChild size="lg" className="animate-pulse">
                 <Link to="/courses">Browse All Courses</Link>
               </Button>
             </div>
@@ -315,12 +306,12 @@ const CourseDetail = () => {
                 <h3 className="text-xl font-semibold mb-6">Recommended Courses</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {similarCourses.map((course, index) => (
-                    <Card key={index} className="overflow-hidden hover:shadow-md transition-shadow">
+                    <Card key={index} className="overflow-hidden hover:shadow-md transition-shadow border-border/60 hover:border-primary/30">
                       <div className="h-48 overflow-hidden">
                         <img 
                           src={course.image} 
                           alt={course.title} 
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
                         />
                       </div>
                       <CardHeader className="pb-2">
@@ -346,6 +337,7 @@ const CourseDetail = () => {
                             <span>{course.students} students</span>
                           </div>
                         </div>
+                        <div className="font-semibold text-primary text-lg">Free</div>
                       </CardContent>
                       <CardFooter>
                         <Button asChild className="w-full">
@@ -372,6 +364,15 @@ const CourseDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{course.title} | Student Success Portal</title>
+        <meta name="description" content={course.description} />
+        <meta name="keywords" content={`${course.category}, ${course.level}, ${course.title}, student course, free course, education, learning`} />
+        <meta property="og:title" content={`${course.title} | Free Online Course`} />
+        <meta property="og:description" content={course.description} />
+        <meta property="og:image" content={course.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
       <Navbar />
       <main className="flex-1 pt-24">
         <section className="bg-secondary/30 py-12">
@@ -389,6 +390,9 @@ const CourseDetail = () => {
                     </span>
                     <span className="inline-block px-3 py-1 bg-muted text-muted-foreground text-sm font-medium rounded-full">
                       {course.level}
+                    </span>
+                    <span className="inline-block px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
+                      Free Access
                     </span>
                   </div>
                   <h1 className="text-3xl md:text-4xl font-bold">{course.title}</h1>
@@ -689,18 +693,29 @@ const CourseDetail = () => {
                       <img 
                         src={course.image} 
                         alt={course.title} 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform hover:scale-105 duration-700"
                       />
                     </div>
                     <div className="p-6 space-y-6">
                       <div className="flex items-baseline justify-between">
-                        <div className="text-3xl font-bold">
-                          {course.price === 'Free' ? 'Free' : course.price}
+                        <div className="text-3xl font-bold text-green-600">
+                          Free
                         </div>
+                        {course.price && (
+                          <div className="text-lg text-muted-foreground line-through">
+                            {course.price}
+                          </div>
+                        )}
                       </div>
                       
                       <div className="space-y-2">
-                        <Button className="w-full">Enroll Now</Button>
+                        <Button 
+                          className="w-full"
+                          onClick={handleEnrollNow}
+                          disabled={enrollmentPending}
+                        >
+                          {enrollmentPending ? "Coming Soon..." : "Enroll Now"}
+                        </Button>
                         <Button variant="outline" className="w-full">Add to Wishlist</Button>
                       </div>
                       
@@ -733,6 +748,10 @@ const CourseDetail = () => {
                             <div className="flex justify-between py-1">
                               <span className="text-muted-foreground">Enrolled</span>
                               <span className="font-medium">{course.students.toLocaleString()} students</span>
+                            </div>
+                            <div className="flex justify-between py-1">
+                              <span className="text-muted-foreground">Last Updated</span>
+                              <span className="font-medium">June 2023</span>
                             </div>
                           </div>
                         </div>

@@ -84,11 +84,16 @@ const CourseCard = ({
           </div>
         </div>
 
-        {/* Course Level */}
+        {/* Course Level and Price */}
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-secondary">
-            {level}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-secondary">
+              {level}
+            </span>
+            <span className="text-xs font-medium text-green-600">
+              Free
+            </span>
+          </div>
           <Button 
             size="sm" 
             variant="outline" 
