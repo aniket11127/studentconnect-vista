@@ -735,4 +735,126 @@ export const allCourses: Course[] = [
       'Understand how AI language models process and respond to different types of prompts',
       'Master key techniques for writing clear, effective prompts',
       'Learn how to iterate and refine prompts to get better results',
-      'Apply prompt engineering across different AI tools and use cases
+      'Apply prompt engineering across different AI tools and use cases',
+      'Develop strategies for overcoming common AI limitations through clever prompting'
+    ],
+    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+    category: 'AI Skills',
+    level: 'Beginner',
+    duration: '15 hours',
+    students: 1850,
+    lessons: 18,
+    featured: true,
+    price: 'Free',
+    modules: [
+      {
+        title: 'Introduction to Prompt Engineering',
+        duration: '3 hours',
+        lessons: [
+          { title: 'Understanding AI Models', duration: '30 mins', id: 'ai-1' },
+          { title: 'The Art of Prompting', duration: '45 mins', id: 'ai-2' },
+          { title: 'Basic Prompting Techniques', duration: '60 mins', id: 'ai-3' },
+          { title: 'Common Mistakes to Avoid', duration: '45 mins', id: 'ai-4' },
+        ],
+        exercises: [
+          {
+            id: 'ex-ai-1',
+            title: 'Rewrite Simple Prompts',
+            description: 'Practice rewriting ineffective prompts to get better results from an AI assistant.',
+            type: 'task',
+            difficulty: 'easy',
+            estimatedTime: '30 mins',
+          },
+          {
+            id: 'ex-ai-2',
+            title: 'Prompt Analysis Quiz',
+            description: 'Analyze different prompts and predict which will produce the most helpful response.',
+            type: 'quiz',
+            difficulty: 'easy',
+            estimatedTime: '20 mins',
+          }
+        ]
+      },
+      {
+        title: 'Advanced Prompting Techniques',
+        duration: '5 hours',
+        lessons: [
+          { title: 'Using Context and Examples', duration: '60 mins', id: 'ai-5' },
+          { title: 'Iterative Prompting', duration: '90 mins', id: 'ai-6' },
+          { title: 'Prompting for Different Tasks', duration: '45 mins', id: 'ai-7' },
+          { title: 'Prompting for Creativity', duration: '60 mins', id: 'ai-8' },
+        ],
+        exercises: [
+          {
+            id: 'ex-ai-3',
+            title: 'Chain-of-Thought Prompting',
+            description: 'Apply chain-of-thought techniques to help AI models solve complex reasoning problems.',
+            type: 'task',
+            difficulty: 'medium',
+            estimatedTime: '45 mins',
+          },
+          {
+            id: 'ex-ai-4',
+            title: 'Creative Writing with AI',
+            description: 'Craft prompts that guide AI to generate creative stories with specific themes and styles.',
+            type: 'task',
+            difficulty: 'medium',
+            estimatedTime: '60 mins',
+          }
+        ]
+      },
+      {
+        title: 'Prompt Engineering for Specific AI Models',
+        duration: '7 hours',
+        lessons: [
+          { title: 'Prompting for ChatGPT', duration: '90 mins', id: 'ai-9' },
+          { title: 'Prompting for Image Generation', duration: '120 mins', id: 'ai-10' },
+          { title: 'Prompting for Code Generation', duration: '90 mins', id: 'ai-11' },
+          { title: 'Prompting for Data Analysis', duration: '60 mins', id: 'ai-12' },
+        ],
+        exercises: [
+          {
+            id: 'ex-ai-5',
+            title: 'Code Helper Prompts',
+            description: 'Create prompts that generate useful code snippets and explain programming concepts.',
+            type: 'task',
+            difficulty: 'hard',
+            estimatedTime: '60 mins',
+          },
+          {
+            id: 'ex-ai-6',
+            title: 'AI Image Creation',
+            description: 'Craft detailed prompts for image generation tools to create specific visual outputs.',
+            type: 'task',
+            difficulty: 'medium',
+            estimatedTime: '45 mins',
+          }
+        ]
+      },
+    ],
+    projects: [
+      {
+        id: 'proj-ai-1',
+        title: 'Personal AI Writing Assistant',
+        description: 'Design a set of template prompts for different writing tasks (emails, essays, creative writing) that can be reused and customized.',
+        skills: ['Prompt Engineering', 'Template Design', 'Writing'],
+        estimatedTime: '3 hours',
+        difficulty: 'beginner',
+      },
+      {
+        id: 'proj-ai-2',
+        title: 'AI Learning Tool',
+        description: 'Create a structured prompt system that turns AI into a personalized tutor for a subject of your choice.',
+        skills: ['Advanced Prompting', 'Educational Design', 'Chain-of-Thought'],
+        estimatedTime: '4 hours',
+        difficulty: 'intermediate',
+      }
+    ],
+    outcomes: [
+      'Understand the principles of prompt engineering',
+      'Craft effective prompts for AI tools',
+      'Improve the accuracy and quality of AI results',
+      'Apply prompt engineering techniques to different AI models',
+    ],
+  },
+];
