@@ -18,6 +18,7 @@ import VipSessionDetail from "./pages/VipSessionDetail";
 import MyCertificates from "./pages/MyCertificates";
 import NotFound from "./pages/NotFound";
 
+// Create a QueryClient instance
 const queryClient = new QueryClient();
 
 // ScrollToTop component to ensure page scrolls to top on navigation
@@ -104,7 +105,7 @@ const StructuredData = () => {
 // Main routing component
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       <StructuredData />
       <Routes>
@@ -123,19 +124,23 @@ const AppRoutes = () => {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 
 // Main App component
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <AppRoutes />
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AppRoutes />
+        </TooltipProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
