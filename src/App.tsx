@@ -101,31 +101,39 @@ const StructuredData = () => {
   return null;
 };
 
+// Main routing component
+const AppRoutes = () => {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <StructuredData />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/curriculum" element={<Curriculum />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/course/:id" element={<CourseDetail />} />
+        <Route path="/module/:name" element={<CourseDetail />} />
+        <Route path="/vip-sessions" element={<VipSessions />} />
+        <Route path="/vip-sessions/:id" element={<VipSessionDetail />} />
+        <Route path="/certificates" element={<MyCertificates />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+// Main App component
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <StructuredData />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/curriculum" element={<Curriculum />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/course/:id" element={<CourseDetail />} />
-          <Route path="/module/:name" element={<CourseDetail />} />
-          <Route path="/vip-sessions" element={<VipSessions />} />
-          <Route path="/vip-sessions/:id" element={<VipSessionDetail />} />
-          <Route path="/certificates" element={<MyCertificates />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AppRoutes />
     </TooltipProvider>
   </QueryClientProvider>
 );
