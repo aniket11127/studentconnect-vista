@@ -13,7 +13,6 @@ import { toast } from 'sonner';
 import { getResourcesByModuleSlug } from '@/data/courseResources';
 import { downloadResource } from '@/utils/downloadUtils';
 
-// Helper function to determine the icon based on module name
 const getModuleIcon = (moduleName: string) => {
   if (moduleName.includes('MS Word') || moduleName.includes('MS Excel')) return FileText;
   if (moduleName.includes('HTML') || moduleName.includes('Web Development') || moduleName.includes('Python')) return Code;
@@ -23,7 +22,6 @@ const getModuleIcon = (moduleName: string) => {
   return BookOpen;
 };
 
-// Mock exercises data for each module
 const generateExercises = (name: string, moduleCount: number) => {
   const exercises = [];
   
@@ -120,15 +118,26 @@ const ModuleDetail = () => {
   };
   
   const handleDownloadResources = () => {
+    const moduleName = moduleSlug || formattedName.replace(/\s+/g, '-').toLowerCase();
+    
     if (moduleResources.length === 0) {
-      toast("No resources available", {
-        description: "We're currently preparing resources for this module."
+      const fallbackResource = {
+        fileName: `${moduleName}-guide`,
+        type: 'pdf'
+      };
+      
+      toast.info("Downloading module guide...", {
+        description: "Your module guide will begin downloading shortly."
       });
+      
+      setTimeout(() => {
+        downloadResource(fallbackResource.fileName, fallbackResource.type);
+      }, 500);
       return;
     }
     
-    toast("Preparing resources for download", {
-      description: "Your course materials will begin downloading shortly."
+    toast.info("Preparing resources for download", {
+      description: "Your module materials will begin downloading shortly."
     });
     
     if (moduleResources.length > 1) {

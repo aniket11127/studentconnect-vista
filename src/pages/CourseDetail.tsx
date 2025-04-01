@@ -22,7 +22,6 @@ import { Helmet } from 'react-helmet-async';
 import { getResourcesByCourseId } from '@/data/courseResources';
 import { downloadResource, downloadAllResources } from '@/utils/downloadUtils';
 
-// Type definitions for exercises and projects
 type Exercise = {
   id: string;
   title: string;
@@ -41,14 +40,12 @@ type Project = {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
 };
 
-// Type for user progress
 type UserProgress = {
   completedLessons: string[];
   completedExercises: string[];
   completedProjects: string[];
 };
 
-// Related VIP sessions for each course
 const courseRelatedSessions = {
   '1': [
     {
@@ -110,7 +107,6 @@ const courseRelatedSessions = {
   ]
 };
 
-// Enhanced course details with exercises and projects
 const courseDetails = allCourses;
 
 const CourseDetail = () => {
@@ -125,21 +121,16 @@ const CourseDetail = () => {
   });
   const [similarCourses, setSimilarCourses] = useState<any[]>([]);
   
-  // Find the course by ID
   const course = courseDetails.find(course => course.id === id);
   
-  // Get course resources
   const courseResources = id ? getResourcesByCourseId(id) : [];
   
-  // Generate similar courses based on category if course is found
   useEffect(() => {
     if (course) {
-      // Find courses in the same category, excluding the current one
       const sameCategoryCourses = courseDetails
         .filter(c => c.category === course.category && c.id !== course.id)
         .slice(0, 3);
       
-      // If we need more courses to recommend, add some popular ones
       let recommendedCourses = [...sameCategoryCourses];
       if (recommendedCourses.length < 3) {
         const popularCourses = courseDetails
@@ -152,7 +143,6 @@ const CourseDetail = () => {
       
       setSimilarCourses(recommendedCourses);
     } else {
-      // If no course is found, show popular courses
       const topCourses = courseDetails
         .sort((a, b) => b.students - a.students)
         .slice(0, 4);
@@ -161,7 +151,6 @@ const CourseDetail = () => {
     }
   }, [course, id]);
   
-  // Load user progress from local storage on component mount
   useEffect(() => {
     if (id) {
       const savedProgress = localStorage.getItem(`course-progress-${id}`);
@@ -171,14 +160,12 @@ const CourseDetail = () => {
     }
   }, [id]);
   
-  // Save progress to local storage whenever it changes
   useEffect(() => {
     if (id) {
       localStorage.setItem(`course-progress-${id}`, JSON.stringify(userProgress));
     }
   }, [userProgress, id]);
   
-  // Handle marking a lesson as complete/incomplete
   const toggleLessonCompletion = (lessonId: string) => {
     setUserProgress(prev => {
       const isCompleted = prev.completedLessons.includes(lessonId);
@@ -203,7 +190,6 @@ const CourseDetail = () => {
     });
   };
   
-  // Handle marking an exercise as complete/incomplete
   const toggleExerciseCompletion = (exerciseId: string) => {
     setUserProgress(prev => {
       const isCompleted = prev.completedExercises.includes(exerciseId);
@@ -228,7 +214,6 @@ const CourseDetail = () => {
     });
   };
   
-  // Handle marking a project as complete/incomplete
   const toggleProjectCompletion = (projectId: string) => {
     setUserProgress(prev => {
       const isCompleted = prev.completedProjects.includes(projectId);
@@ -253,7 +238,6 @@ const CourseDetail = () => {
     });
   };
   
-  // Handle enrollment button click
   const handleEnrollNow = () => {
     setEnrollmentPending(true);
     toast.success("Enrollment Coming Soon!", {
@@ -266,29 +250,24 @@ const CourseDetail = () => {
     }, 3000);
   };
   
-  // Calculate course completion percentage
   const calculateProgress = () => {
     if (!course) return 0;
     
-    // Count all lessons, exercises, and projects
     let totalItems = 0;
     let completedItems = 0;
     
-    // Count lessons
     const allLessons = course.modules.flatMap(module => module.lessons);
     totalItems += allLessons.length;
     completedItems += allLessons.filter(lesson => 
       userProgress.completedLessons.includes(lesson.id)
     ).length;
     
-    // Count exercises
     const allExercises = course.modules.flatMap(module => module.exercises || []);
     totalItems += allExercises.length;
     completedItems += allExercises.filter(exercise => 
       userProgress.completedExercises.includes(exercise.id)
     ).length;
     
-    // Count projects
     if (course.projects) {
       totalItems += course.projects.length;
       completedItems += course.projects.filter(project => 
@@ -299,12 +278,19 @@ const CourseDetail = () => {
     return totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
   };
   
-  // Add the missing handleDownloadResources function
   const handleDownloadResources = () => {
+    const courseName = course ? course.title.replace(/\s+/g, '-').toLowerCase() : '';
+    
     if (courseResources.length === 0) {
-      toast("No resources available", {
-        description: "We're currently preparing resources for this course."
+      toast.info("Downloading course materials...", {
+        description: "We're preparing basic course materials for you."
       });
+      
+      setTimeout(() => {
+        if (course) {
+          downloadResource(`${courseName}-course-guide`, 'pdf');
+        }
+      }, 500);
       return;
     }
     
@@ -313,7 +299,6 @@ const CourseDetail = () => {
     }
   };
   
-  // Handle case where course is not found
   if (!course) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -388,10 +373,8 @@ const CourseDetail = () => {
     );
   }
   
-  // Get related VIP sessions for this course
   const relatedSessions = courseRelatedSessions[course.id as keyof typeof courseRelatedSessions] || [];
 
-  // Calculate progress
   const progressPercentage = calculateProgress();
 
   return (
