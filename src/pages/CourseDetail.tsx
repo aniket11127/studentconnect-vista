@@ -299,6 +299,20 @@ const CourseDetail = () => {
     return totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
   };
   
+  // Add the missing handleDownloadResources function
+  const handleDownloadResources = () => {
+    if (courseResources.length === 0) {
+      toast("No resources available", {
+        description: "We're currently preparing resources for this course."
+      });
+      return;
+    }
+    
+    if (course) {
+      downloadAllResources(course.id, course.title);
+    }
+  };
+  
   // Handle case where course is not found
   if (!course) {
     return (
