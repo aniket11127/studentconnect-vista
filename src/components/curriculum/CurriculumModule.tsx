@@ -52,6 +52,9 @@ const CurriculumModule = ({
     ([key]) => name.includes(key)
   )?.[1] || iconMap.default;
 
+  // Generate URL-friendly slug from name
+  const moduleSlug = name.toLowerCase().replace(/\s+/g, '-');
+
   return (
     <Collapsible className="w-full">
       <Card className="hover:shadow-md transition-shadow duration-300">
@@ -189,7 +192,18 @@ const CurriculumModule = ({
 
         <CardFooter>
           <Button variant="outline" className="w-full" asChild>
-            <Link to={`/module/${name.toLowerCase().replace(/\s+/g, '-')}`}>
+            <Link to={`/module/${moduleSlug}`} state={{ 
+              moduleData: {
+                name,
+                description,
+                modules,
+                projects,
+                topics,
+                progress,
+                weeks,
+                image
+              } 
+            }}>
               View Module
               <ChevronRight className="ml-2 h-4 w-4" />
             </Link>
