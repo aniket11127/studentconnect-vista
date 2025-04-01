@@ -248,6 +248,19 @@ const CourseDetail = () => {
     });
   };
   
+  // Handle enrollment button click
+  const handleEnrollNow = () => {
+    setEnrollmentPending(true);
+    toast.success("Enrollment Coming Soon!", {
+      description: "This feature will be available in the near future.",
+      duration: 3000,
+    });
+    
+    setTimeout(() => {
+      setEnrollmentPending(false);
+    }, 3000);
+  };
+  
   // Calculate course completion percentage
   const calculateProgress = () => {
     if (!course) return 0;
