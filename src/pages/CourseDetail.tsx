@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Clock, Users, BookOpen, Award, BarChart2, Calendar, MessageSquare, User, Check, CheckCircle2, CircleDashed, Rocket, Brain, Target, Code, PenSquare } from 'lucide-react';
+import { ArrowLeft, Clock, Users, BookOpen, Award, BarChart2, Calendar, MessageSquare, User, Check, CheckCircle2, CircleDashed, Rocket, Brain, Target, Code, PenSquare, Download, File, FileText } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
@@ -19,6 +19,8 @@ import {
 import { toast } from 'sonner';
 import { allCourses } from '@/data/courses';
 import { Helmet } from 'react-helmet-async';
+import { getResourcesByCourseId } from '@/data/courseResources';
+import { downloadResource, downloadAllResources } from '@/utils/downloadUtils';
 
 // Type definitions for exercises and projects
 type Exercise = {
@@ -125,6 +127,9 @@ const CourseDetail = () => {
   
   // Find the course by ID
   const course = courseDetails.find(course => course.id === id);
+  
+  // Get course resources
+  const courseResources = id ? getResourcesByCourseId(id) : [];
   
   // Generate similar courses based on category if course is found
   useEffect(() => {
@@ -437,6 +442,7 @@ const CourseDetail = () => {
                       <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
                       <TabsTrigger value="exercises">Exercises & Projects</TabsTrigger>
                       <TabsTrigger value="info">Course Info</TabsTrigger>
+                      <TabsTrigger value="resources">Resources</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="curriculum" className="space-y-6">
@@ -695,6 +701,64 @@ const CourseDetail = () => {
                         </div>
                       )}
                     </TabsContent>
+
+                    <TabsContent value="resources" className="space-y-6">
+                      <div className="bg-background rounded-lg p-6 shadow-sm border">
+                        <h3 className="text-xl font-semibold mb-4">Course Resources</h3>
+                        
+                        {courseResources.length > 0 ? (
+                          <div className="space-y-6">
+                            <div className="flex justify-end">
+                              <Button onClick={handleDownloadResources} className="flex items-center gap-2">
+                                <Download className="h-4 w-4" />
+                                Download All Resources
+                              </Button>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              {courseResources.map((resource) => (
+                                <Card key={resource.id} className="overflow-hidden">
+                                  <CardContent className="pt-6">
+                                    <div className="flex items-start mb-4">
+                                      <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mr-3">
+                                        <File className="h-5 w-5" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <h4 className="font-medium">{resource.title}</h4>
+                                        <p className="text-sm text-muted-foreground mb-1">{resource.description}</p>
+                                        <div className="flex items-center text-xs text-muted-foreground">
+                                          <span className="uppercase mr-2">{resource.type}</span>
+                                          <span>{resource.fileSize}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <Button 
+                                      variant="outline" 
+                                      className="w-full" 
+                                      onClick={() => downloadResource(resource.fileName, resource.type)}
+                                    >
+                                      <Download className="h-4 w-4 mr-2" />
+                                      Download
+                                    </Button>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-center py-12">
+                            <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-muted mb-4">
+                              <FileText className="h-8 w-8 text-muted-foreground" />
+                            </div>
+                            <h3 className="text-lg font-medium mb-2">No resources available yet</h3>
+                            <p className="text-muted-foreground max-w-md mx-auto">
+                              We're currently preparing resources for this course. Please check back later.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </TabsContent>
                   </Tabs>
                 </div>
               </div>
@@ -729,7 +793,10 @@ const CourseDetail = () => {
                         >
                           {enrollmentPending ? "Coming Soon..." : "Enroll Now"}
                         </Button>
-                        <Button variant="outline" className="w-full">Add to Wishlist</Button>
+                        <Button variant="outline" className="w-full" onClick={handleDownloadResources}>
+                          <Download className="mr-2 h-4 w-4" />
+                          Download Resources
+                        </Button>
                       </div>
                       
                       <div className="border-t pt-6 space-y-4">

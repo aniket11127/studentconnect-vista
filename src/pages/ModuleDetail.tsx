@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { useLocation, useParams, Link } from 'react-router-dom';
-import { ChevronLeft, BookOpen, Download, FileText, Code, Database, Award, Brain, Calendar, Clock, Users, BookCheck, CheckCircle } from 'lucide-react';
+import { ChevronLeft, BookOpen, Download, FileText, Code, Database, Award, Brain, Calendar, Clock, Users, BookCheck, CheckCircle, File } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -11,6 +10,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { getResourcesByModuleSlug } from '@/data/courseResources';
+import { downloadResource } from '@/utils/downloadUtils';
 
 // Helper function to determine the icon based on module name
 const getModuleIcon = (moduleName: string) => {
@@ -63,7 +64,6 @@ const generateExercises = (name: string, moduleCount: number) => {
       { id: 3, title: 'Multi-modal Prompt Engineering', level: 'Advanced', estimated: '75 min' }
     );
   } else {
-    // Generic exercises for any other module type
     exercises.push(
       { id: 1, title: 'Fundamentals Exercise', level: 'Beginner', estimated: '45 min' },
       { id: 2, title: 'Practical Application', level: 'Intermediate', estimated: '60 min' },
@@ -71,7 +71,6 @@ const generateExercises = (name: string, moduleCount: number) => {
     );
   }
   
-  // Add more exercises based on module count
   if (moduleCount > 10) {
     exercises.push({ 
       id: 4, 
@@ -88,11 +87,8 @@ const ModuleDetail = () => {
   const location = useLocation();
   const { moduleSlug } = useParams();
   
-  // Attempt to get module data from location state
   const moduleData = location.state?.moduleData;
   
-  // If no module data in state, we could fetch it based on the slug
-  // For now, we'll show a placeholder if no data is available
   const module = moduleData || {
     name: moduleSlug?.replace(/-/g, ' '),
     description: 'Comprehensive course curriculum',
@@ -107,28 +103,43 @@ const ModuleDetail = () => {
     ]
   };
   
-  // Format module name for display (capitalize words)
   const formattedName = module.name
     ? module.name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
     : 'Course Module';
   
   const Icon = getModuleIcon(formattedName);
   
-  // Generate exercises based on module name
   const exercises = generateExercises(formattedName, module.modules);
   
-  // Handle enrollment
+  const moduleResources = moduleSlug ? getResourcesByModuleSlug(moduleSlug) : [];
+  
   const handleEnroll = () => {
     toast.success(`Successfully enrolled in ${formattedName}`, {
       description: "You can now access all course materials and exercises."
     });
   };
   
-  // Handle download resources
   const handleDownloadResources = () => {
+    if (moduleResources.length === 0) {
+      toast("No resources available", {
+        description: "We're currently preparing resources for this module."
+      });
+      return;
+    }
+    
     toast("Preparing resources for download", {
       description: "Your course materials will begin downloading shortly."
     });
+    
+    if (moduleResources.length > 1) {
+      moduleResources.forEach((resource, index) => {
+        setTimeout(() => {
+          downloadResource(resource.fileName, resource.type);
+        }, index * 1500);
+      });
+    } else if (moduleResources.length === 1) {
+      downloadResource(moduleResources[0].fileName, moduleResources[0].type);
+    }
   };
 
   return (
@@ -136,7 +147,6 @@ const ModuleDetail = () => {
       <Navbar />
       <main className="flex-1 pt-20 pb-16">
         <div className="container max-w-6xl">
-          {/* Breadcrumb */}
           <div className="mb-6">
             <Link 
               to="/curriculum" 
@@ -147,9 +157,7 @@ const ModuleDetail = () => {
             </Link>
           </div>
           
-          {/* Hero Section */}
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 mb-12">
-            {/* Left Column - Module Info */}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
@@ -203,7 +211,6 @@ const ModuleDetail = () => {
               </div>
             </div>
             
-            {/* Right Column - Module Image */}
             <div className="md:w-2/5">
               {module.image ? (
                 <img 
@@ -219,16 +226,15 @@ const ModuleDetail = () => {
             </div>
           </div>
           
-          {/* Module Tabs */}
           <Tabs defaultValue="overview" className="mb-12">
             <TabsList className="mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
               <TabsTrigger value="exercises">Exercises</TabsTrigger>
               <TabsTrigger value="projects">Projects</TabsTrigger>
+              <TabsTrigger value="resources">Resources</TabsTrigger>
             </TabsList>
             
-            {/* Overview Tab */}
             <TabsContent value="overview">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="md:col-span-2 space-y-8">
@@ -307,7 +313,6 @@ const ModuleDetail = () => {
               </div>
             </TabsContent>
             
-            {/* Curriculum Tab */}
             <TabsContent value="curriculum">
               <h2 className="text-2xl font-semibold mb-6">Course Curriculum</h2>
               
@@ -324,7 +329,6 @@ const ModuleDetail = () => {
                       <p className="text-muted-foreground mb-4">{week.description}</p>
                       
                       <div className="space-y-3">
-                        {/* Example lectures for this week */}
                         {[1, 2, 3].map((lecture) => (
                           <div key={lecture} className="flex items-center justify-between border-b pb-2">
                             <div className="flex items-center gap-3">
@@ -355,7 +359,6 @@ const ModuleDetail = () => {
               </Accordion>
             </TabsContent>
             
-            {/* Exercises Tab */}
             <TabsContent value="exercises">
               <h2 className="text-2xl font-semibold mb-6">Practical Exercises</h2>
               
@@ -389,7 +392,6 @@ const ModuleDetail = () => {
               </div>
             </TabsContent>
             
-            {/* Projects Tab */}
             <TabsContent value="projects">
               <h2 className="text-2xl font-semibold mb-6">Course Projects</h2>
               
@@ -422,6 +424,62 @@ const ModuleDetail = () => {
                   </Card>
                 ))}
               </div>
+            </TabsContent>
+            
+            <TabsContent value="resources">
+              <h2 className="text-2xl font-semibold mb-6">Course Resources</h2>
+              
+              {moduleResources.length > 0 ? (
+                <div className="space-y-6">
+                  <div className="flex justify-end">
+                    <Button onClick={handleDownloadResources} className="flex items-center gap-2">
+                      <Download className="h-4 w-4" />
+                      Download All Resources
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {moduleResources.map((resource) => (
+                      <Card key={resource.id} className="overflow-hidden">
+                        <CardContent className="pt-6">
+                          <div className="flex items-start mb-4">
+                            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mr-3">
+                              <File className="h-5 w-5" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="font-medium">{resource.title}</h3>
+                              <p className="text-sm text-muted-foreground mb-1">{resource.description}</p>
+                              <div className="flex items-center text-xs text-muted-foreground">
+                                <span className="uppercase mr-2">{resource.type}</span>
+                                <span>{resource.fileSize}</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <Button 
+                            variant="outline" 
+                            className="w-full" 
+                            onClick={() => downloadResource(resource.fileName, resource.type)}
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-muted mb-4">
+                    <FileText className="h-8 w-8 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">No resources available yet</h3>
+                  <p className="text-muted-foreground max-w-md mx-auto">
+                    We're currently preparing resources for this module. Please check back later.
+                  </p>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
