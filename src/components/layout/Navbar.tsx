@@ -51,7 +51,7 @@ const Navbar = () => {
       )}
     >
       <div className="container flex items-center justify-between">
-        {/* Logo - Resized and background blended */}
+        {/* Logo - Enhanced with new logo */}
         <Link 
           to="/" 
           className="flex items-center gap-2 font-bold text-xl tracking-tight"
@@ -60,17 +60,16 @@ const Navbar = () => {
         >
           <div className="h-14 w-auto relative flex items-center justify-center">
             <img 
-              src="/lovable-uploads/02174cfd-bb30-416f-90c8-8968b3544810.png" 
+              src="/lovable-uploads/a7b92d72-5b5a-4c45-b8d6-df9a520a09df.png" 
               alt="SGK14 Logo" 
-              className="h-full w-auto object-contain drop-shadow-sm"
+              className="h-full w-auto object-contain"
               style={{
-                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.05))',
-                backgroundColor: 'transparent',
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
               }}
               loading="eager"
             />
           </div>
-          <span className="hidden lg:inline-block ml-2">SKILL GROWTH & KNOWLEDGE</span>
+          <span className="hidden lg:inline-block ml-2 text-primary font-semibold">SKILL GROWTH & KNOWLEDGE</span>
         </Link>
 
         {/* Desktop Navigation */}

@@ -33,18 +33,19 @@ const Footer = () => {
     <footer className="bg-secondary/50 py-16">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Logo and info */}
+          {/* Logo and info - Updated with new logo */}
           <div className="space-y-5">
             <Link to="/" className="flex items-center gap-2 font-bold text-xl" aria-label="SGK14 - Home">
-              <img 
-                src="/logo.png" 
-                alt="SGK14 Logo" 
-                width="40" 
-                height="40" 
-                className="h-10 w-auto"
-                loading="lazy"
-              />
-              <span>SGK14</span>
+              <div className="h-12 w-auto">
+                <img 
+                  src="/lovable-uploads/a7b92d72-5b5a-4c45-b8d6-df9a520a09df.png" 
+                  alt="SGK14 Logo" 
+                  className="h-full w-auto object-contain"
+                  style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))' }}
+                  loading="lazy"
+                />
+              </div>
+              <span className="text-primary font-semibold">SGK14</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">
               Empowering MP Board students with essential digital skills and career guidance for a successful future.
