@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -29,9 +30,18 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
+    { name: 'Curriculum', path: '/curriculum' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
+
+  // Check if a link is active
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <header
@@ -69,7 +79,12 @@ const Navbar = () => {
             <Link
               key={link.name}
               to={link.path}
-              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+              className={cn(
+                "text-sm font-medium transition-colors",
+                isActive(link.path) 
+                  ? "text-primary font-semibold" 
+                  : "text-foreground/80 hover:text-primary"
+              )}
               aria-label={`Navigate to ${link.name}`}
             >
               {link.name}
@@ -105,7 +120,12 @@ const Navbar = () => {
                   <Link
                     key={link.name}
                     to={link.path}
-                    className="text-lg font-medium hover:text-primary transition-colors"
+                    className={cn(
+                      "text-lg font-medium transition-colors", 
+                      isActive(link.path) 
+                        ? "text-primary font-semibold" 
+                        : "hover:text-primary"
+                    )}
                     onClick={closeMenu}
                     aria-label={`Navigate to ${link.name}`}
                   >
