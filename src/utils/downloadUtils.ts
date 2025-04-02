@@ -147,29 +147,54 @@ const createDummyContent = (fileName: string, fileType: string) => {
 ${formatTitle(fileName)} - COURSE OVERVIEW
 ==================================
 
-COURSE OUTLINE:
-${topics.map((topic, index) => `${index + 1}. ${topic}`).join('\n')}
+COURSE DESCRIPTION:
+${generateCourseDescription(courseName)}
 
+==================================
+TOPICS & SUBTOPICS:
+==================================
+${generateDetailedTopics(courseName)}
+
+==================================
 LEARNING OBJECTIVES:
+==================================
 ${generateLearningObjectives(courseName)}
 
-MODULES:
+==================================
+MODULES & CURRICULUM:
+==================================
 ${generateModules(courseName)}
 
-PROJECTS:
+==================================
+PROJECTS & ASSIGNMENTS:
+==================================
 ${generateProjects(courseName)}
 
-EXERCISES:
+==================================
+PRACTICAL EXERCISES:
+==================================
 ${generateExercises(courseName)}
 
+==================================
+ESTIMATED DURATION:
+==================================
+${generateCourseDuration(courseName)}
+
+==================================
 RESOURCES:
+==================================
 - Comprehensive course slides
 - Hands-on practice exercises
 - Real-world project templates
 - Reference materials and cheat sheets
 - Video tutorials for key concepts
+- Community forum for discussion
+- Expert instructor support
+- Downloadable code samples
 
 ==================================
+Course_Overview_${fileName}.pdf
+Copyright © ${new Date().getFullYear()} Learning Platform
 This is a simulated PDF file for learning purposes.
 In a real application, this would contain actual course materials.
 ==================================
@@ -184,6 +209,8 @@ Contains the following files:
 - ${fileName}_resources.pdf
 - ${fileName}_solutions.pdf
 - ${fileName}_supplementary_materials.pdf
+- ${fileName}_code_samples.zip
+- ${fileName}_presentation_slides.pptx
 
 This is a simulated ZIP file for learning purposes.
 In a real application, this would contain actual course materials.
@@ -200,6 +227,239 @@ const formatTitle = (fileName: string): string => {
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
+};
+
+// Generate course description based on course type
+const generateCourseDescription = (courseType: string): string => {
+  const descriptions: Record<string, string> = {
+    'ms-excel': 
+      'This comprehensive Microsoft Excel course takes you from beginner to advanced user. You\'ll learn essential spreadsheet skills, powerful formulas and functions, data visualization techniques, and automation tools that will transform your productivity and data analysis capabilities. Whether you\'re looking to enhance your career prospects or improve your efficiency at work, this course provides practical skills that you can apply immediately.',
+    'ms-word': 
+      'Master Microsoft Word with this in-depth course designed for all skill levels. Learn to create professional documents, automate repetitive tasks, and leverage Word\'s powerful formatting and collaboration features. From basic document creation to advanced templates and automation, this course covers everything you need to become proficient in Microsoft\'s industry-standard word processing software.',
+    'python-programming': 
+      'This Python programming course offers a comprehensive journey from programming fundamentals to advanced Python concepts. You\'ll develop strong coding skills through hands-on projects and exercises, learning data manipulation, algorithmic thinking, and software design principles. By the end of the course, you\'ll be able to build functional applications and have the foundation needed for specialized paths like data science, web development, or automation.',
+    'web-development': 
+      'Dive into modern web development with this comprehensive course covering frontend and backend technologies. Learn to build responsive, interactive websites using HTML, CSS, and JavaScript, and understand how to connect them to backend services. Through practical projects and real-world examples, you\'ll develop the skills needed to create professional web applications from scratch.',
+    'sql-database': 
+      'This SQL and database management course provides a thorough understanding of relational databases and the SQL language. From basic queries to advanced database design concepts, you\'ll learn how to effectively store, retrieve, and manipulate data. Practical exercises with real-world scenarios will help you master database optimization, security, and integration with applications.',
+    'prompt-engineering': 
+      'Explore the cutting-edge field of prompt engineering for large language models in this specialized course. Learn the principles and techniques for crafting effective prompts that yield precise and useful AI responses. Through practical examples and hands-on exercises, you\'ll develop skills to harness the power of AI language models for various applications, from content creation to specialized technical tasks.',
+    'general': 
+      'This comprehensive course provides a thorough introduction to key concepts and practical applications in the field. Designed for both beginners and those looking to enhance their existing skills, the curriculum covers fundamental principles, industry best practices, and advanced techniques through a combination of theoretical knowledge and hands-on exercises.'
+  };
+
+  return descriptions[courseType] || descriptions['general'];
+};
+
+// Generate detailed topics with subtopics
+const generateDetailedTopics = (courseType: string): string => {
+  const detailedTopics: Record<string, string> = {
+    'ms-excel': 
+`1. Excel Fundamentals
+   - Understanding the Excel interface and ribbon
+   - Cell navigation and selection techniques
+   - Basic data entry and formatting
+   - Workbook management and organization
+
+2. Working with Formulas and Functions
+   - Creating basic formulas with operators
+   - Understanding cell references (relative, absolute, mixed)
+   - Using common functions (SUM, AVERAGE, COUNT, MAX, MIN)
+   - Logical functions (IF, AND, OR, NOT)
+   - Lookup functions (VLOOKUP, HLOOKUP, INDEX/MATCH)
+   - Text and date manipulation functions
+
+3. Data Analysis and Visualization
+   - Sorting and filtering data
+   - Creating and formatting charts and graphs
+   - Using conditional formatting for data visualization
+   - Creating and using PivotTables and PivotCharts
+   - Data validation and error checking
+
+4. Advanced Excel Features
+   - What-if analysis tools (Goal Seek, Scenario Manager)
+   - Data analysis with PowerPivot
+   - Creating and using macros for automation
+   - Introduction to VBA
+   - Excel for business intelligence`,
+
+    'ms-word': 
+`1. Word Essentials
+   - Interface overview and document navigation
+   - Text entry, editing, and basic formatting
+   - Document views and display options
+   - Saving and managing document files
+
+2. Document Formatting and Structure
+   - Paragraph and character formatting
+   - Working with styles and themes
+   - Page layout and section formatting
+   - Headers, footers, and page numbering
+   - Creating and using templates
+
+3. Advanced Document Elements
+   - Working with tables and formatting options
+   - Inserting and modifying images and graphics
+   - Creating and customizing charts and diagrams
+   - Using SmartArt and drawing tools
+   - Working with equations and symbols
+
+4. Collaborative Features and Automation
+   - Track changes and document review
+   - Document protection and security
+   - Mail merge for personalized documents
+   - Creating and using macros
+   - Integration with other Office applications`,
+
+    'python-programming': 
+`1. Python Fundamentals
+   - Setting up the Python environment
+   - Variables, data types, and operators
+   - Control flow: conditionals and loops
+   - Functions and modules
+   - Error handling with try/except
+
+2. Data Structures and Collections
+   - Lists, tuples, and sets
+   - Dictionaries and their applications
+   - List comprehensions
+   - Working with strings and string methods
+   - File handling and I/O operations
+
+3. Object-Oriented Programming
+   - Classes and objects
+   - Inheritance and polymorphism
+   - Encapsulation and abstraction
+   - Special methods and operator overloading
+   - Custom data structures
+
+4. Python Libraries and Applications
+   - Working with NumPy for numerical computing
+   - Data analysis using Pandas
+   - Data visualization with Matplotlib and Seaborn
+   - Web scraping fundamentals
+   - Introduction to web applications with Flask`,
+
+    'web-development': 
+`1. HTML Fundamentals
+   - Document structure and semantic markup
+   - Text formatting and hyperlinking
+   - Lists, tables, and forms
+   - Media embedding (images, audio, video)
+   - HTML5 features and APIs
+
+2. CSS Styling and Layout
+   - Selectors and the cascade
+   - Box model and sizing
+   - Typography and color styling
+   - Flexbox and Grid layout systems
+   - Responsive design and media queries
+   - CSS animations and transitions
+
+3. JavaScript Programming
+   - Syntax fundamentals and data types
+   - Functions, scope, and closures
+   - DOM manipulation and events
+   - Asynchronous JavaScript (Promises, async/await)
+   - Fetch API and working with JSON
+   - Modern ES6+ features
+
+4. Frontend Frameworks and Tools
+   - Introduction to React components and props
+   - State management concepts
+   - Build tools and module bundlers
+   - Version control with Git
+   - Performance optimization techniques`,
+
+    'sql-database': 
+`1. Relational Database Fundamentals
+   - Database concepts and terminology
+   - Entity-Relationship modeling
+   - Normalization and database design
+   - DBMS architecture and components
+   - SQL language overview
+
+2. Data Retrieval with SQL
+   - SELECT statement syntax and clauses
+   - Filtering with WHERE conditions
+   - Sorting with ORDER BY
+   - Aggregation with GROUP BY
+   - Joining tables (INNER, LEFT, RIGHT, FULL)
+
+3. Data Manipulation and Management
+   - INSERT, UPDATE, and DELETE operations
+   - Transaction management
+   - Constraints and data integrity
+   - Indexes and performance optimization
+   - Views and stored procedures
+
+4. Advanced SQL and Database Topics
+   - Subqueries and Common Table Expressions
+   - Window functions
+   - Triggers and events
+   - Database security principles
+   - Performance tuning and query optimization`,
+
+    'prompt-engineering': 
+`1. Understanding Language Models
+   - How large language models work
+   - Tokenization and embeddings
+   - Context windows and limitations
+   - Model capabilities and constraints
+   - Comparing different AI models
+
+2. Prompt Design Fundamentals
+   - Components of effective prompts
+   - Clarity and specificity techniques
+   - Context setting and priming
+   - Output formatting control
+   - Handling ambiguity and edge cases
+
+3. Advanced Prompting Techniques
+   - Few-shot learning and examples
+   - Chain-of-thought reasoning
+   - Self-consistency and verification
+   - Retrieval-augmented generation
+   - Prompt chaining and composition
+
+4. Domain-Specific Applications
+   - Prompting for code generation
+   - Creative writing and content creation
+   - Data analysis and extraction
+   - Conversation design for AI assistants
+   - Ethical considerations in prompt engineering`,
+
+    'general': 
+`1. Foundational Concepts
+   - Field terminology and basic principles
+   - Historical development and context
+   - Core theoretical frameworks
+   - Industry standards and best practices
+   - Essential tools and resources
+
+2. Intermediate Techniques
+   - Problem-solving methodologies
+   - Data collection and analysis
+   - Project planning and management
+   - Quality assurance and testing
+   - Optimization strategies
+
+3. Practical Applications
+   - Real-world case studies
+   - Industry-specific implementations
+   - Integration with existing systems
+   - Troubleshooting common issues
+   - Customization and adaptation
+
+4. Advanced Topics
+   - Emerging trends and technologies
+   - Research and development approaches
+   - Specialized techniques for complex scenarios
+   - Performance enhancement methods
+   - Future directions and innovations`
+  };
+
+  return detailedTopics[courseType] || detailedTopics['general'];
 };
 
 // Generate learning objectives based on course type
@@ -257,6 +517,56 @@ const generateLearningObjectives = (courseType: string): string => {
   };
 
   return (objectives[courseType] || objectives['general']).map((obj, i) => `${i + 1}. ${obj}`).join('\n');
+};
+
+// Generate course duration information
+const generateCourseDuration = (courseType: string): string => {
+  const durations: Record<string, string> = {
+    'ms-excel': 
+      'Total Duration: 30 hours\n\n' +
+      '- Core Modules: 20 hours of video content\n' +
+      '- Practical Exercises: 8 hours\n' +
+      '- Projects: 10-15 hours depending on complexity\n' +
+      '- Suggested Pace: 4-6 weeks (5-7 hours per week)',
+    'ms-word': 
+      'Total Duration: 25 hours\n\n' +
+      '- Core Modules: 16 hours of video content\n' +
+      '- Practical Exercises: 6 hours\n' +
+      '- Projects: 8-12 hours depending on complexity\n' +
+      '- Suggested Pace: 3-5 weeks (5-7 hours per week)',
+    'python-programming': 
+      'Total Duration: 45 hours\n\n' +
+      '- Core Modules: 28 hours of video content\n' +
+      '- Coding Exercises: 12 hours\n' +
+      '- Projects: 15-20 hours depending on complexity\n' +
+      '- Suggested Pace: 6-8 weeks (6-8 hours per week)',
+    'web-development': 
+      'Total Duration: 50 hours\n\n' +
+      '- Core Modules: 30 hours of video content\n' +
+      '- Coding Exercises: 15 hours\n' +
+      '- Projects: 15-25 hours depending on complexity\n' +
+      '- Suggested Pace: 8-10 weeks (5-7 hours per week)',
+    'sql-database': 
+      'Total Duration: 28 hours\n\n' +
+      '- Core Modules: 18 hours of video content\n' +
+      '- Practice Queries: 7 hours\n' +
+      '- Database Projects: 10-15 hours depending on complexity\n' +
+      '- Suggested Pace: 4-6 weeks (5-6 hours per week)',
+    'prompt-engineering': 
+      'Total Duration: 20 hours\n\n' +
+      '- Core Modules: 12 hours of video content\n' +
+      '- Practical Exercises: 5 hours\n' +
+      '- Applied Projects: 8-10 hours depending on complexity\n' +
+      '- Suggested Pace: 3-4 weeks (5-6 hours per week)',
+    'general': 
+      'Total Duration: 35 hours\n\n' +
+      '- Core Modules: 20 hours of video content\n' +
+      '- Practical Exercises: 10 hours\n' +
+      '- Applied Projects: 10-15 hours depending on complexity\n' +
+      '- Suggested Pace: 5-7 weeks (5-7 hours per week)'
+  };
+
+  return durations[courseType] || durations['general'];
 };
 
 // Generate modules content
@@ -444,7 +754,7 @@ export const downloadAllResources = (courseId: string, courseTitle: string) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${courseName}-complete-resources.zip`);
+      link.setAttribute('download', `Course_Overview_${courseName}-complete-resources.zip`);
       
       // Append to body, click and remove
       document.body.appendChild(link);
@@ -494,7 +804,7 @@ export const downloadCurriculumResource = (subjectName: string) => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${formattedName}-curriculum-overview.pdf`);
+      link.setAttribute('download', `Course_Overview_${formattedName}.pdf`);
       
       // Append to body, click and remove
       document.body.appendChild(link);
