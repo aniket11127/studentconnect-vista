@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Download } from 'lucide-react';
@@ -103,6 +104,15 @@ const CurriculumModule = ({
             showValue={true} 
             label="Completion" 
           />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="mt-4 w-full flex items-center justify-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"
+            onClick={handleDownloadResources}
+          >
+            <Download className="h-4 w-4" />
+            Download Course Overview
+          </Button>
         </CardContent>
 
         <CollapsibleContent>
@@ -139,15 +149,6 @@ const CurriculumModule = ({
                     </li>
                   ))}
                 </ul>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="mt-4 flex items-center gap-2"
-                  onClick={handleDownloadResources}
-                >
-                  <Download className="h-4 w-4" />
-                  Download course resources
-                </Button>
               </div>
             )}
 
