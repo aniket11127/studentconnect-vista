@@ -1,11 +1,11 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain } from 'lucide-react';
+import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Download } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import ProgressBar from '@/components/ui/ProgressBar';
+import { downloadCurriculumResource } from '@/utils/downloadUtils';
 
 const iconMap = {
   'MS Word': FileText,
@@ -52,8 +52,11 @@ const CurriculumModule = ({
     ([key]) => name.includes(key)
   )?.[1] || iconMap.default;
 
-  // Generate URL-friendly slug from name
   const moduleSlug = name.toLowerCase().replace(/\s+/g, '-');
+  
+  const handleDownloadResources = () => {
+    downloadCurriculumResource(name);
+  };
 
   return (
     <Collapsible className="w-full">
@@ -136,6 +139,15 @@ const CurriculumModule = ({
                     </li>
                   ))}
                 </ul>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-4 flex items-center gap-2"
+                  onClick={handleDownloadResources}
+                >
+                  <Download className="h-4 w-4" />
+                  Download course resources
+                </Button>
               </div>
             )}
 
@@ -191,23 +203,33 @@ const CurriculumModule = ({
         </CollapsibleContent>
 
         <CardFooter>
-          <Button variant="outline" className="w-full" asChild>
-            <Link to={`/module/${moduleSlug}`} state={{ 
-              moduleData: {
-                name,
-                description,
-                modules,
-                projects,
-                topics,
-                progress,
-                weeks,
-                image
-              } 
-            }}>
-              View Module
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="w-full flex flex-col sm:flex-row gap-2">
+            <Button variant="outline" className="w-full sm:flex-1" asChild>
+              <Link to={`/module/${moduleSlug}`} state={{ 
+                moduleData: {
+                  name,
+                  description,
+                  modules,
+                  projects,
+                  topics,
+                  progress,
+                  weeks,
+                  image
+                } 
+              }}>
+                View Module
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button 
+              variant="secondary" 
+              className="w-full sm:w-auto flex items-center gap-2"
+              onClick={handleDownloadResources}
+            >
+              <Download className="h-4 w-4" />
+              Resources
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </Collapsible>
