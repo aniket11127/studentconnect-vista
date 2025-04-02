@@ -213,7 +213,7 @@ const generateLearningObjectives = (courseType: string): string => {
       'Build automated workflows using macros'
     ],
     'ms-word': [
-      'Navigate Word's interface efficiently',
+      'Navigate Word\'s interface efficiently',
       'Apply professional document formatting techniques',
       'Create and manage templates for consistent documents',
       'Implement advanced features like mail merge',
