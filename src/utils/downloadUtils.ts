@@ -30,13 +30,13 @@ export const downloadResource = (fileName: string, fileType = 'pdf') => {
       const dummyContent = createDummyContent(fileName, fileType);
       
       // Create a blob with the dummy content
-      const blob = new Blob([dummyContent], { type: `application/${fileType}` });
+      const blob = new Blob([dummyContent], { type: `text/plain` }); // Using text/plain ensures it can be opened
       
       // Create a download link
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${fileName}.${fileType}`);
+      link.setAttribute('download', `Course_Overview_${fileName}.${fileType}`);
       
       // Append to body, click and remove
       document.body.appendChild(link);
@@ -195,8 +195,8 @@ RESOURCES:
 ==================================
 Course_Overview_${fileName}.pdf
 Copyright © ${new Date().getFullYear()} Learning Platform
-This is a simulated PDF file for learning purposes.
-In a real application, this would contain actual course materials.
+This is a simulated text file for learning purposes.
+In a real application, this would be a properly formatted PDF file.
 ==================================
 `;
   } else if (fileType === 'zip') {
@@ -748,7 +748,7 @@ export const downloadAllResources = (courseId: string, courseTitle: string) => {
       // In a real application, you would package all files into a zip here
       const dummyContent = createDummyContent(courseName, 'zip');
       
-      const blob = new Blob([dummyContent], { type: 'application/zip' });
+      const blob = new Blob([dummyContent], { type: 'text/plain' });
       
       // Create a download link
       const url = window.URL.createObjectURL(blob);
@@ -796,9 +796,9 @@ export const downloadCurriculumResource = (subjectName: string) => {
   setTimeout(() => {
     try {
       // Create content specifically formatted for curriculum overviews
-      const dummyContent = createDummyContent(`${formattedName}-curriculum`, 'pdf');
+      const dummyContent = createDummyContent(`${formattedName}`, 'pdf');
       
-      const blob = new Blob([dummyContent], { type: 'application/pdf' });
+      const blob = new Blob([dummyContent], { type: 'text/plain' });
       
       // Create a download link
       const url = window.URL.createObjectURL(blob);
@@ -825,4 +825,3 @@ export const downloadCurriculumResource = (subjectName: string) => {
     }
   }, 1500);
 };
-
