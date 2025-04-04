@@ -9,13 +9,120 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      certificates: {
+        Row: {
+          certificate_id: string
+          completion_date: string
+          course_id: string
+          created_at: string
+          expert_name: string
+          id: string
+          session_title: string
+          user_id: string
+        }
+        Insert: {
+          certificate_id: string
+          completion_date?: string
+          course_id: string
+          created_at?: string
+          expert_name: string
+          id?: string
+          session_title: string
+          user_id: string
+        }
+        Update: {
+          certificate_id?: string
+          completion_date?: string
+          course_id?: string
+          created_at?: string
+          expert_name?: string
+          id?: string
+          session_title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses_progress: {
+        Row: {
+          completed: boolean | null
+          course_id: string
+          created_at: string
+          id: string
+          progress: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          course_id: string
+          created_at?: string
+          id?: string
+          progress?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          progress?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "courses_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          name: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_certificate_id: {
+        Args: {
+          course_prefix: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

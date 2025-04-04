@@ -1,24 +1,52 @@
 
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { CertificateCard } from '@/components/ui/Certificate';
 import { Award, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 
-// Sample certificates data
-const certificates = [
-  {
-    id: 'cert-001',
-    sessionTitle: 'Digital Marketing Essentials',
-    expertName: 'Priya Malhotra',
-    completionDate: 'March 25, 2025',
-    certificateId: 'SGK14-DM-2025-001',
-  },
-];
+interface Certificate {
+  id: string;
+  session_title: string;
+  expert_name: string;
+  completion_date: string;
+  certificate_id: string;
+}
 
 const MyCertificates = () => {
-  const studentName = "Rahul Sharma"; // This would come from user profile in a real app
+  const { user } = useAuth();
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchCertificates() {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('certificates')
+          .select('*')
+          .order('completion_date', { ascending: false });
+          
+        if (error) throw error;
+        
+        setCertificates(data || []);
+      } catch (error: any) {
+        console.error('Error fetching certificates:', error);
+        toast.error('Failed to load certificates');
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchCertificates();
+  }, [user]);
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -35,17 +63,25 @@ const MyCertificates = () => {
             <p className="text-muted-foreground">View, download, and share your earned certificates</p>
           </div>
           
-          {certificates.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-pulse text-muted-foreground">Loading certificates...</div>
+            </div>
+          ) : certificates.length > 0 ? (
             <div className="space-y-12">
               {certificates.map(certificate => (
                 <div key={certificate.id}>
-                  <h2 className="text-xl font-semibold mb-4">{certificate.sessionTitle}</h2>
+                  <h2 className="text-xl font-semibold mb-4">{certificate.session_title}</h2>
                   <CertificateCard 
-                    studentName={studentName}
-                    sessionTitle={certificate.sessionTitle}
-                    expertName={certificate.expertName}
-                    completionDate={certificate.completionDate}
-                    certificateId={certificate.certificateId}
+                    studentName={user?.user_metadata?.name || 'Student'}
+                    sessionTitle={certificate.session_title}
+                    expertName={certificate.expert_name}
+                    completionDate={new Date(certificate.completion_date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                    certificateId={certificate.certificate_id}
                   />
                 </div>
               ))}
