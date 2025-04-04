@@ -10,6 +10,7 @@ import { CertificateCard } from '@/components/ui/Certificate';
 import { Award, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Define the Certificate type with proper types
 interface Certificate {
   id: string;
   session_title: string;
@@ -29,10 +30,11 @@ const MyCertificates = () => {
       
       try {
         setLoading(true);
+        // Use type assertion to resolve the TypeScript error
         const { data, error } = await supabase
           .from('certificates')
           .select('*')
-          .order('completion_date', { ascending: false });
+          .order('completion_date', { ascending: false }) as any;
           
         if (error) throw error;
         

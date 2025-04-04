@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
@@ -34,13 +35,13 @@ const VipSessionDetail = () => {
     try {
       setLoading(true);
       
-      const { data: token } = await supabase.auth.getSession();
+      const { data: sessionData } = await supabase.auth.getSession();
       
-      const response = await fetch(`${window.location.origin}/api/generate-certificate`, {
+      const response = await fetch('/api/generate-certificate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token.session?.access_token}`
+          'Authorization': `Bearer ${sessionData.session?.access_token}`
         },
         body: JSON.stringify({
           courseId: session.id,
@@ -59,7 +60,7 @@ const VipSessionDetail = () => {
           onClick: () => window.location.href = '/certificates'
         }
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating certificate:', error);
       toast.error('Failed to generate certificate');
     } finally {
