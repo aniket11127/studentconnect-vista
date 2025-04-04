@@ -44,7 +44,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       toast.success("Successfully signed in!");
     } catch (error: any) {
-      toast.error(error.message || "Error signing in");
+      const errorMessage = import.meta.env.VITE_SUPABASE_URL ? error.message : "Supabase is not configured. Please set up your environment variables.";
+      toast.error(errorMessage || "Error signing in");
       throw error;
     }
   };
@@ -61,7 +62,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       toast.success("Registration successful! Please check your email for verification.");
     } catch (error: any) {
-      toast.error(error.message || "Error signing up");
+      const errorMessage = import.meta.env.VITE_SUPABASE_URL ? error.message : "Supabase is not configured. Please set up your environment variables.";
+      toast.error(errorMessage || "Error signing up");
       throw error;
     }
   };
