@@ -2,6 +2,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './components/ui/theme-provider';
+import { AuthProvider } from './hooks/useAuth';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import Index from './pages/Index';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -20,24 +22,30 @@ import './App.css';
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="sgk14-theme">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/course/:courseId" element={<CourseDetail />} />
-          <Route path="/curriculum" element={<Curriculum />} />
-          <Route path="/module/:moduleSlug" element={<ModuleDetail />} />
-          <Route path="/vip-sessions" element={<VipSessions />} />
-          <Route path="/vip-sessions/:sessionId" element={<VipSessionDetail />} />
-          <Route path="/certificates" element={<MyCertificates />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/course/:courseId" element={<CourseDetail />} />
+            <Route path="/curriculum" element={<Curriculum />} />
+            <Route path="/module/:moduleSlug" element={<ModuleDetail />} />
+            <Route path="/vip-sessions" element={<VipSessions />} />
+            <Route path="/vip-sessions/:sessionId" element={<VipSessionDetail />} />
+            <Route path="/certificates" element={
+              <ProtectedRoute>
+                <MyCertificates />
+              </ProtectedRoute>
+            } />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Toaster />
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
