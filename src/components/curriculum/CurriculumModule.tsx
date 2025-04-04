@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import ProgressBar from '@/components/ui/ProgressBar';
 import { downloadCurriculumResource } from '@/utils/downloadUtils';
+import { toast } from 'sonner';
 
 const iconMap = {
   'MS Word': FileText,
@@ -56,6 +57,7 @@ const CurriculumModule = ({
   const moduleSlug = name.toLowerCase().replace(/\s+/g, '-');
   
   const handleDownloadResources = () => {
+    toast.info(`Preparing ${name} curriculum materials...`);
     downloadCurriculumResource(name);
   };
 

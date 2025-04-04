@@ -29,8 +29,9 @@ export const downloadResource = (fileName: string, fileType = 'pdf') => {
       
       switch(fileType.toLowerCase()) {
         case 'pdf':
-          mimeType = 'application/pdf';
-          extension = 'pdf';
+          // Use text/html to ensure browser can open it properly
+          mimeType = 'text/html';
+          extension = 'html';
           break;
         case 'docx':
           mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -42,18 +43,11 @@ export const downloadResource = (fileName: string, fileType = 'pdf') => {
           break;
         default:
           mimeType = 'text/plain';
-          extension = fileType;
+          extension = 'txt';
       }
       
-      // For PDF, use text/html for better browser compatibility 
-      // This ensures our document can be properly viewed
-      if (fileType.toLowerCase() === 'pdf') {
-        mimeType = 'text/html';
-      }
-      
-      // Enhanced HTML content
-      const htmlContent = fileType.toLowerCase() === 'pdf' ? 
-        createPdfHtmlContent(fileName, dummyContent) : dummyContent;
+      // Create HTML content for better browser compatibility
+      const htmlContent = createHtmlDocument(fileName, dummyContent, fileType);
       
       const blob = new Blob([htmlContent], { type: mimeType });
       
@@ -61,7 +55,13 @@ export const downloadResource = (fileName: string, fileType = 'pdf') => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Course_Overview_${fileName}.${extension}`);
+      
+      // Use the correct extension but keep the PDF in the filename for user experience
+      if (fileType.toLowerCase() === 'pdf') {
+        link.setAttribute('download', `${formatTitle(fileName)}_Course_Material.html`);
+      } else {
+        link.setAttribute('download', `${formatTitle(fileName)}.${extension}`);
+      }
       
       // Append to body, click and remove
       document.body.appendChild(link);
@@ -83,186 +83,126 @@ export const downloadResource = (fileName: string, fileType = 'pdf') => {
   }, 1500);
 };
 
-// Create an HTML document with professional PDF-like styling
-const createPdfHtmlContent = (fileName: string, content: string) => {
-  return `<!DOCTYPE html>
-  <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Course Overview: ${formatTitle(fileName)}</title>
-    <style>
-      @media print {
-        @page {
-          margin: 1.5cm;
+// Create an HTML document with professional styling
+const createHtmlDocument = (fileName: string, content: string, fileType: string) => {
+  // For PDF-type content, use a nicely formatted HTML document
+  if (fileType.toLowerCase() === 'pdf') {
+    return `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Course Overview: ${formatTitle(fileName)}</title>
+      <style>
+        body { 
+          font-family: Arial, Helvetica, sans-serif;
+          line-height: 1.6;
+          max-width: 800px;
+          margin: 20px auto;
+          padding: 20px;
+          background: #f9f9f9;
+          color: #333;
         }
-      }
-      body { 
-        font-family: 'Segoe UI', Arial, sans-serif;
-        line-height: 1.6;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background: white;
-        color: #333;
-        font-size: 14px;
-      }
-      h1 { 
-        font-size: 28px;
-        color: #1a365d;
-        text-align: center;
-        border-bottom: 2px solid #3182ce;
-        padding-bottom: 10px;
-        margin-bottom: 25px;
-      }
-      h2 {
-        font-size: 22px;
-        color: #2c5282;
-        margin-top: 25px;
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 5px;
-      }
-      h3 {
-        font-size: 18px;
-        color: #2c5282;
-        margin-top: 20px;
-      }
-      .section {
-        margin-bottom: 25px;
-        background: #f8fafc;
-        border-radius: 5px;
-        padding: 15px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      }
-      ul { padding-left: 25px; }
-      li { margin-bottom: 5px; }
-      p { margin-bottom: 10px; }
-      .footer {
-        margin-top: 50px;
-        text-align: center;
-        font-size: 0.9em;
-        color: #718096;
-        border-top: 1px solid #e2e8f0;
-        padding-top: 20px;
-      }
-      .highlight {
-        background-color: #ebf8ff;
-        padding: 2px 4px;
-        border-radius: 3px;
-      }
-      .page-break {
-        page-break-after: always;
-      }
-      .module-list {
-        list-style-type: none;
-        padding: 0;
-      }
-      .module-list li {
-        background: #edf2f7;
-        margin-bottom: 10px;
-        padding: 10px;
-        border-radius: 4px;
-        border-left: 4px solid #3182ce;
-      }
-      .project-box {
-        background: #e6fffa;
-        border-left: 4px solid #38b2ac;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    ${content}
-    <div class="footer">
-      <p>Course Overview: ${formatTitle(fileName)} | Generated by Learning Platform</p>
-      <p>Copyright © ${new Date().getFullYear()} Learning Platform</p>
-    </div>
-  </body>
-  </html>`;
+        h1 { 
+          font-size: 28px;
+          color: #1a365d;
+          text-align: center;
+          border-bottom: 2px solid #3182ce;
+          padding-bottom: 10px;
+          margin-bottom: 25px;
+        }
+        h2 {
+          font-size: 22px;
+          color: #2c5282;
+          margin-top: 25px;
+          border-bottom: 1px solid #e2e8f0;
+          padding-bottom: 5px;
+        }
+        h3 {
+          font-size: 18px;
+          color: #2c5282;
+          margin-top: 20px;
+        }
+        .section {
+          margin-bottom: 25px;
+          background: #fff;
+          border-radius: 5px;
+          padding: 15px;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        ul { padding-left: 25px; }
+        li { margin-bottom: 5px; }
+        p { margin-bottom: 10px; }
+        .footer {
+          margin-top: 50px;
+          text-align: center;
+          font-size: 0.9em;
+          color: #718096;
+          border-top: 1px solid #e2e8f0;
+          padding-top: 20px;
+        }
+        .highlight {
+          background-color: #ebf8ff;
+          padding: 2px 4px;
+          border-radius: 3px;
+        }
+        .page-break {
+          page-break-after: always;
+        }
+        .module-list {
+          list-style-type: none;
+          padding: 0;
+        }
+        .module-list li {
+          background: #edf2f7;
+          margin-bottom: 10px;
+          padding: 10px;
+          border-radius: 4px;
+          border-left: 4px solid #3182ce;
+        }
+        .project-box {
+          background: #e6fffa;
+          border-left: 4px solid #38b2ac;
+          padding: 10px;
+          margin-bottom: 15px;
+          border-radius: 4px;
+        }
+      </style>
+    </head>
+    <body>
+      ${content}
+      <div class="footer">
+        <p>Course Overview: ${formatTitle(fileName)}</p>
+        <p>Copyright © ${new Date().getFullYear()} Learning Platform</p>
+      </div>
+    </body>
+    </html>`;
+  } 
+  
+  // For other file types, just return the content
+  return content;
 };
 
-// Enhanced function to create dummy content based on file type and course information
+// Helper function to format title nicely
+const formatTitle = (fileName: string): string => {
+  return fileName
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+// Create course-specific content for different subjects
 const createDummyContent = (fileName: string, fileType: string) => {
-  const courseTopics: Record<string, string[]> = {
-    'ms-excel': [
-      'Introduction to Excel Interface',
-      'Basic Formulas and Functions',
-      'Data Formatting and Visualization',
-      'Advanced Functions (VLOOKUP, INDEX/MATCH)',
-      'PivotTables and PivotCharts',
-      'Data Analysis Tools',
-      'Macros and VBA Basics'
-    ],
-    'ms-word': [
-      'Word Interface and Navigation',
-      'Document Formatting Techniques',
-      'Working with Tables and Images',
-      'Mail Merge',
-      'Styles and Templates',
-      'Collaborative Editing Features',
-      'Advanced Document Elements'
-    ],
-    'python-programming': [
-      'Python Syntax and Data Types',
-      'Control Flow (if statements, loops)',
-      'Functions and Modules',
-      'Data Structures (lists, dictionaries)',
-      'File Handling',
-      'Object-Oriented Programming',
-      'Error Handling',
-      'Libraries (NumPy, Pandas)'
-    ],
-    'web-development': [
-      'HTML Fundamentals',
-      'CSS Styling and Layout',
-      'JavaScript Basics',
-      'DOM Manipulation',
-      'Responsive Design Principles',
-      'Frontend Frameworks Introduction',
-      'API Integration',
-      'Web Performance Optimization'
-    ],
-    'sql-database': [
-      'Database Concepts and Design',
-      'SQL Query Basics',
-      'Data Retrieval with SELECT',
-      'Data Manipulation (INSERT, UPDATE, DELETE)',
-      'Joins and Relationships',
-      'Indexing and Performance',
-      'Stored Procedures and Functions',
-      'Database Security'
-    ],
-    'prompt-engineering': [
-      'Introduction to Large Language Models',
-      'Prompt Structure and Elements',
-      'Context Setting Techniques',
-      'Few-shot Learning Examples',
-      'Chain of Thought Prompting',
-      'Output Format Control',
-      'Prompt Iteration and Refinement',
-      'Multi-modal Prompting'
-    ]
-  };
+  // Determine the course type based on the filename
+  let courseType = 'general';
   
-  // Get course name from file name
-  let courseName = 'general';
-  Object.keys(courseTopics).forEach(key => {
-    if (fileName.toLowerCase().includes(key)) {
-      courseName = key;
-    }
-  });
-
-  const topics = courseTopics[courseName] || [
-    'Course Introduction',
-    'Key Concepts and Terminology',
-    'Practical Applications',
-    'Advanced Techniques',
-    'Case Studies',
-    'Best Practices',
-    'Future Trends'
-  ];
-
+  if (fileName.includes('excel')) courseType = 'ms-excel';
+  else if (fileName.includes('word')) courseType = 'ms-word';
+  else if (fileName.includes('python')) courseType = 'python-programming';
+  else if (fileName.includes('web')) courseType = 'web-development';
+  else if (fileName.includes('sql')) courseType = 'sql-database';
+  else if (fileName.includes('prompt')) courseType = 'prompt-engineering';
+  else if (fileName.includes('ai')) courseType = 'prompt-engineering';
+  
   // Enhanced PDF content with better structure and details
   if (fileType === 'pdf') {
     // Generate a more structured HTML content that looks like a PDF
@@ -271,43 +211,45 @@ const createDummyContent = (fileName: string, fileType: string) => {
     
     <div class="section">
       <h2>COURSE DESCRIPTION</h2>
-      <p>${generateCourseDescription(courseName)}</p>
+      <p>${generateCourseDescription(courseType)}</p>
     </div>
     
     <div class="section">
       <h2>TOPICS & SUBTOPICS</h2>
-      ${generateDetailedTopics(courseName)}
+      <ul>
+        ${generateTopicsList(courseType)}
+      </ul>
     </div>
     
     <div class="section">
       <h2>LEARNING OBJECTIVES</h2>
       <ul>
-        ${generateLearningObjectives(courseName).split('\n').map(obj => `<li>${obj.substring(obj.indexOf('.')+1).trim()}</li>`).join('')}
+        ${generateLearningObjectives(courseType)}
       </ul>
     </div>
     
     <div class="section">
       <h2>MODULES & CURRICULUM</h2>
       <ul class="module-list">
-        ${generateModules(courseName).split('\n').map(module => `<li>${module}</li>`).join('')}
+        ${generateModules(courseType)}
       </ul>
     </div>
     
     <div class="section">
       <h2>PROJECTS & ASSIGNMENTS</h2>
-      ${generateProjects(courseName).split('\n\n').map(project => `<div class="project-box">${project}</div>`).join('')}
+      ${generateProjects(courseType)}
     </div>
     
     <div class="section">
       <h2>PRACTICAL EXERCISES</h2>
       <ul>
-        ${generateExercises(courseName).split('\n').map(exercise => `<li>${exercise}</li>`).join('')}
+        ${generateExercises(courseType)}
       </ul>
     </div>
     
     <div class="section">
       <h2>ESTIMATED DURATION</h2>
-      ${generateCourseDuration(courseName).replace(/\n/g, '<br>')}
+      <p>${generateCourseDuration(courseType)}</p>
     </div>
     
     <div class="section">
@@ -324,8 +266,7 @@ const createDummyContent = (fileName: string, fileType: string) => {
       </ul>
     </div>`;
   } else if (fileType === 'zip') {
-    return `
-[SIMULATED ZIP ARCHIVE]
+    return `[SIMULATED ZIP ARCHIVE]
 Contains the following files:
 - ${fileName}_lecture_notes.pdf
 - ${fileName}_exercises.pdf
@@ -337,249 +278,16 @@ Contains the following files:
 - ${fileName}_presentation_slides.pptx
 
 This is a simulated ZIP file for learning purposes.
-In a real application, this would contain actual course materials.
-`;
+In a real application, this would contain actual course materials.`;
   } else {
     return `This is a simulated ${fileType.toUpperCase()} file for ${formatTitle(fileName)}.\n\n` +
       `This would be the actual course content in a real application.`;
   }
 };
 
-// Generate detailed topics with subtopics - converted to HTML
-const generateDetailedTopics = (courseType: string): string => {
-  const detailedTopicsContent: Record<string, string> = {
-    'ms-excel': 
-`1. Excel Fundamentals
-   - Understanding the Excel interface and ribbon
-   - Cell navigation and selection techniques
-   - Basic data entry and formatting
-   - Workbook management and organization
-
-2. Working with Formulas and Functions
-   - Creating basic formulas with operators
-   - Understanding cell references (relative, absolute, mixed)
-   - Using common functions (SUM, AVERAGE, COUNT, MAX, MIN)
-   - Logical functions (IF, AND, OR, NOT)
-   - Lookup functions (VLOOKUP, HLOOKUP, INDEX/MATCH)
-   - Text and date manipulation functions
-
-3. Data Analysis and Visualization
-   - Sorting and filtering data
-   - Creating and formatting charts and graphs
-   - Using conditional formatting for data visualization
-   - Creating and using PivotTables and PivotCharts
-   - Data validation and error checking
-
-4. Advanced Excel Features
-   - What-if analysis tools (Goal Seek, Scenario Manager)
-   - Data analysis with PowerPivot
-   - Creating and using macros for automation
-   - Introduction to VBA
-   - Excel for business intelligence`,
-
-    'ms-word': 
-`1. Word Essentials
-   - Interface overview and document navigation
-   - Text entry, editing, and basic formatting
-   - Document views and display options
-   - Saving and managing document files
-
-2. Document Formatting and Structure
-   - Paragraph and character formatting
-   - Working with styles and themes
-   - Page layout and section formatting
-   - Headers, footers, and page numbering
-   - Creating and using templates
-
-3. Advanced Document Elements
-   - Working with tables and formatting options
-   - Inserting and modifying images and graphics
-   - Creating and customizing charts and diagrams
-   - Using SmartArt and drawing tools
-   - Working with equations and symbols
-
-4. Collaborative Features and Automation
-   - Track changes and document review
-   - Document protection and security
-   - Mail merge for personalized documents
-   - Creating and using macros
-   - Integration with other Office applications`,
-
-    'python-programming': 
-`1. Python Fundamentals
-   - Setting up the Python environment
-   - Variables, data types, and operators
-   - Control flow: conditionals and loops
-   - Functions and modules
-   - Error handling with try/except
-
-2. Data Structures and Collections
-   - Lists, tuples, and sets
-   - Dictionaries and their applications
-   - List comprehensions
-   - Working with strings and string methods
-   - File handling and I/O operations
-
-3. Object-Oriented Programming
-   - Classes and objects
-   - Inheritance and polymorphism
-   - Encapsulation and abstraction
-   - Special methods and operator overloading
-   - Custom data structures
-
-4. Python Libraries and Applications
-   - Working with NumPy for numerical computing
-   - Data analysis using Pandas
-   - Data visualization with Matplotlib and Seaborn
-   - Web scraping fundamentals
-   - Introduction to web applications with Flask`,
-
-    'web-development': 
-`1. HTML Fundamentals
-   - Document structure and semantic markup
-   - Text formatting and hyperlinking
-   - Lists, tables, and forms
-   - Media embedding (images, audio, video)
-   - HTML5 features and APIs
-
-2. CSS Styling and Layout
-   - Selectors and the cascade
-   - Box model and sizing
-   - Typography and color styling
-   - Flexbox and Grid layout systems
-   - Responsive design and media queries
-   - CSS animations and transitions
-
-3. JavaScript Programming
-   - Syntax fundamentals and data types
-   - Functions, scope, and closures
-   - DOM manipulation and events
-   - Asynchronous JavaScript (Promises, async/await)
-   - Fetch API and working with JSON
-   - Modern ES6+ features
-
-4. Frontend Frameworks and Tools
-   - Introduction to React components and props
-   - State management concepts
-   - Build tools and module bundlers
-   - Version control with Git
-   - Performance optimization techniques`,
-
-    'sql-database': 
-`1. Relational Database Fundamentals
-   - Database concepts and terminology
-   - Entity-Relationship modeling
-   - Normalization and database design
-   - DBMS architecture and components
-   - SQL language overview
-
-2. Data Retrieval with SQL
-   - SELECT statement syntax and clauses
-   - Filtering with WHERE conditions
-   - Sorting with ORDER BY
-   - Aggregation with GROUP BY
-   - Joining tables (INNER, LEFT, RIGHT, FULL)
-
-3. Data Manipulation and Management
-   - INSERT, UPDATE, and DELETE operations
-   - Transaction management
-   - Constraints and data integrity
-   - Indexes and performance optimization
-   - Views and stored procedures
-
-4. Advanced SQL and Database Topics
-   - Subqueries and Common Table Expressions
-   - Window functions
-   - Triggers and events
-   - Database security principles
-   - Performance tuning and query optimization`,
-
-    'prompt-engineering': 
-`1. Understanding Language Models
-   - How large language models work
-   - Tokenization and embeddings
-   - Context windows and limitations
-   - Model capabilities and constraints
-   - Comparing different AI models
-
-2. Prompt Design Fundamentals
-   - Components of effective prompts
-   - Clarity and specificity techniques
-   - Context setting and priming
-   - Output formatting control
-   - Handling ambiguity and edge cases
-
-3. Advanced Prompting Techniques
-   - Few-shot learning and examples
-   - Chain-of-thought reasoning
-   - Self-consistency and verification
-   - Retrieval-augmented generation
-   - Prompt chaining and composition
-
-4. Domain-Specific Applications
-   - Prompting for code generation
-   - Creative writing and content creation
-   - Data analysis and extraction
-   - Conversation design for AI assistants
-   - Ethical considerations in prompt engineering`,
-
-    'general': 
-`1. Foundational Concepts
-   - Field terminology and basic principles
-   - Historical development and context
-   - Core theoretical frameworks
-   - Industry standards and best practices
-   - Essential tools and resources
-
-2. Intermediate Techniques
-   - Problem-solving methodologies
-   - Data collection and analysis
-   - Project planning and management
-   - Quality assurance and testing
-   - Optimization strategies
-
-3. Practical Applications
-   - Real-world case studies
-   - Industry-specific implementations
-   - Integration with existing systems
-   - Troubleshooting common issues
-   - Customization and adaptation
-
-4. Advanced Topics
-   - Emerging trends and technologies
-   - Research and development approaches
-   - Specialized techniques for complex scenarios
-   - Performance enhancement methods
-   - Future directions and innovations`
-  };
-
-  const rawTopics = detailedTopicsContent[courseType] || detailedTopicsContent['general'];
-  
-  // Convert the plain text format to HTML
-  const htmlContent = rawTopics.split('\n\n').map(section => {
-    const [heading, ...items] = section.split('\n');
-    return `
-      <h3>${heading}</h3>
-      <ul>
-        ${items.map(item => `<li>${item.trim()}</li>`).join('')}
-      </ul>
-    `;
-  }).join('');
-
-  return htmlContent;
-};
-
-// Helper function to format title nicely
-const formatTitle = (fileName: string): string => {
-  return fileName
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
-
 // Generate course description based on course type
 const generateCourseDescription = (courseType: string): string => {
-  const descriptions: Record<string, string> = {
+  const descriptions = {
     'ms-excel': 
       'This comprehensive Microsoft Excel course takes you from beginner to advanced user. You\'ll learn essential spreadsheet skills, powerful formulas and functions, data visualization techniques, and automation tools that will transform your productivity and data analysis capabilities. Whether you\'re looking to enhance your career prospects or improve your efficiency at work, this course provides practical skills that you can apply immediately.',
     'ms-word': 
@@ -599,116 +307,145 @@ const generateCourseDescription = (courseType: string): string => {
   return descriptions[courseType] || descriptions['general'];
 };
 
-// Generate learning objectives based on course type
-const generateLearningObjectives = (courseType: string): string => {
-  const objectives: Record<string, string[]> = {
+// Generate topics list based on course type
+const generateTopicsList = (courseType: string): string => {
+  const topicsByType = {
     'ms-excel': [
-      'Master Excel interface and navigation',
-      'Create and manipulate formulas and functions',
-      'Design professional spreadsheets and data visualizations',
-      'Perform data analysis using PivotTables and charts',
-      'Build automated workflows using macros'
+      'Excel Interface and Navigation',
+      'Cell Formatting and Styles',
+      'Formulas and Functions',
+      'Data Analysis with PivotTables',
+      'Charts and Data Visualization',
+      'Data Validation and Protection',
+      'Macros and VBA Basics'
     ],
     'ms-word': [
-      'Navigate Word\'s interface efficiently',
-      'Apply professional document formatting techniques',
-      'Create and manage templates for consistent documents',
-      'Implement advanced features like mail merge',
-      'Use collaborative editing tools effectively'
+      'Word Interface and Navigation',
+      'Document Formatting and Styles',
+      'Tables, Graphics and Multimedia',
+      'Mail Merge and Document Automation',
+      'Templates and Form Creation',
+      'Review and Collaboration Tools',
+      'Document Security and Protection'
     ],
     'python-programming': [
-      'Understand Python syntax and data structures',
-      'Write efficient and readable Python code',
-      'Implement object-oriented programming concepts',
-      'Create practical applications using Python libraries',
-      'Debug and optimize Python programs'
+      'Python Syntax and Data Types',
+      'Control Flow (Conditionals and Loops)',
+      'Functions and Modules',
+      'Data Structures and Collections',
+      'File I/O and Exception Handling',
+      'Object-Oriented Programming',
+      'Libraries and Web APIs'
     ],
     'web-development': [
-      'Build responsive websites using HTML, CSS, and JavaScript',
-      'Implement modern web design principles',
-      'Create interactive user interfaces',
-      'Connect frontend applications to APIs',
-      'Optimize web applications for performance'
+      'HTML Structure and Semantics',
+      'CSS Styling and Layouts',
+      'JavaScript Fundamentals',
+      'Responsive Design Principles',
+      'Frontend Frameworks Introduction',
+      'Web API Integration',
+      'Performance Optimization'
     ],
     'sql-database': [
-      'Design efficient database schemas',
-      'Write complex SQL queries for data retrieval',
-      'Implement database security best practices',
-      'Optimize database performance',
-      'Manage database relationships effectively'
+      'Database Design Principles',
+      'SQL Query Fundamentals',
+      'Data Retrieval and Filtering',
+      'Data Manipulation (INSERT/UPDATE/DELETE)',
+      'Joins and Relationships',
+      'Indexes and Performance',
+      'Database Security'
     ],
     'prompt-engineering': [
-      'Understand how large language models process prompts',
-      'Craft effective prompts for different AI applications',
-      'Implement advanced prompting techniques',
-      'Troubleshoot and refine prompts for better results',
-      'Apply prompt engineering in practical scenarios'
+      'AI Model Capabilities and Limitations',
+      'Prompt Structure and Components',
+      'Context Setting and Priming',
+      'Chain-of-Thought Prompting',
+      'Few-Shot Learning Examples',
+      'Output Format Control',
+      'Domain-Specific Prompting'
     ],
     'general': [
-      'Understand core concepts and terminology',
-      'Apply learned techniques to practical scenarios',
-      'Develop problem-solving skills in the subject area',
-      'Create professional-quality projects',
-      'Prepare for advanced learning in the field'
+      'Fundamentals and Core Concepts',
+      'Key Terminology and Principles',
+      'Industry Best Practices',
+      'Practical Application Methods',
+      'Problem-Solving Techniques',
+      'Advanced Strategies',
+      'Future Trends and Developments'
+    ]
+  };
+  
+  const topics = topicsByType[courseType] || topicsByType['general'];
+  return topics.map(topic => `<li>${topic}</li>`).join('');
+};
+
+// Generate learning objectives based on course type
+const generateLearningObjectives = (courseType: string): string => {
+  const objectives = {
+    'ms-excel': [
+      'Navigate the Excel interface efficiently and understand its components',
+      'Create and manipulate formulas and functions for data analysis',
+      'Design professional spreadsheets with proper formatting and data validation',
+      'Build dynamic charts and dashboards to visualize data effectively',
+      'Implement PivotTables and PivotCharts for complex data analysis',
+      'Automate repetitive tasks using basic macros and VBA concepts'
+    ],
+    'ms-word': [
+      'Master the Word interface and document navigation techniques',
+      'Apply professional formatting using styles, themes, and templates',
+      'Create and format complex document elements including tables and graphics',
+      'Implement document automation using mail merge and fields',
+      'Use collaboration tools for team document editing and review',
+      'Secure documents with appropriate protection methods'
+    ],
+    'python-programming': [
+      'Write clean, efficient Python code using proper syntax and conventions',
+      'Implement control structures and functions to solve programming problems',
+      'Create and manipulate data structures for effective data management',
+      'Apply object-oriented programming principles to build maintainable code',
+      'Develop practical applications using Python libraries and frameworks',
+      'Debug and optimize Python programs for better performance'
+    ],
+    'web-development': [
+      'Create well-structured web pages using semantic HTML elements',
+      'Style web content using CSS for attractive, responsive layouts',
+      'Implement interactive features using JavaScript and DOM manipulation',
+      'Build responsive designs that work across various device sizes',
+      'Integrate data from APIs into web applications',
+      'Optimize web pages for performance and accessibility'
+    ],
+    'sql-database': [
+      'Design efficient database schemas using normalization principles',
+      'Write complex SQL queries to retrieve and manipulate data',
+      'Implement proper relationships between tables for data integrity',
+      'Optimize query performance using indexes and execution plans',
+      'Apply database security best practices to protect data',
+      'Create views and stored procedures for data access abstraction'
+    ],
+    'prompt-engineering': [
+      'Understand how large language models interpret and respond to prompts',
+      'Create well-structured prompts that generate targeted, useful responses',
+      'Apply advanced techniques like chain-of-thought and few-shot learning',
+      'Troubleshoot and refine prompts to overcome model limitations',
+      'Design specialized prompts for different domains and applications',
+      'Implement systematic prompt testing and improvement methods'
+    ],
+    'general': [
+      'Understand foundational concepts and principles of the subject area',
+      'Apply theoretical knowledge to practical, real-world scenarios',
+      'Analyze problems and develop effective solutions using learned techniques',
+      'Create professional-quality projects demonstrating mastery of key skills',
+      'Evaluate and improve implementations using best practices',
+      'Develop a framework for continued learning and skill advancement'
     ]
   };
 
-  return (objectives[courseType] || objectives['general']).map((obj, i) => `${i + 1}. ${obj}`).join('\n');
-};
-
-// Generate course duration information
-const generateCourseDuration = (courseType: string): string => {
-  const durations: Record<string, string> = {
-    'ms-excel': 
-      'Total Duration: 30 hours\n\n' +
-      '- Core Modules: 20 hours of video content\n' +
-      '- Practical Exercises: 8 hours\n' +
-      '- Projects: 10-15 hours depending on complexity\n' +
-      '- Suggested Pace: 4-6 weeks (5-7 hours per week)',
-    'ms-word': 
-      'Total Duration: 25 hours\n\n' +
-      '- Core Modules: 16 hours of video content\n' +
-      '- Practical Exercises: 6 hours\n' +
-      '- Projects: 8-12 hours depending on complexity\n' +
-      '- Suggested Pace: 3-5 weeks (5-7 hours per week)',
-    'python-programming': 
-      'Total Duration: 45 hours\n\n' +
-      '- Core Modules: 28 hours of video content\n' +
-      '- Coding Exercises: 12 hours\n' +
-      '- Projects: 15-20 hours depending on complexity\n' +
-      '- Suggested Pace: 6-8 weeks (6-8 hours per week)',
-    'web-development': 
-      'Total Duration: 50 hours\n\n' +
-      '- Core Modules: 30 hours of video content\n' +
-      '- Coding Exercises: 15 hours\n' +
-      '- Projects: 15-25 hours depending on complexity\n' +
-      '- Suggested Pace: 8-10 weeks (5-7 hours per week)',
-    'sql-database': 
-      'Total Duration: 28 hours\n\n' +
-      '- Core Modules: 18 hours of video content\n' +
-      '- Practice Queries: 7 hours\n' +
-      '- Database Projects: 10-15 hours depending on complexity\n' +
-      '- Suggested Pace: 4-6 weeks (5-6 hours per week)',
-    'prompt-engineering': 
-      'Total Duration: 20 hours\n\n' +
-      '- Core Modules: 12 hours of video content\n' +
-      '- Practical Exercises: 5 hours\n' +
-      '- Applied Projects: 8-10 hours depending on complexity\n' +
-      '- Suggested Pace: 3-4 weeks (5-6 hours per week)',
-    'general': 
-      'Total Duration: 35 hours\n\n' +
-      '- Core Modules: 20 hours of video content\n' +
-      '- Practical Exercises: 10 hours\n' +
-      '- Applied Projects: 10-15 hours depending on complexity\n' +
-      '- Suggested Pace: 5-7 weeks (5-7 hours per week)'
-  };
-
-  return durations[courseType] || durations['general'];
+  return (objectives[courseType] || objectives['general']).map(obj => `<li>${obj}</li>`).join('');
 };
 
 // Generate modules content
 const generateModules = (courseType: string): string => {
-  const modules: Record<string, string[]> = {
+  const modules = {
     'ms-excel': [
       'Module 1: Excel Fundamentals - Interface, navigation, basic operations',
       'Module 2: Working with Data - Formulas, functions, cell references',
@@ -760,157 +497,157 @@ const generateModules = (courseType: string): string => {
     ]
   };
 
-  return (modules[courseType] || modules['general']).join('\n');
+  return (modules[courseType] || modules['general']).map(module => `<li>${module}</li>`).join('');
 };
 
 // Generate projects content
 const generateProjects = (courseType: string): string => {
-  const projects: Record<string, string[]> = {
+  const projects = {
     'ms-excel': [
-      'Project 1: Personal Budget Tracker - Create a comprehensive budget spreadsheet with formulas and charts',
-      'Project 2: Business Dashboard - Design an interactive sales dashboard with PivotTables and slicers',
-      'Project 3: Automated Inventory System - Build an inventory management tool with macros and data validation'
+      '<div class="project-box"><strong>Project 1: Personal Budget Tracker</strong><p>Create a comprehensive budget spreadsheet with formulas, conditional formatting and charts to track personal finances.</p></div>',
+      '<div class="project-box"><strong>Project 2: Business Dashboard</strong><p>Design an interactive sales dashboard with PivotTables, slicers, and dynamic charts for business analytics.</p></div>',
+      '<div class="project-box"><strong>Project 3: Automated Inventory System</strong><p>Build an inventory management tool with data validation, lookup functions, and basic macros for automation.</p></div>'
     ],
     'ms-word': [
-      'Project 1: Professional Resume - Create a professionally formatted resume with advanced layout features',
-      'Project 2: Company Newsletter - Design a multi-page newsletter with various content elements',
-      'Project 3: Automated Report Template - Build a report template with fields and automated elements'
+      '<div class="project-box"><strong>Project 1: Professional Resume</strong><p>Create a professionally formatted resume with advanced layout features, styles, and graphics.</p></div>',
+      '<div class="project-box"><strong>Project 2: Company Newsletter</strong><p>Design a multi-page newsletter with various content elements, styles, and automated table of contents.</p></div>',
+      '<div class="project-box"><strong>Project 3: Automated Report Template</strong><p>Build a report template with fields, automated elements, and protection features.</p></div>'
     ],
     'python-programming': [
-      'Project 1: Data Analysis Tool - Create a program to analyze and visualize datasets',
-      'Project 2: Task Management System - Build a command-line application for managing tasks',
-      'Project 3: Web Scraper - Develop a tool to extract and process information from websites'
+      '<div class="project-box"><strong>Project 1: Data Analysis Tool</strong><p>Create a program to analyze and visualize datasets using Python libraries like Pandas and Matplotlib.</p></div>',
+      '<div class="project-box"><strong>Project 2: Task Management System</strong><p>Build a command-line application for managing tasks with file storage and user interaction.</p></div>',
+      '<div class="project-box"><strong>Project 3: Web Scraper</strong><p>Develop a tool to extract and process information from websites using libraries like Beautiful Soup.</p></div>'
     ],
     'web-development': [
-      'Project 1: Personal Portfolio - Create a responsive personal portfolio website',
-      'Project 2: Product Landing Page - Design an interactive product showcase page',
-      'Project 3: Interactive Dashboard - Build a data visualization dashboard with API integration'
+      '<div class="project-box"><strong>Project 1: Personal Portfolio</strong><p>Create a responsive personal portfolio website showcasing your skills and projects.</p></div>',
+      '<div class="project-box"><strong>Project 2: Product Landing Page</strong><p>Design an interactive product showcase page with features like image galleries and contact forms.</p></div>',
+      '<div class="project-box"><strong>Project 3: Interactive Dashboard</strong><p>Build a data visualization dashboard with API integration and interactive elements.</p></div>'
     ],
     'sql-database': [
-      'Project 1: E-commerce Database - Design and implement a database for an online store',
-      'Project 2: Reporting System - Create complex queries for business intelligence reporting',
-      'Project 3: Data Migration Tool - Develop a strategy for safely migrating between database systems'
+      '<div class="project-box"><strong>Project 1: E-commerce Database</strong><p>Design and implement a normalized database for an online store with products, customers, and orders.</p></div>',
+      '<div class="project-box"><strong>Project 2: Reporting System</strong><p>Create complex queries for business intelligence reporting using joins, subqueries, and aggregations.</p></div>',
+      '<div class="project-box"><strong>Project 3: Data Migration Tool</strong><p>Develop a strategy for safely migrating between database systems while maintaining data integrity.</p></div>'
     ],
     'prompt-engineering': [
-      'Project 1: AI Assistant Design - Create a functioning AI assistant with effective prompts',
-      'Project 2: Creative Writing Partner - Design prompts for generating quality creative content',
-      'Project 3: Technical Documentation Generator - Build a system for producing technical documentation'
+      '<div class="project-box"><strong>Project 1: AI Assistant Design</strong><p>Create a functioning AI assistant with effective prompts for specific tasks and domains.</p></div>',
+      '<div class="project-box"><strong>Project 2: Creative Writing Partner</strong><p>Design prompts for generating quality creative content like stories, articles, or marketing copy.</p></div>',
+      '<div class="project-box"><strong>Project 3: Technical Documentation Generator</strong><p>Build a system for producing technical documentation from specifications using AI prompts.</p></div>'
     ],
     'general': [
-      'Project 1: Fundamentals Application - Apply basic concepts to solve a real-world problem',
-      'Project 2: Intermediate Challenge - Create a more complex solution using multiple techniques',
-      'Project 3: Capstone Project - Demonstrate mastery by building a comprehensive final project'
+      '<div class="project-box"><strong>Project 1: Fundamentals Application</strong><p>Apply basic concepts to solve a real-world problem in the subject domain.</p></div>',
+      '<div class="project-box"><strong>Project 2: Intermediate Challenge</strong><p>Create a more complex solution using multiple techniques learned throughout the course.</p></div>',
+      '<div class="project-box"><strong>Project 3: Capstone Project</strong><p>Demonstrate mastery by building a comprehensive final project that integrates all major concepts.</p></div>'
     ]
   };
 
-  return (projects[courseType] || projects['general']).join('\n\n');
+  return (projects[courseType] || projects['general']).join('');
 };
 
 // Generate exercises content
 const generateExercises = (courseType: string): string => {
-  const exercises: Record<string, string[]> = {
+  const exercises = {
     'ms-excel': [
-      'Exercise 1: Basic Formulas - Practice with SUM, AVERAGE, MAX, MIN functions',
-      'Exercise 2: Data Formatting - Apply conditional formatting and custom number formats',
-      'Exercise 3: Chart Creation - Create various chart types from sample data',
-      'Exercise 4: PivotTable Analysis - Analyze sales data using PivotTables',
-      'Exercise 5: Function Mastery - Work with VLOOKUP, INDEX/MATCH, and other advanced functions'
+      '<li><strong>Exercise 1: Basic Formulas</strong> - Practice with SUM, AVERAGE, MAX, MIN functions</li>',
+      '<li><strong>Exercise 2: Data Formatting</strong> - Apply conditional formatting and custom number formats</li>',
+      '<li><strong>Exercise 3: Chart Creation</strong> - Create various chart types from sample data</li>',
+      '<li><strong>Exercise 4: PivotTable Analysis</strong> - Analyze sales data using PivotTables</li>',
+      '<li><strong>Exercise 5: Function Mastery</strong> - Work with VLOOKUP, INDEX/MATCH, and other advanced functions</li>'
     ],
     'ms-word': [
-      'Exercise 1: Text Formatting - Practice with fonts, styles, and paragraph formatting',
-      'Exercise 2: Page Layout - Work with margins, columns, and section breaks',
-      'Exercise 3: Tables and Graphics - Insert and format tables, images, and shapes',
-      'Exercise 4: Mail Merge - Create personalized letters using data sources',
-      'Exercise 5: Document Automation - Use fields, cross-references, and other automation features'
+      '<li><strong>Exercise 1: Text Formatting</strong> - Practice with fonts, styles, and paragraph formatting</li>',
+      '<li><strong>Exercise 2: Page Layout</strong> - Work with margins, columns, and section breaks</li>',
+      '<li><strong>Exercise 3: Tables and Graphics</strong> - Insert and format tables, images, and shapes</li>',
+      '<li><strong>Exercise 4: Mail Merge</strong> - Create personalized letters using data sources</li>',
+      '<li><strong>Exercise 5: Document Automation</strong> - Use fields, cross-references, and other automation features</li>'
     ],
     'python-programming': [
-      'Exercise 1: Basic Syntax - Practice with variables, operators, and control flow',
-      'Exercise 2: Data Structures - Work with lists, dictionaries, and string manipulation',
-      'Exercise 3: Functions - Create reusable functions with parameters and return values',
-      'Exercise 4: File Operations - Read from and write to files in various formats',
-      'Exercise 5: API Integration - Connect to and process data from web APIs'
+      '<li><strong>Exercise 1: Basic Syntax</strong> - Practice with variables, operators, and control flow</li>',
+      '<li><strong>Exercise 2: Data Structures</strong> - Work with lists, dictionaries, and string manipulation</li>',
+      '<li><strong>Exercise 3: Functions</strong> - Create reusable functions with parameters and return values</li>',
+      '<li><strong>Exercise 4: File Operations</strong> - Read from and write to files in various formats</li>',
+      '<li><strong>Exercise 5: API Integration</strong> - Connect to and process data from web APIs</li>'
     ],
     'web-development': [
-      'Exercise 1: HTML Structure - Create properly structured HTML documents',
-      'Exercise 2: CSS Styling - Apply various styling techniques to web pages',
-      'Exercise 3: JavaScript Basics - Write scripts for DOM manipulation and events',
-      'Exercise 4: Responsive Design - Make web pages adapt to different screen sizes',
-      'Exercise 5: Form Validation - Implement client-side form validation'
+      '<li><strong>Exercise 1: HTML Structure</strong> - Create properly structured HTML documents</li>',
+      '<li><strong>Exercise 2: CSS Styling</strong> - Apply various styling techniques to web pages</li>',
+      '<li><strong>Exercise 3: JavaScript Basics</strong> - Write scripts for DOM manipulation and events</li>',
+      '<li><strong>Exercise 4: Responsive Design</strong> - Make web pages adapt to different screen sizes</li>',
+      '<li><strong>Exercise 5: Form Validation</strong> - Implement client-side form validation</li>'
     ],
     'sql-database': [
-      'Exercise 1: Basic Queries - Write SELECT statements with various clauses',
-      'Exercise 2: Data Manipulation - Practice INSERT, UPDATE, and DELETE operations',
-      'Exercise 3: Join Operations - Work with different join types to combine tables',
-      'Exercise 4: Aggregation - Use GROUP BY and aggregate functions for data analysis',
-      'Exercise 5: Subqueries - Implement nested queries and Common Table Expressions'
+      '<li><strong>Exercise 1: Basic Queries</strong> - Write SELECT statements with various clauses</li>',
+      '<li><strong>Exercise 2: Data Manipulation</strong> - Practice INSERT, UPDATE, and DELETE operations</li>',
+      '<li><strong>Exercise 3: Join Operations</strong> - Work with different join types to combine tables</li>',
+      '<li><strong>Exercise 4: Aggregation</strong> - Use GROUP BY and aggregate functions for data analysis</li>',
+      '<li><strong>Exercise 5: Subqueries</strong> - Implement nested queries and Common Table Expressions</li>'
     ],
     'prompt-engineering': [
-      'Exercise 1: Basic Prompting - Write clear and effective simple prompts',
-      'Exercise 2: Context Setting - Practice providing relevant context in prompts',
-      'Exercise 3: Few-Shot Learning - Create prompts with examples for better results',
-      'Exercise 4: Chain of Thought - Implement step-by-step reasoning in prompts',
-      'Exercise 5: Specialized Tasks - Design prompts for specific domains like code or creative writing'
+      '<li><strong>Exercise 1: Basic Prompting</strong> - Write clear and effective simple prompts</li>',
+      '<li><strong>Exercise 2: Context Setting</strong> - Practice providing relevant context in prompts</li>',
+      '<li><strong>Exercise 3: Few-Shot Learning</strong> - Create prompts with examples for better results</li>',
+      '<li><strong>Exercise 4: Chain of Thought</strong> - Implement step-by-step reasoning in prompts</li>',
+      '<li><strong>Exercise 5: Specialized Tasks</strong> - Design prompts for specific domains like code or creative writing</li>'
     ],
     'general': [
-      'Exercise 1: Fundamentals - Practice basic concepts and techniques',
-      'Exercise 2: Problem Solving - Apply knowledge to solve specific challenges',
-      'Exercise 3: Critical Thinking - Analyze scenarios and develop appropriate solutions',
-      'Exercise 4: Practical Application - Use tools and techniques in realistic contexts',
-      'Exercise 5: Advanced Skills - Work with complex requirements and constraints'
+      '<li><strong>Exercise 1: Fundamentals</strong> - Practice basic concepts and techniques</li>',
+      '<li><strong>Exercise 2: Problem Solving</strong> - Apply knowledge to solve specific challenges</li>',
+      '<li><strong>Exercise 3: Critical Thinking</strong> - Analyze scenarios and develop appropriate solutions</li>',
+      '<li><strong>Exercise 4: Practical Application</strong> - Use tools and techniques in realistic contexts</li>',
+      '<li><strong>Exercise 5: Advanced Skills</strong> - Work with complex requirements and constraints</li>'
     ]
   };
 
-  return (exercises[courseType] || exercises['general']).join('\n');
+  return (exercises[courseType] || exercises['general']).join('');
 };
 
-// Function to download all resources for a course as a ZIP file
-export const downloadAllResources = (courseId: string, courseTitle: string) => {
-  if (!courseId || !courseTitle) {
-    toast.error("Course information missing", {
-      description: "Unable to download resources due to missing course information.",
-    });
-    return;
-  }
-  
-  const courseName = courseTitle.replace(/\s+/g, '-').toLowerCase();
-  
-  toast.info("Preparing course resources...", {
-    description: `All resources for ${courseTitle} are being prepared for download.`,
-    duration: 2500,
-  });
-  
-  // Simulate network delay
-  setTimeout(() => {
-    try {
-      // In a real application, you would package all files into a zip here
-      const dummyContent = createDummyContent(courseName, 'zip');
-      
-      const blob = new Blob([dummyContent], { type: 'text/plain' });
-      
-      // Create a download link
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `Course_Overview_${courseName}-complete-resources.zip`);
-      
-      // Append to body, click and remove
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Clean up
-      window.URL.revokeObjectURL(url);
-      
-      toast.success("Resources downloaded!", {
-        description: `All resources for ${courseTitle} have been downloaded successfully.`,
-      });
-    } catch (error) {
-      console.error("Download failed:", error);
-      toast.error("Download failed", {
-        description: "There was an error downloading the resources. Please try again later.",
-      });
-    }
-  }, 2000);
+// Generate course duration information
+const generateCourseDuration = (courseType: string): string => {
+  const durations = {
+    'ms-excel': 
+      'Total Duration: 30 hours<br><br>' +
+      '• Core Modules: 20 hours of video content<br>' +
+      '• Practical Exercises: 8 hours<br>' +
+      '• Projects: 10-15 hours depending on complexity<br>' +
+      '• Suggested Pace: 4-6 weeks (5-7 hours per week)',
+    'ms-word': 
+      'Total Duration: 25 hours<br><br>' +
+      '• Core Modules: 16 hours of video content<br>' +
+      '• Practical Exercises: 6 hours<br>' +
+      '• Projects: 8-12 hours depending on complexity<br>' +
+      '• Suggested Pace: 3-5 weeks (5-7 hours per week)',
+    'python-programming': 
+      'Total Duration: 45 hours<br><br>' +
+      '• Core Modules: 28 hours of video content<br>' +
+      '• Coding Exercises: 12 hours<br>' +
+      '• Projects: 15-20 hours depending on complexity<br>' +
+      '• Suggested Pace: 6-8 weeks (6-8 hours per week)',
+    'web-development': 
+      'Total Duration: 50 hours<br><br>' +
+      '• Core Modules: 30 hours of video content<br>' +
+      '• Coding Exercises: 15 hours<br>' +
+      '• Projects: 15-25 hours depending on complexity<br>' +
+      '• Suggested Pace: 8-10 weeks (5-7 hours per week)',
+    'sql-database': 
+      'Total Duration: 28 hours<br><br>' +
+      '• Core Modules: 18 hours of video content<br>' +
+      '• Practice Queries: 7 hours<br>' +
+      '• Database Projects: 10-15 hours depending on complexity<br>' +
+      '• Suggested Pace: 4-6 weeks (5-6 hours per week)',
+    'prompt-engineering': 
+      'Total Duration: 20 hours<br><br>' +
+      '• Core Modules: 12 hours of video content<br>' +
+      '• Practical Exercises: 5 hours<br>' +
+      '• Applied Projects: 8-10 hours depending on complexity<br>' +
+      '• Suggested Pace: 3-4 weeks (5-6 hours per week)',
+    'general': 
+      'Total Duration: 35 hours<br><br>' +
+      '• Core Modules: 20 hours of video content<br>' +
+      '• Practical Exercises: 10 hours<br>' +
+      '• Applied Projects: 10-15 hours depending on complexity<br>' +
+      '• Suggested Pace: 5-7 weeks (5-7 hours per week)'
+  };
+
+  return durations[courseType] || durations['general'];
 };
 
 // Function specifically for downloading curriculum resources from the Curriculum page
@@ -933,19 +670,19 @@ export const downloadCurriculumResource = (subjectName: string) => {
   setTimeout(() => {
     try {
       // Create content specifically formatted for curriculum overviews
-      const dummyContent = createDummyContent(`${formattedName}`, 'pdf');
+      const dummyContent = createDummyContent(formattedName, 'pdf');
       
-      // Create HTML-wrapped content for better viewing
-      const htmlContent = createPdfHtmlContent(subjectName, dummyContent);
+      // Create HTML document with the content
+      const htmlContent = createHtmlDocument(subjectName, dummyContent, 'pdf');
       
-      // Use the proper MIME type
+      // Use text/html MIME type for better browser compatibility
       const blob = new Blob([htmlContent], { type: 'text/html' });
       
       // Create a download link
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Course_Overview_${formattedName}.pdf`);
+      link.setAttribute('download', `${subjectName}_Curriculum_Overview.html`);
       
       // Append to body, click and remove
       document.body.appendChild(link);
@@ -965,4 +702,9 @@ export const downloadCurriculumResource = (subjectName: string) => {
       });
     }
   }, 1500);
+};
+
+// For backward compatibility - redirect to the new function
+export const downloadAllResources = (courseId: string, courseTitle: string) => {
+  downloadCurriculumResource(courseTitle);
 };
