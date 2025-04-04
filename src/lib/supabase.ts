@@ -10,20 +10,25 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Supabase URL or Anon Key is missing. Please check your environment variables.');
 }
 
-// Create a dummy client if environment variables are missing (for development only)
-// This prevents the app from crashing but won't actually connect to Supabase
-export const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : {
-      auth: {
-        getSession: async () => ({ data: { session: null }, error: null }),
-        getUser: async () => ({ data: { user: null }, error: null }),
-        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-        signInWithPassword: async () => ({ error: new Error('Supabase not configured') }),
-        signUp: async () => ({ error: new Error('Supabase not configured') }),
-        signOut: async () => ({ error: null }),
-      }
-    };
+// Create a Supabase client if environment variables are available
+let supabaseClient;
+if (supabaseUrl && supabaseAnonKey) {
+  supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+} else {
+  // Create a mock client with minimum required methods for development
+  supabaseClient = {
+    auth: {
+      getSession: async () => ({ data: { session: null }, error: null }),
+      getUser: async () => ({ data: { user: null }, error: null }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+      signInWithPassword: async () => ({ error: new Error('Supabase not configured') }),
+      signUp: async () => ({ error: new Error('Supabase not configured') }),
+      signOut: async () => ({ error: null }),
+    }
+  };
+}
+
+export const supabase = supabaseClient;
 
 // Helper function to check if user is authenticated
 export async function isAuthenticated() {
