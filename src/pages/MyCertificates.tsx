@@ -9,8 +9,9 @@ import { Button } from '@/components/ui/button';
 import { CertificateCard } from '@/components/ui/Certificate';
 import { Award, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import { Database } from '@/integrations/supabase/types';
 
-// Define the Certificate type with proper types
+// Define the Certificate type using the database types
 interface Certificate {
   id: string;
   session_title: string;
@@ -30,11 +31,11 @@ const MyCertificates = () => {
       
       try {
         setLoading(true);
-        // Use type assertion to resolve the TypeScript error
+        // Properly type the query using the Database type
         const { data, error } = await supabase
           .from('certificates')
           .select('*')
-          .order('completion_date', { ascending: false }) as any;
+          .order('completion_date', { ascending: false });
           
         if (error) throw error;
         

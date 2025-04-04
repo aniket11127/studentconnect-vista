@@ -35,24 +35,31 @@ const VipSessionDetail = () => {
     try {
       setLoading(true);
       
+      // Get the current session data
       const { data: sessionData } = await supabase.auth.getSession();
       
-      const response = await fetch('/api/generate-certificate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionData.session?.access_token}`
-        },
-        body: JSON.stringify({
-          courseId: session.id,
-          sessionTitle: session.title,
-          expertName: session.expert
-        })
-      });
+      if (!sessionData.session) {
+        toast.error('You must be logged in to receive a certificate');
+        return;
+      }
       
-      const result = await response.json();
-      
-      if (!response.ok) throw new Error(result.error || 'Failed to generate certificate');
+      // In a real-world scenario, we would call an edge function
+      // For now, we'll insert directly to demonstrate functionality
+      const { data, error } = await supabase
+        .from('certificates')
+        .insert([
+          {
+            user_id: user.id,
+            course_id: session.id,
+            session_title: session.title,
+            expert_name: session.expert,
+            certificate_id: `SGK14-DM-2025-${Math.floor(Math.random() * 999).toString().padStart(3, '0')}`,
+          }
+        ])
+        .select('*')
+        .single();
+        
+      if (error) throw error;
       
       toast.success('Certificate successfully generated!', {
         action: {
