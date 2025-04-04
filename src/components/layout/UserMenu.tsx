@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { User, LogOut, Settings, Certificate } from 'lucide-react';
+import { User, LogOut, Settings, Award } from 'lucide-react';
 
 const UserMenu = () => {
   const { user, loading, signOut } = useAuth();
@@ -80,7 +80,7 @@ const UserMenu = () => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/certificates" className="cursor-pointer flex items-center">
-            <Certificate className="mr-2 h-4 w-4" />
+            <Award className="mr-2 h-4 w-4" />
             <span>My Certificates</span>
           </Link>
         </DropdownMenuItem>
