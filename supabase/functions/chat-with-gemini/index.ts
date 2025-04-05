@@ -47,6 +47,8 @@ Remember that your primary goal is to educate and empower students, not just pro
       systemPrompt += "\n\nIMPORTANT: Explain in very simple terms, as if to a younger student. Use shorter sentences and basic vocabulary.";
     }
 
+    console.log("Making request to Gemini API...");
+
     // Construct the request to Gemini API
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
       method: 'POST',
@@ -93,10 +95,12 @@ Remember that your primary goal is to educate and empower students, not just pro
     const data = await response.json();
     
     if (!response.ok) {
+      console.error("Gemini API error:", data);
       throw new Error(data.error?.message || "Failed to get response from Gemini API");
     }
 
     const generatedText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't generate a response.";
+    console.log("Successfully generated response from Gemini API");
 
     return new Response(JSON.stringify({ 
       response: generatedText 

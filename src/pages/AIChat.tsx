@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Navbar from '@/components/layout/Navbar';
+import Navbar from '@/components/layout/NavbarWithAI';
 import Footer from '@/components/layout/Footer';
 import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
