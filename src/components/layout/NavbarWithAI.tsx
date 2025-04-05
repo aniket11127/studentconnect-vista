@@ -45,7 +45,6 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
     { name: 'Curriculum', path: '/curriculum' },
-    { name: 'VIP Sessions', path: '/vip-sessions' },
     { name: 'AI Chat', path: '/ai-chat' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
@@ -61,7 +60,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img src="/logo.png" alt="SGK14 EdTech" className="h-10 w-auto" />
+            <img 
+              src="/lovable-uploads/02174cfd-bb30-416f-90c8-8968b3544810.png" 
+              alt="SGK14 EdTech" 
+              className="h-10 w-auto" 
+            />
             <span className="ml-2 text-lg font-bold">SGK14</span>
           </Link>
 

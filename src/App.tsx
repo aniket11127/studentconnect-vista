@@ -11,8 +11,6 @@ import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import Curriculum from './pages/Curriculum';
 import ModuleDetail from './pages/ModuleDetail';
-import VipSessions from './pages/VipSessions';
-import VipSessionDetail from './pages/VipSessionDetail';
 import MyCertificates from './pages/MyCertificates';
 import AIChat from './pages/AIChat';
 import Login from './pages/Login';
@@ -33,8 +31,6 @@ function App() {
             <Route path="/course/:courseId" element={<CourseDetail />} />
             <Route path="/curriculum" element={<Curriculum />} />
             <Route path="/module/:moduleSlug" element={<ModuleDetail />} />
-            <Route path="/vip-sessions" element={<VipSessions />} />
-            <Route path="/vip-sessions/:sessionId" element={<VipSessionDetail />} />
             <Route path="/certificates" element={
               <ProtectedRoute>
                 <MyCertificates />
