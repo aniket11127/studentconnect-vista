@@ -58,14 +58,17 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
+          {/* Logo - Updated with new logo and improved sizing/positioning */}
           <Link to="/" className="flex items-center">
-            <img 
-              src="/lovable-uploads/02174cfd-bb30-416f-90c8-8968b3544810.png" 
-              alt="SGK14 EdTech" 
-              className="h-10 w-auto" 
-            />
-            <span className="ml-2 text-lg font-bold">SGK14</span>
+            <div className="h-10 md:h-12 w-auto flex items-center">
+              <img 
+                src="/lovable-uploads/4eaa1a0e-6c88-482c-92bd-3faa661433cd.png" 
+                alt="SGK14 EdTech" 
+                className="h-full w-auto object-contain"
+                style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.05))' }}
+              />
+            </div>
+            <span className="ml-2 text-lg font-bold text-primary">SGK14</span>
           </Link>
 
           {/* Desktop Navigation */}
