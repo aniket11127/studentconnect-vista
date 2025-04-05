@@ -14,6 +14,7 @@ import ModuleDetail from './pages/ModuleDetail';
 import VipSessions from './pages/VipSessions';
 import VipSessionDetail from './pages/VipSessionDetail';
 import MyCertificates from './pages/MyCertificates';
+import AIChat from './pages/AIChat';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
@@ -39,6 +40,7 @@ function App() {
                 <MyCertificates />
               </ProtectedRoute>
             } />
+            <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="*" element={<NotFound />} />
