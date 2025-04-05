@@ -1,7 +1,5 @@
 
 import React, { useEffect } from 'react';
-import Navbar from '@/components/layout/NavbarWithAI';
-import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
 import Courses from '@/components/sections/Courses';
@@ -14,15 +12,11 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <main className="flex-grow">
-        <Hero />
-        <Features />
-        <Courses />
-        <ReviewSection />
-      </main>
-      <Footer />
+    <div>
+      <Hero />
+      <Features />
+      <Courses />
+      <ReviewSection />
     </div>
   );
 };

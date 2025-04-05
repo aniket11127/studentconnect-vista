@@ -4,6 +4,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './components/ui/theme-provider';
 import { AuthProvider } from './hooks/useAuth';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import NavbarWithAI from './components/layout/NavbarWithAI';
+import Footer from './components/layout/Footer';
 import Index from './pages/Index';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -23,24 +25,30 @@ function App() {
     <ThemeProvider defaultTheme="light" storageKey="sgk14-theme">
       <AuthProvider>
         <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/course/:courseId" element={<CourseDetail />} />
-            <Route path="/curriculum" element={<Curriculum />} />
-            <Route path="/module/:moduleSlug" element={<ModuleDetail />} />
-            <Route path="/certificates" element={
-              <ProtectedRoute>
-                <MyCertificates />
-              </ProtectedRoute>
-            } />
-            <Route path="/ai-chat" element={<AIChat />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className="flex flex-col min-h-screen">
+            <NavbarWithAI />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/course/:courseId" element={<CourseDetail />} />
+                <Route path="/curriculum" element={<Curriculum />} />
+                <Route path="/module/:moduleSlug" element={<ModuleDetail />} />
+                <Route path="/certificates" element={
+                  <ProtectedRoute>
+                    <MyCertificates />
+                  </ProtectedRoute>
+                } />
+                <Route path="/ai-chat" element={<AIChat />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
           <Toaster />
         </Router>
       </AuthProvider>

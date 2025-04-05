@@ -1,15 +1,19 @@
-
-import Navbar from '@/components/layout/Navbar';
+import React, { useEffect } from 'react';
+import Navbar from '@/components/layout/NavbarWithAI';
 import Footer from '@/components/layout/Footer';
+import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Users, Award, Lightbulb } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const About = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen">
+      <Helmet>
+        <title>About Us | SGK14 EdTech</title>
+      </Helmet>
       <Navbar />
-      <main className="flex-1 pt-24">
+      <main className="flex-grow pt-20 md:pt-24">
         <section className="py-12">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center mb-16">
