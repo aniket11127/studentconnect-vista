@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CurriculumModule from '@/components/curriculum/CurriculumModule';
@@ -7,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 
-// Updated curriculum data organized by class
 const curriculumData = {
   'Class 8': [
     {
@@ -28,7 +26,7 @@ const curriculumData = {
         { weekNumber: 2, title: 'Text Formatting', description: 'Text styles, fonts, paragraphs and page layout' },
         { weekNumber: 3, title: 'Advanced Features', description: 'Templates, references, collaboration tools' }
       ],
-      image: '/lovable-uploads/02174cfd-bb30-416f-90c8-8968b3544810.png'
+      image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Microsoft_Office_Word_%282019%E2%80%93present%29.svg'
     },
     {
       name: 'MS Excel Essential Skills',
@@ -47,7 +45,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Spreadsheet Fundamentals', description: 'Basic data entry, cell formatting and simple calculations' },
         { weekNumber: 2, title: 'Functions & Formulas', description: 'Using Excel functions for data analysis' },
         { weekNumber: 3, title: 'Data Analysis', description: 'Pivot tables, charts and conditional formatting' }
-      ]
+      ],
+      image: 'https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg'
     },
     {
       name: 'HTML Basics',
@@ -66,7 +65,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'HTML Foundations', description: 'Document structure and basic elements' },
         { weekNumber: 2, title: 'Building Pages', description: 'Creating simple web pages with HTML' },
         { weekNumber: 3, title: 'HTML5 Features', description: 'Modern HTML capabilities and best practices' }
-      ]
+      ],
+      image: 'https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg'
     }
   ],
   'Class 9': [
@@ -87,7 +87,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Advanced Formatting', description: 'Custom styles, themes and formatting' },
         { weekNumber: 2, title: 'Document Automation', description: 'Macros and document automation techniques' },
         { weekNumber: 3, title: 'Integration Features', description: 'Connecting Word with other applications' }
-      ]
+      ],
+      image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Microsoft_Office_Word_%282019%E2%80%93present%29.svg'
     },
     {
       name: 'MS Excel Data Analysis',
@@ -106,7 +107,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Advanced Excel Functions', description: 'Complex calculations and data manipulation' },
         { weekNumber: 2, title: 'Data Visualization', description: 'Creating effective charts and dashboards' },
         { weekNumber: 3, title: 'Excel Power Tools', description: 'Power Query, Power Pivot and advanced analytics' }
-      ]
+      ],
+      image: 'https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg'
     },
     {
       name: 'HTML & CSS Fundamentals',
@@ -125,7 +127,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'HTML & CSS Basics', description: 'Combining HTML with basic CSS styling' },
         { weekNumber: 2, title: 'Page Layout', description: 'Creating structured page layouts' },
         { weekNumber: 3, title: 'Responsive Design', description: 'Making websites work on all devices' }
-      ]
+      ],
+      image: 'https://cdn-icons-png.flaticon.com/512/174/174854.png'
     }
   ],
   'Class 10': [
@@ -146,7 +149,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Modern HTML5', description: 'Using semantic elements and modern HTML features' },
         { weekNumber: 2, title: 'CSS3 Techniques', description: 'Advanced styling and visual effects' },
         { weekNumber: 3, title: 'Layout Systems', description: 'Mastering Flexbox and CSS Grid' }
-      ]
+      ],
+      image: 'https://cdn-icons-png.flaticon.com/512/732/732190.png'
     },
     {
       name: 'Python Programming',
@@ -165,7 +169,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Python Basics', description: 'Syntax, data types, and control structures' },
         { weekNumber: 2, title: 'Functions & Modules', description: 'Creating reusable code components' },
         { weekNumber: 3, title: 'Practical Python', description: 'Solving real-world problems with Python' }
-      ]
+      ],
+      image: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg'
     },
     {
       name: 'Web Development Essentials',
@@ -184,7 +189,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Web Technologies', description: 'Understanding how web technologies work together' },
         { weekNumber: 2, title: 'Adding Interactivity', description: 'Introduction to JavaScript for web pages' },
         { weekNumber: 3, title: 'Project Implementation', description: 'Building a complete interactive website' }
-      ]
+      ],
+      image: 'https://cdn-icons-png.flaticon.com/512/1927/1927731.png'
     }
   ],
   'Class 11': [
@@ -205,7 +211,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'OOP in Python', description: 'Classes, objects, and inheritance' },
         { weekNumber: 2, title: 'Advanced Python Features', description: 'Decorators, generators, and context managers' },
         { weekNumber: 3, title: 'Python Applications', description: 'Building real-world applications with Python' }
-      ]
+      ],
+      image: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg'
     },
     {
       name: 'HTML/CSS & JavaScript',
@@ -224,7 +231,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Modern JavaScript', description: 'ES6+ features and modern JavaScript techniques' },
         { weekNumber: 2, title: 'Dynamic Web Content', description: 'Creating interactive web applications' },
         { weekNumber: 3, title: 'Frontend Frameworks', description: 'Introduction to modern frontend libraries' }
-      ]
+      ],
+      image: 'https://cdn-icons-png.flaticon.com/512/5968/5968292.png'
     },
     {
       name: 'SQL Database Fundamentals',
@@ -243,7 +251,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Database Concepts', description: 'Understanding relational databases and tables' },
         { weekNumber: 2, title: 'SQL Queries', description: 'SELECT statements, filtering, and data manipulation' },
         { weekNumber: 3, title: 'Advanced SQL', description: 'Joins, subqueries, and database design' }
-      ]
+      ],
+      image: 'https://www.svgrepo.com/show/331760/sql-database-generic.svg'
     }
   ],
   'Class 12': [
@@ -264,7 +273,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Data Science Fundamentals', description: 'Introduction to data analysis workflow' },
         { weekNumber: 2, title: 'Python Data Libraries', description: 'Working with pandas, numpy, and matplotlib' },
         { weekNumber: 3, title: 'Machine Learning Intro', description: 'Basic ML concepts and implementations' }
-      ]
+      ],
+      image: 'https://cdn-icons-png.flaticon.com/512/2821/2821637.png'
     },
     {
       name: 'Modern Web Development',
@@ -283,7 +293,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Modern Frameworks', description: 'Working with React or similar libraries' },
         { weekNumber: 2, title: 'Building Applications', description: 'Creating complete web applications' },
         { weekNumber: 3, title: 'Production Deployment', description: 'Optimizing and deploying web apps' }
-      ]
+      ],
+      image: 'https://cdn-icons-png.flaticon.com/512/1126/1126012.png'
     },
     {
       name: 'Advanced SQL & Databases',
@@ -302,7 +313,8 @@ const curriculumData = {
         { weekNumber: 1, title: 'Advanced Database Concepts', description: 'Complex database design and operations' },
         { weekNumber: 2, title: 'Database Programming', description: 'Stored procedures, triggers, and functions' },
         { weekNumber: 3, title: 'Enterprise Databases', description: 'Scaling and securing database systems' }
-      ]
+      ],
+      image: 'https://cdn-icons-png.flaticon.com/512/2906/2906274.png'
     }
   ]
 };
@@ -311,7 +323,6 @@ const Curriculum = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   
-  // Scroll to top on component mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -320,7 +331,6 @@ const Curriculum = () => {
     setSearchTerm(e.target.value);
   };
 
-  // Get all modules for filtering
   const getAllModules = () => {
     const allModules: any[] = [];
     Object.entries(curriculumData).forEach(([className, modules]) => {
@@ -334,7 +344,6 @@ const Curriculum = () => {
     return allModules;
   };
 
-  // Filter modules based on search and active tab
   const getFilteredModules = () => {
     const allModules = getAllModules();
     
@@ -346,7 +355,6 @@ const Curriculum = () => {
       if (activeTab === 'office') return (module.name.includes('MS Word') || module.name.includes('MS Excel')) && matchesSearch;
       if (activeTab === 'programming') return (module.name.includes('Python') || module.name.includes('Web') || module.name.includes('HTML') || module.name.includes('SQL')) && matchesSearch;
       
-      // Match by class
       return activeTab === module.className.toLowerCase().replace(' ', '') && matchesSearch;
     });
   };
@@ -392,7 +400,6 @@ const Curriculum = () => {
             </div>
           </div>
 
-          {/* Display when filtering */}
           {(searchTerm || activeTab !== 'all') && (
             <div className="space-y-6 mb-10">
               {getFilteredModules().length > 0 ? (
@@ -420,7 +427,6 @@ const Curriculum = () => {
             </div>
           )}
 
-          {/* Display by class when not filtering */}
           {!searchTerm && activeTab === 'all' && (
             <div className="space-y-12">
               {Object.entries(curriculumData).map(([className, modules]) => (

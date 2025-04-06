@@ -17,6 +17,27 @@ const Courses = () => {
         .sort((a, b) => b.students - a.students)
         .slice(0, 4 - featuredCourses.length)];
 
+  // Ensure all courses have valid images
+  const coursesWithImages = coursesToShow.map(course => {
+    if (!course.image || course.image === '/placeholder-course-image.jpg') {
+      // Assign relevant image based on category
+      let image = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d';
+      
+      if (course.category.includes('Web Development')) {
+        image = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6';
+      } else if (course.category.includes('Data')) {
+        image = 'https://images.unsplash.com/photo-1518770660439-4636190af475';
+      } else if (course.category.includes('AI') || course.category.includes('Machine')) {
+        image = 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7';
+      } else if (course.category.includes('Cloud')) {
+        image = 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b';
+      }
+      
+      return { ...course, image };
+    }
+    return course;
+  });
+
   return (
     <section className="py-20">
       <div className="container">
@@ -47,7 +68,7 @@ const Courses = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {coursesToShow.map((course, index) => (
+          {coursesWithImages.map((course, index) => (
             <CourseCard
               key={course.id}
               {...course}

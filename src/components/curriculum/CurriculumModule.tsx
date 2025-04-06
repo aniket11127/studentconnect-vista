@@ -9,6 +9,7 @@ import ProgressBar from '@/components/ui/ProgressBar';
 import { downloadCurriculumResource } from '@/utils/downloadUtils';
 import { toast } from 'sonner';
 
+// Map module names to appropriate icons
 const iconMap = {
   'MS Word': FileText,
   'MS Excel': FileText,
@@ -17,9 +18,24 @@ const iconMap = {
   'Python': Code,
   'SQL': Database,
   'Professional Development': Award,
-  'AI Tools': BookOpen,
+  'AI Tools': Brain,
   'Prompt Engineering': Brain,
   default: BookOpen
+};
+
+// Map module names to appropriate image URLs
+const imageMap: Record<string, string> = {
+  'MS Word': 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Microsoft_Office_Word_%282019%E2%80%93present%29.svg',
+  'MS Excel': 'https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg',
+  'HTML': 'https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg',
+  'CSS': 'https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg',
+  'Python': 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
+  'SQL': 'https://www.svgrepo.com/show/331760/sql-database-generic.svg',
+  'Web Development': 'https://cdn-icons-png.flaticon.com/512/1927/1927731.png',
+  'Data Science': 'https://cdn-icons-png.flaticon.com/512/2821/2821637.png',
+  'AI': 'https://cdn-icons-png.flaticon.com/512/8649/8649595.png',
+  'Cybersecurity': 'https://cdn-icons-png.flaticon.com/512/2092/2092757.png',
+  'Professional Development': 'https://cdn-icons-png.flaticon.com/512/9796/9796811.png',
 };
 
 interface CurriculumModuleProps {
@@ -56,6 +72,23 @@ const CurriculumModule = ({
 
   const moduleSlug = name.toLowerCase().replace(/\s+/g, '-');
   
+  // Get appropriate image for the module
+  const getModuleImage = () => {
+    if (image) return image;
+    
+    // Try to find a matching image from our map
+    for (const [key, url] of Object.entries(imageMap)) {
+      if (name.includes(key)) {
+        return url;
+      }
+    }
+    
+    // Use a generic image if no match is found
+    return 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d';
+  };
+  
+  const moduleImage = getModuleImage();
+  
   const handleDownloadResources = () => {
     toast.info(`Preparing ${name} curriculum materials...`);
     downloadCurriculumResource(name);
@@ -80,17 +113,19 @@ const CurriculumModule = ({
         </CardHeader>
 
         <CardContent className="pb-2">
-          {image && (
-            <div className="mb-4 overflow-hidden rounded-lg cursor-pointer transition-all duration-300" 
-                 onClick={() => setIsImageExpanded(!isImageExpanded)}
-                 style={{ maxHeight: isImageExpanded ? '400px' : '200px' }}>
-              <img 
-                src={image} 
-                alt={name}
-                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-              />
-            </div>
-          )}
+          <div className="mb-4 overflow-hidden rounded-lg cursor-pointer transition-all duration-300" 
+               onClick={() => setIsImageExpanded(!isImageExpanded)}
+               style={{ maxHeight: isImageExpanded ? '400px' : '200px' }}>
+            <img 
+              src={moduleImage}
+              alt={name}
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d';
+              }}
+            />
+          </div>
           <div className="flex justify-between text-sm mb-2">
             <span className="text-muted-foreground">Modules</span>
             <span className="font-medium">{modules}</span>
@@ -217,7 +252,7 @@ const CurriculumModule = ({
                   topics,
                   progress,
                   weeks,
-                  image
+                  image: moduleImage
                 } 
               }}>
                 View Module

@@ -43,9 +43,13 @@ const CourseCard = ({
       {/* Course Image */}
       <div className="relative h-[180px] overflow-hidden">
         <img
-          src={image}
+          src={image || '/placeholder.svg'}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = '/placeholder.svg';
+          }}
         />
         <div className="absolute top-3 left-3">
           <span className="px-3 py-1 text-xs font-medium bg-white/90 backdrop-blur-sm rounded-full">
