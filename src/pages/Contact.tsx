@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
@@ -6,10 +7,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-const Contact = () => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+type FormValues = {
+  name: string;
+  email: string;
+  message: string;
+};
 
-  const onSubmit = async (data: any) => {
+const Contact = () => {
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
+
+  const onSubmit = async (data: FormValues) => {
     try {
       const response = await fetch('/api/send-email', {
         method: 'POST',
@@ -62,7 +69,7 @@ const Contact = () => {
                 className="mt-1"
                 {...register("name", { required: "Name is required" })}
               />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message as string}</p>}
             </div>
 
             <div>
@@ -82,7 +89,7 @@ const Contact = () => {
                   },
                 })}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message as string}</p>}
             </div>
 
             <div>
@@ -96,7 +103,7 @@ const Contact = () => {
                 className="mt-1"
                 {...register("message", { required: "Message is required" })}
               />
-              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+              {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message as string}</p>}
             </div>
 
             <Button type="submit" className="w-full">
