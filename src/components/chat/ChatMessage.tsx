@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User } from 'lucide-react';
+import { User, AlertCircle } from 'lucide-react';
 
 interface ChatMessageProps {
   message: {
     role: 'user' | 'bot';
     content: string;
     timestamp: Date;
+    isError?: boolean;
   };
 }
 
@@ -48,6 +49,7 @@ const formatMessageContent = (content: string) => {
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isBot = message.role === 'bot';
+  const isError = message.isError;
   
   return (
     <div className={`flex gap-3 mb-4 ${isBot ? '' : 'flex-row-reverse'}`}>
@@ -69,11 +71,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       <div 
         className={`rounded-lg p-4 max-w-[80%] ${
           isBot 
-            ? 'bg-background border border-border' 
+            ? isError 
+              ? 'bg-destructive/10 border border-destructive/20 text-destructive-foreground' 
+              : 'bg-background border border-border' 
             : 'bg-primary text-primary-foreground ml-auto'
         }`}
       >
-        <div className="text-sm font-medium mb-1">
+        <div className="text-sm font-medium mb-1 flex items-center">
+          {isBot && isError && <AlertCircle className="h-4 w-4 mr-1" />}
           {isBot ? 'AI Mentor' : 'You'}
         </div>
         

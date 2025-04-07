@@ -7,7 +7,7 @@ import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { RefreshCw, Copy, MessageCircle } from 'lucide-react';
+import { RefreshCw, Copy, MessageCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Define the chat message interface
@@ -16,6 +16,7 @@ interface ChatMessageType {
   role: 'user' | 'bot';
   content: string;
   timestamp: Date;
+  isError?: boolean;
 }
 
 // Define the class and subject options
@@ -48,6 +49,7 @@ const AIChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [errorRetries, setErrorRetries] = useState(0);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
@@ -89,7 +91,15 @@ const AIChat = () => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase function error:", error);
+        throw new Error(error.message || "Failed to call the AI assistant. Please try again.");
+      }
+
+      if (data.error) {
+        console.error("Chat function returned error:", data.error);
+        throw new Error(data.error);
+      }
 
       // Add bot response to the chat
       const botMessage: ChatMessageType = {
@@ -100,19 +110,34 @@ const AIChat = () => {
       };
 
       setMessages((prev) => [...prev, botMessage]);
+      setErrorRetries(0); // Reset error counter on success
     } catch (error: any) {
       console.error('Error sending message:', error);
+      
+      let errorMessage = "Sorry, I encountered an error while processing your request. Please try again later.";
+      
+      // Provide more specific error messages based on the error
+      if (error.message && error.message.includes("API key")) {
+        errorMessage = "Sorry, there's an issue with the AI service configuration. Please contact support.";
+      } else if (error.message && error.message.includes("rate limit")) {
+        errorMessage = "Sorry, we've reached our usage limit. Please try again in a few minutes.";
+      } else if (errorRetries > 2) {
+        errorMessage = "I'm still having trouble connecting to the AI service. You might want to refresh the page or try again later.";
+      }
+      
       toast.error('Failed to get a response. Please try again.');
 
       // Add error message to the chat
       const errorMessage: ChatMessageType = {
         id: (Date.now() + 1).toString(),
         role: 'bot',
-        content: 'Sorry, I encountered an error while processing your request. Please try again later.',
+        content: errorMessage,
         timestamp: new Date(),
+        isError: true
       };
 
       setMessages((prev) => [...prev, errorMessage]);
+      setErrorRetries(prev => prev + 1);
     } finally {
       setIsLoading(false);
     }
@@ -141,7 +166,7 @@ const AIChat = () => {
   // Copy the last response to clipboard
   const handleCopyResponse = () => {
     // Find the last bot message
-    const lastBotMessage = [...messages].reverse().find(m => m.role === 'bot');
+    const lastBotMessage = [...messages].reverse().find(m => m.role === 'bot' && !m.isError);
     if (lastBotMessage) {
       navigator.clipboard.writeText(lastBotMessage.content);
       toast.success('Response copied to clipboard!');

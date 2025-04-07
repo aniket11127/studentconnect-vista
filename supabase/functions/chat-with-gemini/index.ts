@@ -20,7 +20,8 @@ serve(async (req) => {
     const { message, studentClass, subject, format } = await req.json();
     
     if (!GEMINI_API_KEY) {
-      throw new Error("Gemini API key is not configured");
+      console.error("Gemini API key is not configured");
+      throw new Error("Gemini API key is not configured. Please check your Supabase secrets.");
     }
 
     // Construct appropriate system prompt based on student details
@@ -47,7 +48,8 @@ Remember that your primary goal is to educate and empower students, not just pro
       systemPrompt += "\n\nIMPORTANT: Explain in very simple terms, as if to a younger student. Use shorter sentences and basic vocabulary.";
     }
 
-    console.log("Making request to Gemini API...");
+    console.log("Making request to Gemini API with API key:", GEMINI_API_KEY ? "API key is set" : "API key is missing");
+    console.log("Request URL:", GEMINI_API_URL);
 
     // Construct the request to Gemini API
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
@@ -92,15 +94,39 @@ Remember that your primary goal is to educate and empower students, not just pro
       }),
     });
 
-    const data = await response.json();
-    
     if (!response.ok) {
-      console.error("Gemini API error:", data);
-      throw new Error(data.error?.message || "Failed to get response from Gemini API");
+      const errorData = await response.json();
+      console.error("Gemini API error response:", errorData);
+      
+      // Determine specific error types for better user feedback
+      let errorMessage = "Failed to get response from Gemini API";
+      
+      if (response.status === 429) {
+        errorMessage = "Rate limit exceeded. Please try again later.";
+      } else if (response.status === 400) {
+        errorMessage = "Invalid request to Gemini API. Please check your input.";
+      } else if (response.status === 401) {
+        errorMessage = "Authentication failed with Gemini API. Please check your API key.";
+      } else if (response.status === 500) {
+        errorMessage = "Gemini API server error. Please try again later.";
+      } else if (errorData.error) {
+        errorMessage = errorData.error.message || errorMessage;
+      }
+      
+      throw new Error(errorMessage);
     }
 
-    const generatedText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't generate a response.";
-    console.log("Successfully generated response from Gemini API");
+    const data = await response.json();
+    console.log("Received response from Gemini API");
+    
+    // Check if the response has the expected structure
+    if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+      console.error("Unexpected Gemini API response format:", data);
+      throw new Error("Received an invalid response format from Gemini API");
+    }
+
+    const generatedText = data.candidates[0].content.parts[0].text || "Sorry, I couldn't generate a response.";
+    console.log("Successfully extracted text from Gemini API response");
 
     return new Response(JSON.stringify({ 
       response: generatedText 
@@ -110,7 +136,7 @@ Remember that your primary goal is to educate and empower students, not just pro
   } catch (error) {
     console.error('Error in chat-with-gemini function:', error);
     return new Response(JSON.stringify({ 
-      error: error.message 
+      error: error.message || "An unexpected error occurred. Please try again later." 
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
