@@ -47,18 +47,18 @@ const Navbar = () => {
     <header
       className={cn(
         'fixed top-0 left-0 w-full z-50 transition-all duration-300',
-        isScrolled ? 'glass py-3 shadow-sm' : 'bg-transparent py-5'
+        isScrolled ? 'bg-background/90 backdrop-blur-md py-3 shadow-sm' : 'bg-transparent py-5'
       )}
     >
       <div className="container flex items-center justify-between">
-        {/* Logo - Enhanced with new logo */}
+        {/* Logo */}
         <Link 
           to="/" 
           className="flex items-center gap-2 font-bold text-xl tracking-tight"
           onClick={closeMenu}
           aria-label="SGK14 - Home"
         >
-          <div className="h-14 w-auto relative flex items-center justify-center">
+          <div className="h-12 w-auto relative flex items-center justify-center">
             <img 
               src="/lovable-uploads/a7b92d72-5b5a-4c45-b8d6-df9a520a09df.png" 
               alt="SGK14 Logo" 
@@ -69,26 +69,29 @@ const Navbar = () => {
               loading="eager"
             />
           </div>
-          <span className="hidden lg:inline-block ml-2 text-primary font-semibold">SKILL GROWTH & KNOWLEDGE</span>
+          <span className="hidden sm:inline-block ml-2 text-primary font-semibold">SKILL GROWTH & KNOWLEDGE</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              className={cn(
-                "text-sm font-medium transition-colors",
-                isActive(link.path) 
-                  ? "text-primary font-semibold" 
-                  : "text-foreground/80 hover:text-primary"
-              )}
-              aria-label={`Navigate to ${link.name}`}
-            >
-              {link.name}
-            </Link>
-          ))}
+        <nav className="hidden md:flex items-center">
+          <ul className="flex space-x-6">
+            {navLinks.map((link) => (
+              <li key={link.name}>
+                <Link
+                  to={link.path}
+                  className={cn(
+                    "text-sm font-medium transition-colors px-2 py-1 rounded-md",
+                    isActive(link.path) 
+                      ? "text-primary font-semibold" 
+                      : "text-foreground/80 hover:text-primary hover:bg-accent/50"
+                  )}
+                  aria-label={`Navigate to ${link.name}`}
+                >
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
 
         {/* Action Buttons */}
@@ -112,7 +115,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation Overlay */}
         {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-50 glass animate-fade-in">
+          <div className="md:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in">
             <div className="flex flex-col h-full pt-20 pb-6 px-6">
               <nav className="flex flex-col gap-6 flex-1">
                 {navLinks.map((link) => (
@@ -120,10 +123,10 @@ const Navbar = () => {
                     key={link.name}
                     to={link.path}
                     className={cn(
-                      "text-lg font-medium transition-colors", 
+                      "text-lg font-medium transition-colors p-2 rounded-md", 
                       isActive(link.path) 
-                        ? "text-primary font-semibold" 
-                        : "hover:text-primary"
+                        ? "text-primary font-semibold bg-primary/10" 
+                        : "hover:text-primary hover:bg-accent/50"
                     )}
                     onClick={closeMenu}
                     aria-label={`Navigate to ${link.name}`}

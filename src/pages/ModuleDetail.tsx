@@ -110,6 +110,10 @@ const ModuleDetail = () => {
   const exercises = generateExercises(formattedName, module.modules);
   
   const moduleResources = moduleSlug ? getResourcesByModuleSlug(moduleSlug) : [];
+
+  const webDevImage = formattedName.toLowerCase().includes('web development') 
+    ? '/lovable-uploads/17d3adc9-8835-4a14-8cfe-eee0e39f5bd9.png'
+    : null;
   
   const handleEnroll = () => {
     toast.success(`Successfully enrolled in ${formattedName}`, {
@@ -221,7 +225,15 @@ const ModuleDetail = () => {
             </div>
             
             <div className="md:w-2/5">
-              {module.image ? (
+              {webDevImage ? (
+                <div className="overflow-hidden rounded-lg shadow-md">
+                  <img 
+                    src={webDevImage} 
+                    alt="Web Development"
+                    className="w-full h-auto object-cover aspect-[4/3]"
+                  />
+                </div>
+              ) : module.image ? (
                 <img 
                   src={module.image} 
                   alt={formattedName}
