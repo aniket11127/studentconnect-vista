@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/layout/NavbarWithAI';
@@ -114,29 +113,30 @@ const AIChat = () => {
     } catch (error: any) {
       console.error('Error sending message:', error);
       
-      let errorMessage = "Sorry, I encountered an error while processing your request. Please try again later.";
+      // Create a default error message
+      let errorText = "Sorry, I encountered an error while processing your request. Please try again later.";
       
       // Provide more specific error messages based on the error
       if (error.message && error.message.includes("API key")) {
-        errorMessage = "Sorry, there's an issue with the AI service configuration. Please contact support.";
+        errorText = "Sorry, there's an issue with the AI service configuration. Please contact support.";
       } else if (error.message && error.message.includes("rate limit")) {
-        errorMessage = "Sorry, we've reached our usage limit. Please try again in a few minutes.";
+        errorText = "Sorry, we've reached our usage limit. Please try again in a few minutes.";
       } else if (errorRetries > 2) {
-        errorMessage = "I'm still having trouble connecting to the AI service. You might want to refresh the page or try again later.";
+        errorText = "I'm still having trouble connecting to the AI service. You might want to refresh the page or try again later.";
       }
       
       toast.error('Failed to get a response. Please try again.');
 
       // Add error message to the chat
-      const errorMessage: ChatMessageType = {
+      const errorBotMessage: ChatMessageType = {
         id: (Date.now() + 1).toString(),
         role: 'bot',
-        content: errorMessage,
+        content: errorText,
         timestamp: new Date(),
         isError: true
       };
 
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorBotMessage]);
       setErrorRetries(prev => prev + 1);
     } finally {
       setIsLoading(false);
