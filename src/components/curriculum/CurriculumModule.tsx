@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Download } from 'lucide-react';
@@ -113,19 +112,28 @@ const CurriculumModule = ({
         </CardHeader>
 
         <CardContent className="pb-2">
-          <div className="mb-4 overflow-hidden rounded-lg cursor-pointer transition-all duration-300" 
-               onClick={() => setIsImageExpanded(!isImageExpanded)}
-               style={{ maxHeight: isImageExpanded ? '400px' : '200px' }}>
-            <img 
-              src={moduleImage}
-              alt={name}
-              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d';
-              }}
-            />
+          <div 
+            className={`mb-4 overflow-hidden rounded-lg cursor-pointer transition-all duration-300 ${isImageExpanded ? 'h-auto max-h-[400px]' : 'h-[160px]'}`}
+            onClick={() => setIsImageExpanded(!isImageExpanded)}
+          >
+            <div className="w-full h-full relative">
+              <img 
+                src={moduleImage}
+                alt={name}
+                className="w-full h-full object-contain bg-gray-50"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d';
+                }}
+              />
+              {!isImageExpanded && (
+                <div className="absolute bottom-0 left-0 right-0 text-center text-xs text-muted-foreground bg-white/80 py-1">
+                  Click to expand
+                </div>
+              )}
+            </div>
           </div>
+          
           <div className="flex justify-between text-sm mb-2">
             <span className="text-muted-foreground">Modules</span>
             <span className="font-medium">{modules}</span>
