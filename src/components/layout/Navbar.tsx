@@ -31,6 +31,7 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'Courses', path: '/courses' },
     { name: 'Curriculum', path: '/curriculum' },
+    { name: 'AI Chat', path: '/ai-chat' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
   ];
@@ -88,6 +89,9 @@ const Navbar = () => {
                   aria-label={`Navigate to ${link.name}`}
                 >
                   {link.name}
+                  {link.name === 'AI Chat' && (
+                    <span className="ml-1 px-1.5 py-0.5 text-xs bg-primary/10 text-primary rounded-full">New</span>
+                  )}
                 </Link>
               </li>
             ))}
@@ -132,6 +136,9 @@ const Navbar = () => {
                     aria-label={`Navigate to ${link.name}`}
                   >
                     {link.name}
+                    {link.name === 'AI Chat' && (
+                      <span className="ml-2 px-1.5 py-0.5 text-xs bg-primary/10 text-primary rounded-full">New</span>
+                    )}
                   </Link>
                 ))}
               </nav>

@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/layout/NavbarWithAI';
@@ -6,7 +7,7 @@ import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { RefreshCw, Copy, MessageCircle, AlertCircle } from 'lucide-react';
+import { RefreshCw, Copy, MessageCircle, AlertCircle, Info } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Define the chat message interface
@@ -49,6 +50,7 @@ const AIChat = () => {
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [errorRetries, setErrorRetries] = useState(0);
+  const [apiStatus, setApiStatus] = useState<'idle' | 'checking' | 'error' | 'ready'>('idle');
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
@@ -59,6 +61,38 @@ const AIChat = () => {
       lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
+
+  // Check API connectivity on component mount
+  useEffect(() => {
+    checkApiConnection();
+  }, []);
+
+  // Function to check API connection
+  const checkApiConnection = async () => {
+    setApiStatus('checking');
+    try {
+      // Simple ping message to test connectivity
+      const { data, error } = await supabase.functions.invoke('chat-with-gemini', {
+        body: {
+          message: "ping test",
+          studentClass: "test",
+          subject: "test",
+        },
+      });
+
+      if (error) {
+        console.error("API connection test failed:", error);
+        setApiStatus('error');
+        toast.error('Cannot connect to AI service. Please try again later.');
+      } else {
+        setApiStatus('ready');
+      }
+    } catch (error) {
+      console.error("API connection check error:", error);
+      setApiStatus('error');
+      toast.error('Cannot connect to AI service. Please try again later.');
+    }
+  };
 
   // Handle sending a new message
   const handleSendMessage = async (message: string, format?: string) => {
@@ -80,6 +114,9 @@ const AIChat = () => {
     setIsLoading(true);
 
     try {
+      console.log("Sending message to AI:", message);
+      console.log("With params - Class:", selectedClass, "Subject:", selectedSubject);
+      
       // Call the Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('chat-with-gemini', {
         body: {
@@ -89,6 +126,8 @@ const AIChat = () => {
           format
         },
       });
+
+      console.log("Response received:", data);
 
       if (error) {
         console.error("Supabase function error:", error);
@@ -173,6 +212,12 @@ const AIChat = () => {
     }
   };
 
+  // Try to reconnect to the API
+  const handleRetryConnection = () => {
+    checkApiConnection();
+    toast.info('Checking connection to AI service...');
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -181,6 +226,27 @@ const AIChat = () => {
         <div className="container max-w-4xl">
           <h1 className="text-3xl font-bold mb-2">AI Student Mentor</h1>
           <p className="text-muted-foreground mb-6">Ask any study questions, get help with assignments, or seek career guidance.</p>
+          
+          {apiStatus === 'error' && (
+            <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 mb-4 flex items-start">
+              <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5 mr-3" />
+              <div>
+                <h3 className="font-medium text-destructive">AI Service Unavailable</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  There's an issue connecting to our AI service. This might be due to server maintenance or configuration issues.
+                </p>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-2"
+                  onClick={handleRetryConnection}
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Try Again
+                </Button>
+              </div>
+            </div>
+          )}
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="md:col-span-2">
@@ -218,6 +284,11 @@ const AIChat = () => {
             <div className="p-4 bg-primary/5 rounded-t-lg flex items-center">
               <MessageCircle className="mr-2 h-5 w-5 text-primary" />
               <h2 className="font-medium">AI Chat</h2>
+              {apiStatus === 'checking' && (
+                <span className="ml-auto text-xs text-muted-foreground flex items-center">
+                  <Info className="h-3 w-3 mr-1" /> Checking connection...
+                </span>
+              )}
             </div>
             
             <div 
@@ -250,7 +321,8 @@ const AIChat = () => {
                 value={inputValue}
                 onChange={setInputValue}
                 onSend={handleSendMessage}
-                disabled={isLoading}
+                disabled={isLoading || apiStatus === 'error'}
+                placeholder={apiStatus === 'error' ? "AI service unavailable..." : "Type your question here..."}
               />
             </div>
           </Card>
@@ -260,7 +332,7 @@ const AIChat = () => {
               variant="outline" 
               size="sm"
               onClick={handleRegenerateResponse}
-              disabled={isLoading || messages.length <= 1}
+              disabled={isLoading || messages.length <= 1 || apiStatus === 'error'}
             >
               <RefreshCw className="mr-2 h-4 w-4" />
               Regenerate Response
@@ -270,7 +342,7 @@ const AIChat = () => {
               variant="outline" 
               size="sm"
               onClick={handleSimplifyResponse}
-              disabled={isLoading || messages.length <= 1}
+              disabled={isLoading || messages.length <= 1 || apiStatus === 'error'}
             >
               Simplify Answer
             </Button>

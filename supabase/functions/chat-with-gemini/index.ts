@@ -24,6 +24,10 @@ serve(async (req) => {
       throw new Error("Gemini API key is not configured. Please check your Supabase secrets.");
     }
 
+    console.log("Processing request with message:", message);
+    console.log("Student class:", studentClass);
+    console.log("Subject:", subject);
+
     // Construct appropriate system prompt based on student details
     let systemPrompt = `You are SGK14's AI Student Mentor, a friendly and patient educational assistant for students in classes 8-12 (MP Board & CBSE).
     
@@ -48,8 +52,7 @@ Remember that your primary goal is to educate and empower students, not just pro
       systemPrompt += "\n\nIMPORTANT: Explain in very simple terms, as if to a younger student. Use shorter sentences and basic vocabulary.";
     }
 
-    console.log("Making request to Gemini API with API key:", GEMINI_API_KEY ? "API key is set" : "API key is missing");
-    console.log("Request URL:", GEMINI_API_URL);
+    console.log("Making request to Gemini API with system prompt prepared");
 
     // Construct the request to Gemini API
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
@@ -94,9 +97,18 @@ Remember that your primary goal is to educate and empower students, not just pro
       }),
     });
 
+    console.log("Response status from Gemini API:", response.status);
+
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Gemini API error response:", errorData);
+      const errorText = await response.text();
+      console.error("Gemini API error response:", errorText);
+      
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch (e) {
+        errorData = { error: { message: "Failed to parse error response" }};
+      }
       
       // Determine specific error types for better user feedback
       let errorMessage = "Failed to get response from Gemini API";

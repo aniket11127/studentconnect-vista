@@ -9,13 +9,15 @@ interface ChatInputProps {
   onChange: (value: string) => void;
   onSend: (message: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ 
   value, 
   onChange, 
   onSend, 
-  disabled = false 
+  disabled = false,
+  placeholder = "Type your question here..."
 }) => {
   const [recording, setRecording] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
@@ -89,7 +91,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Type your question here..."
+        placeholder={placeholder}
         className="min-h-[60px] max-h-[160px] resize-none"
         disabled={disabled}
       />
