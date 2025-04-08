@@ -21,26 +21,38 @@ serve(async (req) => {
     
     // Validate API key
     if (!GEMINI_API_KEY) {
-      console.error("ERROR: Gemini API key is not configured");
-      throw new Error("Gemini API key is not configured. Please check your Supabase secrets.");
+      console.error("CRITICAL ERROR: Missing Gemini API key");
+      throw new Error("Gemini API key is not configured. Please add the GEMINI_API_KEY secret in your Supabase project settings.");
     }
 
-    console.log("Processing request with message:", message);
+    console.log("Processing request with message:", message.substring(0, 50) + "...");
     console.log("Student class:", studentClass);
     console.log("Subject:", subject);
     console.log("Format:", format);
-    console.log("API key available:", !!GEMINI_API_KEY);
-
-    // Test API key validity with a simple request before proceeding
-    const testResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`);
     
-    if (!testResponse.ok) {
-      const errorData = await testResponse.json();
-      console.error("API Key validation failed:", errorData);
-      throw new Error("The Gemini API key appears to be invalid or expired. Please update your API key.");
+    // Test API key validity with a simple request
+    try {
+      console.log("Validating API key...");
+      const testResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`);
+      
+      if (!testResponse.ok) {
+        const errorData = await testResponse.json();
+        console.error("API Key validation failed:", JSON.stringify(errorData));
+        
+        if (testResponse.status === 400) {
+          throw new Error("The Gemini API key appears to be invalid. Please provide a valid API key.");
+        } else if (testResponse.status === 403) {
+          throw new Error("The Gemini API key is not authorized for this operation or has been disabled.");
+        } else {
+          throw new Error(`Gemini API key validation failed with status ${testResponse.status}. Please update your API key.`);
+        }
+      }
+      
+      console.log("API key validation successful ✓");
+    } catch (validationError) {
+      console.error("API key validation error:", validationError);
+      throw validationError;
     }
-    
-    console.log("API key validation successful");
 
     // Construct appropriate system prompt based on student details
     let systemPrompt = `You are SGK14's AI Student Mentor, a friendly and patient educational assistant for students in classes 8-12 (MP Board & CBSE).
@@ -66,7 +78,7 @@ Remember that your primary goal is to educate and empower students, not just pro
       systemPrompt += "\n\nIMPORTANT: Explain in very simple terms, as if to a younger student. Use shorter sentences and basic vocabulary.";
     }
 
-    console.log("Making request to Gemini API");
+    console.log("Making request to Gemini API...");
 
     // Construct the request to Gemini API
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
@@ -111,7 +123,7 @@ Remember that your primary goal is to educate and empower students, not just pro
       }),
     });
 
-    console.log("Response status from Gemini API:", response.status);
+    console.log("Gemini API response status:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -131,7 +143,7 @@ Remember that your primary goal is to educate and empower students, not just pro
         errorMessage = "Rate limit exceeded. Please try again later.";
       } else if (response.status === 400) {
         errorMessage = "Invalid request to Gemini API. Please check your input.";
-      } else if (response.status === 401) {
+      } else if (response.status === 401 || response.status === 403) {
         errorMessage = "Authentication failed with Gemini API. The API key is invalid or has expired.";
       } else if (response.status === 500) {
         errorMessage = "Gemini API server error. Please try again later.";
@@ -143,11 +155,11 @@ Remember that your primary goal is to educate and empower students, not just pro
     }
 
     const data = await response.json();
-    console.log("Received response from Gemini API");
+    console.log("Successfully received response from Gemini API ✓");
     
     // Check if the response has the expected structure
     if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
-      console.error("Unexpected Gemini API response format:", data);
+      console.error("Unexpected Gemini API response format:", JSON.stringify(data));
       throw new Error("Received an invalid response format from Gemini API");
     }
 
