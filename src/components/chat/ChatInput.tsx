@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, Mic, MicOff } from 'lucide-react';
+import { Send, Mic, MicOff, Loader2 } from 'lucide-react';
 
 interface ChatInputProps {
   value: string;
@@ -10,6 +10,7 @@ interface ChatInputProps {
   onSend: (message: string) => void;
   disabled?: boolean;
   placeholder?: string;
+  isLoading?: boolean;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ 
@@ -17,7 +18,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
   onChange, 
   onSend, 
   disabled = false,
-  placeholder = "Type your question here..."
+  placeholder = "Type your question here...",
+  isLoading = false
 }) => {
   const [recording, setRecording] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
@@ -47,7 +49,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (!disabled && value.trim()) {
+      if (!disabled && !isLoading && value.trim()) {
         onSend(value);
       }
     }
@@ -93,7 +95,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className="min-h-[60px] max-h-[160px] resize-none"
-        disabled={disabled}
+        disabled={disabled || isLoading}
       />
       
       <div className="flex flex-col gap-2">
@@ -104,7 +106,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
             size="icon"
             className="rounded-full"
             onClick={startSpeechRecognition}
-            disabled={disabled || recording}
+            disabled={disabled || recording || isLoading}
           >
             {recording ? (
               <MicOff className="h-5 w-5 text-destructive" />
@@ -119,9 +121,13 @@ const ChatInput: React.FC<ChatInputProps> = ({
           size="icon"
           className="rounded-full"
           onClick={() => onSend(value)}
-          disabled={disabled || !value.trim()}
+          disabled={disabled || !value.trim() || isLoading}
         >
-          <Send className="h-5 w-5" />
+          {isLoading ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <Send className="h-5 w-5" />
+          )}
         </Button>
       </div>
     </div>

@@ -19,14 +19,28 @@ serve(async (req) => {
   try {
     const { message, studentClass, subject, format } = await req.json();
     
+    // Validate API key
     if (!GEMINI_API_KEY) {
-      console.error("Gemini API key is not configured");
+      console.error("ERROR: Gemini API key is not configured");
       throw new Error("Gemini API key is not configured. Please check your Supabase secrets.");
     }
 
     console.log("Processing request with message:", message);
     console.log("Student class:", studentClass);
     console.log("Subject:", subject);
+    console.log("Format:", format);
+    console.log("API key available:", !!GEMINI_API_KEY);
+
+    // Test API key validity with a simple request before proceeding
+    const testResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`);
+    
+    if (!testResponse.ok) {
+      const errorData = await testResponse.json();
+      console.error("API Key validation failed:", errorData);
+      throw new Error("The Gemini API key appears to be invalid or expired. Please update your API key.");
+    }
+    
+    console.log("API key validation successful");
 
     // Construct appropriate system prompt based on student details
     let systemPrompt = `You are SGK14's AI Student Mentor, a friendly and patient educational assistant for students in classes 8-12 (MP Board & CBSE).
@@ -52,7 +66,7 @@ Remember that your primary goal is to educate and empower students, not just pro
       systemPrompt += "\n\nIMPORTANT: Explain in very simple terms, as if to a younger student. Use shorter sentences and basic vocabulary.";
     }
 
-    console.log("Making request to Gemini API with system prompt prepared");
+    console.log("Making request to Gemini API");
 
     // Construct the request to Gemini API
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
@@ -118,7 +132,7 @@ Remember that your primary goal is to educate and empower students, not just pro
       } else if (response.status === 400) {
         errorMessage = "Invalid request to Gemini API. Please check your input.";
       } else if (response.status === 401) {
-        errorMessage = "Authentication failed with Gemini API. Please check your API key.";
+        errorMessage = "Authentication failed with Gemini API. The API key is invalid or has expired.";
       } else if (response.status === 500) {
         errorMessage = "Gemini API server error. Please try again later.";
       } else if (errorData.error) {
