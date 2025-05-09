@@ -2,7 +2,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 
-const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
+// Use environment variable or fallback to the provided key
+const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY') || "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";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent";
 
 const corsHeaders = {
@@ -19,16 +20,11 @@ serve(async (req) => {
   try {
     const { message, studentClass, subject, format } = await req.json();
     
-    // Validate API key
-    if (!GEMINI_API_KEY) {
-      console.error("CRITICAL ERROR: Missing Gemini API key");
-      throw new Error("Gemini API key is not configured. Please add the GEMINI_API_KEY secret in your Supabase project settings.");
-    }
-
     console.log("Processing request with message:", message.substring(0, 50) + "...");
     console.log("Student class:", studentClass);
     console.log("Subject:", subject);
     console.log("Format:", format);
+    console.log("Using API key:", GEMINI_API_KEY.substring(0, 10) + "...");
     
     // Test API key validity with a simple request
     try {
