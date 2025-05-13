@@ -13,19 +13,19 @@ const Footer = () => {
       { name: 'Privacy Policy', path: '/privacy' },
       { name: 'Terms of Service', path: '/terms' },
     ],
-    courses: [
-      { name: 'MS Office', path: '/courses/ms-office' },
-      { name: 'Python', path: '/courses/python' },
-      { name: 'HTML & CSS', path: '/courses/web-development' },
-      { name: 'SQL', path: '/courses/sql' },
-      { name: 'Public Speaking', path: '/courses/public-speaking' },
-    ],
     resources: [
       { name: 'Help Center', path: '/help' },
       { name: 'Community', path: '/community' },
       { name: 'Certification', path: '/certification' },
       { name: 'Resume Builder', path: '/resume-builder' },
       { name: 'Career Guidance', path: '/career' },
+    ],
+    skills: [
+      { name: 'MS Office', path: '/curriculum' },
+      { name: 'Python', path: '/curriculum' },
+      { name: 'HTML & CSS', path: '/curriculum' },
+      { name: 'SQL', path: '/curriculum' },
+      { name: 'Public Speaking', path: '/curriculum' },
     ],
   };
 
@@ -83,11 +83,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Courses links */}
+          {/* Skills links - Replaced Courses with Skills */}
           <div>
-            <h3 className="font-medium text-base mb-5">Courses</h3>
+            <h3 className="font-medium text-base mb-5">Skills</h3>
             <ul className="space-y-3">
-              {footerLinks.courses.map((link) => (
+              {footerLinks.skills.map((link) => (
                 <li key={link.name}>
                   <Link 
                     to={link.path} 

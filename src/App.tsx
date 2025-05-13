@@ -9,8 +9,6 @@ import Footer from './components/layout/Footer';
 import Index from './pages/Index';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import Courses from './pages/Courses';
-import CourseDetail from './pages/CourseDetail';
 import Curriculum from './pages/Curriculum';
 import ModuleDetail from './pages/ModuleDetail';
 import MyCertificates from './pages/MyCertificates';
@@ -32,8 +30,6 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/courses" element={<Courses />} />
-                <Route path="/course/:courseId" element={<CourseDetail />} />
                 <Route path="/curriculum" element={<Curriculum />} />
                 <Route path="/module/:moduleSlug" element={<ModuleDetail />} />
                 <Route path="/certificates" element={

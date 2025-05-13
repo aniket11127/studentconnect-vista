@@ -29,7 +29,6 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Courses', path: '/courses' },
     { name: 'Curriculum', path: '/curriculum' },
     { name: 'AI Chat', path: '/ai-chat' },
     { name: 'About', path: '/about' },

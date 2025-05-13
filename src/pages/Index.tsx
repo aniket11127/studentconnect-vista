@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
-import Courses from '@/components/sections/Courses';
 import ReviewSection from '@/components/sections/ReviewSection';
 
 const Index = () => {
@@ -15,7 +14,6 @@ const Index = () => {
     <div>
       <Hero />
       <Features />
-      <Courses />
       <ReviewSection />
     </div>
   );
