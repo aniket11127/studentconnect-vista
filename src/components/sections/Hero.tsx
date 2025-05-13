@@ -83,9 +83,9 @@ const Hero = () => {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-6 animate-fade-in [animation-delay:1600ms]">
             <Button size="lg" asChild className="relative overflow-hidden group">
-              <Link to="/courses" aria-label="Browse our course catalog" className="relative z-10">
+              <Link to="/curriculum" aria-label="Browse our curriculum" className="relative z-10">
                 <span className="relative z-10 flex items-center">
-                  Explore Courses
+                  Explore Curriculum
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </span>
                 <span className="absolute inset-0 bg-gradient-to-r from-primary to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></span>
