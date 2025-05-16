@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import Hero from '@/components/sections/Hero';
 import Features from '@/components/sections/Features';
 import ReviewSection from '@/components/sections/ReviewSection';
+import TrainingOfferBanner from '@/components/sections/TrainingOfferBanner';
 
 const Index = () => {
   // Scroll to top on component mount
@@ -13,6 +14,7 @@ const Index = () => {
   return (
     <div>
       <Hero />
+      <TrainingOfferBanner />
       <Features />
       <ReviewSection />
     </div>
