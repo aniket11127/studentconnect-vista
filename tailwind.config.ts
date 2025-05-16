@@ -106,6 +106,14 @@ export default {
 					'0%, 100%': { transform: 'translateY(0)' },
 					'50%': { transform: 'translateY(-10px)' }
 				},
+				'float-slow': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-15px)' }
+				},
+				'pulse-slow': {
+					'0%, 100%': { opacity: '0.7' },
+					'50%': { opacity: '0.3' }
+				},
 				'shimmer': {
 					'0%': { backgroundPosition: '-200% 0' },
 					'100%': { backgroundPosition: '200% 0' }
@@ -120,6 +128,8 @@ export default {
 				'slide-down': 'slide-down 0.4s ease-out',
 				'pulse-subtle': 'pulse-subtle 3s infinite ease-in-out',
 				'float': 'float 6s ease-in-out infinite',
+				'float-slow': 'float-slow 9s ease-in-out infinite',
+				'pulse-slow': 'pulse-slow 7s infinite ease-in-out',
 				'shimmer': 'shimmer 3s infinite linear'
 			}
 		}
