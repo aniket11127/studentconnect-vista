@@ -34,7 +34,7 @@ const TrainingOfferBanner = () => {
           
           {/* Four separate cards in a responsive grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Program Duration Card */}
+            {/* Our Program Card (replacing Program Duration) */}
             <Card className="overflow-hidden border border-primary/10 bg-white/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300 shadow-md rounded-xl">
               <CardContent className="p-6">
                 <div className="flex items-start gap-5">
@@ -42,8 +42,13 @@ const TrainingOfferBanner = () => {
                     <Calendar className="h-7 w-7 text-primary" />
                   </div>
                   <div className="text-left">
-                    <h3 className="text-lg font-semibold">Program Duration</h3>
-                    <p className="text-muted-foreground mt-1">From Class 8th to 12th</p>
+                    <h3 className="text-xl font-bold">Our Program</h3>
+                    <p className="text-blue-600 font-semibold text-sm mb-2">
+                      Designed Specifically for Class 8th to 12th Students
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      A step-by-step learning journey across 4 years with support, skills, and certifications at every stage.
+                    </p>
                   </div>
                 </div>
               </CardContent>
