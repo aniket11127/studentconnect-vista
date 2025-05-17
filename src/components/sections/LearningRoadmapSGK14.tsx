@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Html, FileText as MsWord, FileSpreadsheet as Excel, Css, Python, FileCheck, Certificate, Project } from 'lucide-react';
+import { FileText, GraduationCap, Rocket, Medal, Code, Calendar } from 'lucide-react';
 
 // Define the curriculum data structure
 interface Module {
@@ -32,9 +32,9 @@ const LearningRoadmapSGK14 = () => {
       year: 1,
       isCurrent: true,
       modules: [
-        { name: "HTML", icon: Html },
-        { name: "MS Word", icon: MsWord },
-        { name: "Excel", icon: Excel }
+        { name: "HTML", icon: Code },
+        { name: "MS Word", icon: FileText },
+        { name: "Excel", icon: FileText }
       ],
       features: ["Projects", "Exercises", "Certificate"]
     },
@@ -42,9 +42,9 @@ const LearningRoadmapSGK14 = () => {
       className: "Class 9",
       year: 2,
       modules: [
-        { name: "HTML", icon: Html },
-        { name: "MS Word", icon: MsWord },
-        { name: "Excel", icon: Excel }
+        { name: "HTML", icon: Code },
+        { name: "MS Word", icon: FileText },
+        { name: "Excel", icon: FileText }
       ],
       features: ["Projects", "Exercises", "Certificate"]
     },
@@ -52,9 +52,9 @@ const LearningRoadmapSGK14 = () => {
       className: "Class 10",
       year: 3,
       modules: [
-        { name: "HTML", icon: Html },
-        { name: "CSS", icon: Css },
-        { name: "Python", icon: Python }
+        { name: "HTML", icon: Code },
+        { name: "CSS", icon: Code },
+        { name: "Python", icon: Rocket }
       ],
       features: ["Projects", "Exercises", "Certificate"]
     },
@@ -62,9 +62,9 @@ const LearningRoadmapSGK14 = () => {
       className: "Class 11",
       year: 4,
       modules: [
-        { name: "HTML/CSS", icon: Html },
+        { name: "HTML/CSS", icon: Code },
         { name: "SQL", icon: FileText },
-        { name: "Python", icon: Python }
+        { name: "Python", icon: Rocket }
       ],
       features: ["Projects", "Exercises", "Certificate"]
     },
@@ -72,9 +72,9 @@ const LearningRoadmapSGK14 = () => {
       className: "Class 12",
       year: 5,
       modules: [
-        { name: "HTML/CSS", icon: Html },
+        { name: "HTML/CSS", icon: Code },
         { name: "SQL", icon: FileText },
-        { name: "Python", icon: Python }
+        { name: "Python", icon: Rocket }
       ],
       features: ["Projects", "Exercises", "Certificate"]
     }
@@ -82,9 +82,9 @@ const LearningRoadmapSGK14 = () => {
 
   // Feature icon mapping
   const featureIcons: Record<string, React.ElementType> = {
-    "Projects": Project,
-    "Exercises": FileCheck,
-    "Certificate": Certificate
+    "Projects": Medal,
+    "Exercises": Calendar,
+    "Certificate": GraduationCap
   };
 
   return (
