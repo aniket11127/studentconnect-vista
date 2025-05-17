@@ -17,11 +17,8 @@ import {
   Users, 
   Brain, 
   Calendar, 
-  Settings, 
-  ArrowRight 
+  Settings
 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 
 const OurServices = () => {
@@ -97,19 +94,7 @@ const OurServices = () => {
             ))}
           </div>
           
-          {/* Call to action */}
-          <div className="mt-12 text-center">
-            <Button 
-              size="lg" 
-              className="group relative overflow-hidden shadow-lg"
-            >
-              <Link to="/curriculum" className="flex items-center">
-                Explore Full Services
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <span className="absolute inset-0 bg-gradient-to-r from-primary to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></span>
-            </Button>
-          </div>
+          {/* Call to action section has been removed */}
         </div>
       </div>
     </section>
