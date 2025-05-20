@@ -198,69 +198,122 @@ const CodingPlayground = ({
     setOutput('');
     
     try {
-      // For demonstration purposes, we'll simulate API call to Judge0
-      // In a real implementation, you would make an actual API call
+      // For real execution, we would use Judge0 API or similar
+      // This is a more dynamic simulation for demonstration
+      const executeResult = executePythonCode(code, input, selectedLanguage);
       setTimeout(() => {
-        if (selectedLanguage === 'python') {
-          // Simulate Python execution
-          if (code.includes('print(')) {
-            if (code.includes('input(') && input.trim()) {
-              const lines = input.split('\n');
-              let currentLineIndex = 0;
-              
-              const simulatedOutput = [
-                "Hello, SGK14!",
-                `Enter your name: ${lines[currentLineIndex] || "User"}`,
-                `Hello, ${lines[currentLineIndex] || "User"}!`,
-                "Welcome to SGK14 Python playground!"
-              ].join('\n');
-              
-              setOutput(simulatedOutput);
-            } else {
-              setOutput('Hello, SGK14!\nYour code executed successfully.');
-            }
-          } else {
-            setError('No output generated. Did you forget to use print()?');
-          }
-        } else if (selectedLanguage === 'java') {
-          // Simulate Java execution
-          if (code.includes('System.out.print')) {
-            if (code.includes('Scanner') && input.trim()) {
-              setOutput(`Hello, SGK14!\nWelcome Student! You are 15 years old.\nEnter your name: ${input.split('\n')[0] || "User"}\nHello, ${input.split('\n')[0] || "User"}!`);
-            } else {
-              setOutput('Hello, SGK14!\nWelcome Student! You are 15 years old.');
-            }
-          } else {
-            setError('No output generated. Did you use System.out.print?');
-          }
-        } else if (selectedLanguage === 'c' || selectedLanguage === 'cpp') {
-          // Simulate C/C++ execution
-          if (code.includes('printf') || code.includes('cout')) {
-            if ((code.includes('scanf') || code.includes('cin')) && input.trim()) {
-              setOutput(`Hello, SGK14!\nWelcome Student! You are 15 years old.\nEnter your name: ${input.split('\n')[0] || "User"}\nHello, ${input.split('\n')[0] || "User"}!`);
-            } else {
-              setOutput(`Hello from ${selectedLanguage === 'c' ? 'C' : 'C++'}!\nYour code executed successfully.`);
-            }
-          } else {
-            setError(`No output generated. Did you use ${selectedLanguage === 'c' ? 'printf' : 'cout'}?`);
-          }
-        } else if (selectedLanguage === 'sql') {
-          // Simulate SQL execution
-          if (code.toLowerCase().includes('select')) {
-            setOutput('Query executed successfully!\n\nid | name | grade | subject\n-----------------------------\n1  | John  | 9     | Math\n2  | Emma  | 10    | Science');
-          } else if (code.toLowerCase().includes('create') || code.toLowerCase().includes('insert')) {
-            setOutput('Query executed. Affected rows: 3');
-          } else {
-            setOutput('Query executed. 0 rows affected.');
-          }
+        setOutput(executeResult.output);
+        if (executeResult.error) {
+          setError(executeResult.error);
         }
         setIsExecuting(false);
-      }, 1200);
+      }, 800); // Simulate execution delay
       
     } catch (err) {
       setError('An error occurred while executing your code.');
       setIsExecuting(false);
     }
+  };
+  
+  // This function simulates code execution based on the actual code content
+  const executePythonCode = (code: string, input: string, language: CodeLanguage) => {
+    let result = {
+      output: '',
+      error: null as string | null
+    };
+    
+    // Parse the actual code to provide dynamic responses
+    if (language === 'python') {
+      // Check for print statements in the code
+      const printMatches = code.match(/print\s*\((.*)\)/g);
+      
+      if (printMatches) {
+        // Extract content from print statements
+        const printContents = printMatches.map(match => {
+          const content = match.match(/print\s*\((.*)\)/)?.[1];
+          if (content) {
+            // Simple string extraction (not a real parser)
+            if (content.startsWith('"') && content.endsWith('"')) {
+              return content.slice(1, -1); // Remove quotes
+            } else if (content.startsWith("'") && content.endsWith("'")) {
+              return content.slice(1, -1); // Remove quotes
+            } else if (!isNaN(Number(content))) {
+              return content; // Number
+            } else {
+              // Simple variable simulation
+              if (content === 'input()' && input.trim()) {
+                return input.trim();
+              }
+              return `[Variable: ${content}]`;
+            }
+          }
+          return "";
+        });
+        
+        result.output = printContents.join('\n');
+      } else if (code.includes('input(') && !code.includes('print(')) {
+        result.error = "Your code reads input but doesn't print anything.";
+      } else if (!code.trim()) {
+        result.output = "No code to execute.";
+      } else {
+        result.error = "No output generated. Did you forget to use print()?";
+      }
+      
+      // Simple syntax error checking
+      if (code.includes('print(') && !code.includes(')')) {
+        result.error = "SyntaxError: unexpected EOF while parsing";
+        result.output = "";
+      }
+      
+      // Check for input usage
+      if (code.includes('input(') && input.trim()) {
+        // Simple simulation of input
+        const lines = input.split('\n');
+        result.output = `Using input: ${lines[0]}\n${result.output}`;
+      }
+    } else if (language === 'java') {
+      // Similar parsing for Java
+      if (code.includes('System.out.print')) {
+        const printMatches = code.match(/System\.out\.print(?:ln)?\s*\((.*)\)/g);
+        if (printMatches) {
+          const printContents = printMatches.map(match => {
+            const content = match.match(/System\.out\.print(?:ln)?\s*\((.*)\)/)?.[1];
+            return content ? (content.startsWith('"') ? content.slice(1, -1) : `[Evaluated: ${content}]`) : "";
+          });
+          result.output = printContents.join('\n');
+        }
+      } else {
+        result.error = "No output generated. Did you use System.out.print?";
+      }
+    } else if (language === 'c' || language === 'cpp') {
+      // Simple C/C++ parsing
+      if (code.includes('printf') || code.includes('cout')) {
+        result.output = "Output from C/C++ code (simulated)";
+        // Extract from printf or cout statements
+        if (language === 'c' && code.match(/printf\s*\("(.*)"\)/)) {
+          result.output = code.match(/printf\s*\("(.*)"\)/)?.[1] || "C output";
+        } else if (language === 'cpp' && code.match(/cout\s*<<\s*"(.*)"/)) {
+          result.output = code.match(/cout\s*<<\s*"(.*)"/)?.[1] || "C++ output";
+        }
+      } else {
+        result.error = `No output generated. Did you use ${language === 'c' ? 'printf' : 'cout'}?`;
+      }
+    } else if (language === 'sql') {
+      if (code.toLowerCase().includes('select')) {
+        // Extract table name from query to customize response
+        const tableMatch = code.match(/from\s+(\w+)/i);
+        const tableName = tableMatch ? tableMatch[1] : "table";
+        result.output = `Query executed on ${tableName}:\n\nid | name | value\n--------------------\n1  | data1 | 100\n2  | data2 | 200`;
+      } else if (code.toLowerCase().includes('insert')) {
+        result.output = "1 row(s) inserted successfully.";
+      } else if (code.toLowerCase().includes('update')) {
+        result.output = "2 row(s) updated successfully.";
+      } else {
+        result.output = "Query executed. No rows affected.";
+      }
+    }
+    
+    return result;
   };
   
   // Set initial code when language changes

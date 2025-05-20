@@ -46,7 +46,6 @@ export const ExecutionPanel = ({
   setTabSize,
 }: ExecutionPanelProps) => {
   const [activeTab, setActiveTab] = useState<string>("input");
-  const outputWithError = error ? `${error}\n\n${output}` : output;
   
   // Handle file download
   const handleDownload = () => {
@@ -129,6 +128,41 @@ export const ExecutionPanel = ({
     if (error) return <AlertTriangle size={16} className="text-red-500" />;
     if (output) return <Check size={16} className="text-green-500" />;
     return null;
+  };
+
+  // Format the output to correctly display both output and errors
+  const displayOutput = () => {
+    if (isExecuting) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full">
+          <Loader className="animate-spin h-8 w-8 mb-4" />
+          <span>Running your code...</span>
+        </div>
+      );
+    }
+    
+    if (!output && !error) {
+      return (
+        <span className="text-muted-foreground italic">Output will appear here after running your code</span>
+      );
+    }
+    
+    return (
+      <>
+        {error && (
+          <div className="text-red-500 mb-2">
+            {error}
+          </div>
+        )}
+        {output && (
+          <div className={error ? "mt-4" : ""}>
+            {output.split('\n').map((line, index) => (
+              <div key={index}>{line}</div>
+            ))}
+          </div>
+        )}
+      </>
+    );
   };
   
   return (
@@ -260,21 +294,10 @@ export const ExecutionPanel = ({
             </TabsContent>
             <TabsContent value="output" className="p-0">
               <pre
-                className={`w-full p-4 font-mono text-sm overflow-auto ${
-                  error ? 'text-red-500' : currentTheme === 'dark' ? 'text-green-300' : 'text-green-700'
-                }`}
+                className={`w-full p-4 font-mono text-sm overflow-auto`}
                 style={{ height: `calc(${height} - 120px)`, fontSize: `${fontSize}px` }}
               >
-                {isExecuting ? (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <Loader className="animate-spin h-8 w-8 mb-4" />
-                    <span>Running your code...</span>
-                  </div>
-                ) : outputWithError ? (
-                  outputWithError
-                ) : (
-                  <span className="text-muted-foreground italic">Output will appear here after running your code</span>
-                )}
+                {displayOutput()}
               </pre>
             </TabsContent>
           </Tabs>
