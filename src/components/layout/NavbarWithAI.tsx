@@ -11,7 +11,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import UserMenu from '@/components/layout/UserMenu';
 import { Button } from '@/components/ui/button';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Code } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -44,6 +44,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Curriculum', path: '/curriculum' },
+    { name: 'Code Editor', path: '/editor', icon: <Code size={16} className="mr-1" /> },
     { name: 'AI Chat', path: '/ai-chat' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
@@ -77,12 +78,13 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                  className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
                     isActivePath(link.path)
                       ? 'text-primary font-medium'
                       : 'text-foreground/80 hover:text-foreground hover:bg-accent'
                   }`}
                 >
+                  {link.icon && link.icon}
                   {link.name}
                   {link.path === '/ai-chat' && (
                     <span className="ml-1 px-1.5 py-0.5 text-[10px] font-medium bg-primary/10 text-primary rounded-full">
@@ -109,13 +111,20 @@ const Navbar = () => {
 
             {!isMobile && user && <UserMenu />}
 
-            {/* AI Chat Button for Mobile */}
+            {/* Quick Access Buttons for Mobile */}
             {isMobile && (
-              <Button asChild variant="outline" size="icon" className="mr-1">
-                <Link to="/ai-chat">
-                  <MessageCircle className="h-5 w-5" />
-                </Link>
-              </Button>
+              <div className="flex gap-2">
+                <Button asChild variant="outline" size="icon" className="mr-1">
+                  <Link to="/editor">
+                    <Code className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="icon" className="mr-1">
+                  <Link to="/ai-chat">
+                    <MessageCircle className="h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
             )}
 
             {/* Mobile Menu Toggle */}
@@ -151,12 +160,13 @@ const Navbar = () => {
                       <DrawerClose key={link.path} asChild>
                         <Link
                           to={link.path}
-                          className={`px-3 py-3 text-base rounded-md ${
+                          className={`flex items-center px-3 py-3 text-base rounded-md ${
                             isActivePath(link.path)
                               ? 'bg-primary/10 text-primary font-medium'
                               : 'hover:bg-accent'
                           }`}
                         >
+                          {link.icon && link.icon}
                           {link.name}
                           {link.path === '/ai-chat' && (
                             <span className="ml-1 px-1.5 py-0.5 text-[10px] font-medium bg-primary/10 text-primary rounded-full">

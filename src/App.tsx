@@ -17,6 +17,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
 import CodingPlayground from './pages/CodingPlayground';
+import EditorPage from './pages/EditorPage';
 import './App.css';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/coding-playground" element={<CodingPlayground />} />
+                <Route path="/editor" element={<EditorPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

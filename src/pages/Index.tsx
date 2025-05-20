@@ -15,15 +15,15 @@ const CodingPlaygroundPreview = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent mb-4">
-            Interactive Coding Playground
+            Interactive Coding Editor
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
-            Practice HTML, CSS, and JavaScript in our interactive editor with live preview
+            Practice coding in multiple languages with our interactive code editor
           </p>
           <Button asChild size="lg" className="flex items-center gap-2">
-            <Link to="/coding-playground">
+            <Link to="/editor">
               <Code size={18} />
-              Try Coding Playground
+              Try Code Editor
             </Link>
           </Button>
         </div>
@@ -31,12 +31,12 @@ const CodingPlaygroundPreview = () => {
         <div className="relative rounded-xl overflow-hidden shadow-xl border border-blue-100">
           <img 
             src="/lovable-uploads/4eaa1a0e-6c88-482c-92bd-3faa661433cd.png" 
-            alt="Coding Playground Preview" 
+            alt="Coding Editor Preview" 
             className="w-full h-auto rounded-lg"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-8">
             <Button asChild variant="default" size="lg" className="shadow-lg bg-primary/90 hover:bg-primary">
-              <Link to="/coding-playground">
+              <Link to="/editor">
                 Launch Editor
               </Link>
             </Button>
