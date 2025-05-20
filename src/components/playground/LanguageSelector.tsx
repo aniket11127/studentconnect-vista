@@ -18,12 +18,15 @@ interface LanguageSelectorProps {
 
 export const LanguageSelector = ({ selectedLanguage, onLanguageChange }: LanguageSelectorProps) => {
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+      <label htmlFor="language-select" className="text-sm font-medium">
+        Select Language:
+      </label>
       <Select
         value={selectedLanguage}
         onValueChange={(value) => onLanguageChange(value as CodeLanguage)}
       >
-        <SelectTrigger className="w-full sm:w-[280px]">
+        <SelectTrigger id="language-select" className="w-full sm:w-[280px]">
           <SelectValue placeholder="Select a language" />
         </SelectTrigger>
         <SelectContent>
@@ -36,6 +39,11 @@ export const LanguageSelector = ({ selectedLanguage, onLanguageChange }: Languag
           </SelectGroup>
         </SelectContent>
       </Select>
+      <span className="text-xs text-muted-foreground hidden sm:inline-block">
+        {selectedLanguage === 'web' 
+          ? 'Create web pages with HTML, CSS, and JavaScript' 
+          : `Write and run ${languageOptions.find(l => l.id === selectedLanguage)?.name || ''} code`}
+      </span>
     </div>
   );
 };

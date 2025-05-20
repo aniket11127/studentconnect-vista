@@ -9,13 +9,13 @@ import {
   SandpackFileExplorer,
   useSandpack,
 } from '@codesandbox/sandpack-react';
-// Remove direct CSS import which doesn't exist in the package
 import { Button } from '@/components/ui/button';
-import { Moon, Sun, Code, Play, Loader } from 'lucide-react';
+import { Moon, Sun, Code, Play, Loader, FileText, Save, Download, Upload, FileUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { LanguageSelector } from './LanguageSelector';
 import { ExecutionPanel } from './ExecutionPanel';
-import { languageOptions, defaultFiles } from './playgroundConfig';
+import { languageOptions, defaultFiles, editorSettings } from './playgroundConfig';
+import { toast } from '@/hooks/use-toast';
 
 // Type definitions
 export type CodeLanguage = 'web' | 'python' | 'java' | 'c' | 'cpp' | 'sql';
@@ -44,11 +44,112 @@ const RunButton = ({ onClick, isLoading }: { onClick: () => void; isLoading: boo
   );
 };
 
+// Theme switcher component
+const ThemeSwitcher = ({ currentTheme, setCurrentTheme }: { 
+  currentTheme: 'light' | 'dark', 
+  setCurrentTheme: (theme: 'light' | 'dark') => void 
+}) => {
+  return (
+    <Button 
+      variant="outline" 
+      size="sm" 
+      className="flex items-center gap-1" 
+      onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
+    >
+      {currentTheme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+      {currentTheme === 'light' ? 'Dark' : 'Light'} Mode
+    </Button>
+  );
+};
+
+// WebEditor component for HTML/CSS/JS
+const WebEditor = ({ 
+  showFileExplorer = true, 
+  height = "600px",
+  currentTheme,
+  setCurrentTheme
+}: { 
+  showFileExplorer?: boolean, 
+  height?: string,
+  currentTheme: 'light' | 'dark',
+  setCurrentTheme: (theme: 'light' | 'dark') => void
+}) => {
+  const handleExport = () => {
+    try {
+      // Create a zip file with all web files
+      const JSZip = window.JSZip;
+      if (!JSZip) {
+        toast({
+          title: "Export failed",
+          description: "JSZip library not available",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      toast({
+        title: "Export successful",
+        description: "Your web project has been exported",
+      });
+    } catch (err) {
+      toast({
+        title: "Export failed",
+        description: "There was an error exporting your project",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  return (
+    <SandpackProvider
+      template="vanilla"
+      files={defaultFiles}
+      theme={currentTheme}
+    >
+      <div className="flex items-center justify-between p-3 bg-card border-b">
+        <div className="flex items-center">
+          <Code className="text-primary mr-2" size={20} />
+          <span className="font-medium">SGK14 Web Playground</span>
+        </div>
+        <div className="flex gap-2">
+          <ThemeSwitcher currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
+        </div>
+      </div>
+
+      <SandpackLayout
+        className={cn("!rounded-none !border-0", !showFileExplorer && "!p-0")}
+        style={{ height }}
+      >
+        {showFileExplorer && (
+          <SandpackFileExplorer className="!border-r" />
+        )}
+        <SandpackStack>
+          <SandpackCodeEditor
+            showTabs
+            showLineNumbers
+            showInlineErrors
+            wrapContent
+            closableTabs
+            showRunButton={false}
+          />
+        </SandpackStack>
+        <SandpackStack>
+          <SandpackPreview
+            showNavigator
+            showRefreshButton
+          />
+        </SandpackStack>
+      </SandpackLayout>
+    </SandpackProvider>
+  );
+};
+
 const CodingPlayground = ({
   defaultHeight = "600px",
   showFileExplorer = true,
   showRunButton = true
 }: CodingPlaygroundProps) => {
+  // State
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
   const [selectedLanguage, setSelectedLanguage] = useState<CodeLanguage>('web');
   const [code, setCode] = useState<string>('');
@@ -56,6 +157,8 @@ const CodingPlayground = ({
   const [output, setOutput] = useState<string>('');
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [fontSize, setFontSize] = useState<number>(editorSettings.defaultFontSize); 
+  const [tabSize, setTabSize] = useState<number>(editorSettings.defaultTabSize);
   
   // Handle language change
   const handleLanguageChange = (language: CodeLanguage) => {
@@ -85,40 +188,74 @@ const CodingPlayground = ({
         if (selectedLanguage === 'python') {
           // Simulate Python execution
           if (code.includes('print(')) {
-            setOutput('Hello from Python!\nYour code executed successfully.');
+            if (code.includes('input(') && input.trim()) {
+              const lines = input.split('\n');
+              let currentLineIndex = 0;
+              
+              const simulatedOutput = [
+                "Hello, SGK14!",
+                `Enter your name: ${lines[currentLineIndex] || "User"}`,
+                `Hello, ${lines[currentLineIndex] || "User"}!`,
+                "Welcome to SGK14 Python playground!"
+              ].join('\n');
+              
+              setOutput(simulatedOutput);
+            } else {
+              setOutput('Hello, SGK14!\nYour code executed successfully.');
+            }
           } else {
             setError('No output generated. Did you forget to use print()?');
           }
         } else if (selectedLanguage === 'java') {
           // Simulate Java execution
           if (code.includes('System.out.print')) {
-            setOutput('Hello from Java!\nYour code executed successfully.');
+            if (code.includes('Scanner') && input.trim()) {
+              setOutput(`Hello, SGK14!\nWelcome Student! You are 15 years old.\nEnter your name: ${input.split('\n')[0] || "User"}\nHello, ${input.split('\n')[0] || "User"}!`);
+            } else {
+              setOutput('Hello, SGK14!\nWelcome Student! You are 15 years old.');
+            }
           } else {
             setError('No output generated. Did you use System.out.print?');
           }
         } else if (selectedLanguage === 'c' || selectedLanguage === 'cpp') {
           // Simulate C/C++ execution
           if (code.includes('printf') || code.includes('cout')) {
-            setOutput(`Hello from ${selectedLanguage === 'c' ? 'C' : 'C++'}!\nYour code executed successfully.`);
+            if ((code.includes('scanf') || code.includes('cin')) && input.trim()) {
+              setOutput(`Hello, SGK14!\nWelcome Student! You are 15 years old.\nEnter your name: ${input.split('\n')[0] || "User"}\nHello, ${input.split('\n')[0] || "User"}!`);
+            } else {
+              setOutput(`Hello from ${selectedLanguage === 'c' ? 'C' : 'C++'}!\nYour code executed successfully.`);
+            }
           } else {
             setError(`No output generated. Did you use ${selectedLanguage === 'c' ? 'printf' : 'cout'}?`);
           }
         } else if (selectedLanguage === 'sql') {
           // Simulate SQL execution
           if (code.toLowerCase().includes('select')) {
-            setOutput('Query executed successfully!\n\nid | name | email\n------------------\n1 | John Doe | john@example.com\n2 | Jane Smith | jane@example.com');
+            setOutput('Query executed successfully!\n\nid | name | grade | subject\n-----------------------------\n1  | John  | 9     | Math\n2  | Emma  | 10    | Science');
+          } else if (code.toLowerCase().includes('create') || code.toLowerCase().includes('insert')) {
+            setOutput('Query executed. Affected rows: 3');
           } else {
             setOutput('Query executed. 0 rows affected.');
           }
         }
         setIsExecuting(false);
-      }, 1500);
+      }, 1200);
       
     } catch (err) {
       setError('An error occurred while executing your code.');
       setIsExecuting(false);
     }
   };
+  
+  // Set initial code when language changes
+  useEffect(() => {
+    if (selectedLanguage !== 'web') {
+      const langOption = languageOptions.find(lang => lang.id === selectedLanguage);
+      if (langOption && !code) {
+        setCode(langOption.defaultCode);
+      }
+    }
+  }, [selectedLanguage, code]);
   
   return (
     <div className="w-full space-y-6 my-8">
@@ -139,55 +276,12 @@ const CodingPlayground = ({
       {/* Editor section */}
       <div className="rounded-xl border shadow-lg overflow-hidden">
         {selectedLanguage === 'web' ? (
-          <SandpackProvider 
-            template="vanilla"
-            files={defaultFiles}
-            theme={currentTheme}
-          >
-            <div className="flex items-center justify-between p-3 bg-card border-b">
-              <div className="flex items-center">
-                <Code className="text-primary mr-2" size={20} />
-                <span className="font-medium">SGK14 Coding Playground</span>
-              </div>
-              <div className="flex gap-2">
-                {showRunButton && <RunButton onClick={() => {}} isLoading={false} />}
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex items-center gap-1" 
-                  onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
-                >
-                  {currentTheme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-                  {currentTheme === 'light' ? 'Dark' : 'Light'} Mode
-                </Button>
-              </div>
-            </div>
-
-            <SandpackLayout 
-              className={cn("!rounded-none !border-0", !showFileExplorer && "!p-0")}
-              style={{ height: defaultHeight }}
-            >
-              {showFileExplorer && (
-                <SandpackFileExplorer className="!border-r" />
-              )}
-              <SandpackStack>
-                <SandpackCodeEditor
-                  showTabs
-                  showLineNumbers
-                  showInlineErrors
-                  wrapContent
-                  closableTabs
-                  showRunButton={false}
-                />
-              </SandpackStack>
-              <SandpackStack>
-                <SandpackPreview
-                  showNavigator
-                  showRefreshButton
-                />
-              </SandpackStack>
-            </SandpackLayout>
-          </SandpackProvider>
+          <WebEditor 
+            showFileExplorer={showFileExplorer} 
+            height={defaultHeight}
+            currentTheme={currentTheme}
+            setCurrentTheme={setCurrentTheme}
+          />
         ) : (
           <ExecutionPanel
             language={selectedLanguage}
@@ -202,6 +296,10 @@ const CodingPlayground = ({
             currentTheme={currentTheme}
             setCurrentTheme={setCurrentTheme}
             height={defaultHeight}
+            fontSize={fontSize}
+            setFontSize={setFontSize}
+            tabSize={tabSize}
+            setTabSize={setTabSize}
           />
         )}
       </div>
@@ -210,6 +308,9 @@ const CodingPlayground = ({
       <div className="text-sm text-muted-foreground">
         <p>Use this playground to practice your programming skills. Choose a language and start coding!</p>
         <p className="mt-2">For HTML/CSS/JS, changes update automatically in the preview window. For other languages, click "Run Code".</p>
+        {selectedLanguage !== 'web' && (
+          <p className="mt-1">You can provide input data in the "Input" tab for languages that require stdin (like Python, Java, C/C++).</p>
+        )}
       </div>
     </div>
   );

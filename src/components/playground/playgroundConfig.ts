@@ -7,11 +7,15 @@ export const languageOptions = [
     id: 'web',
     name: 'HTML/CSS/JS',
     defaultCode: '',
+    fileExtension: '.html',
   },
   {
     id: 'python',
     name: 'Python',
+    fileExtension: '.py',
     defaultCode: `# Python Example
+print("Hello, SGK14!")
+
 def greet(name):
     return f"Hello, {name}!"
 
@@ -26,6 +30,7 @@ if __name__ == "__main__":
   {
     id: 'java',
     name: 'Java',
+    fileExtension: '.java',
     defaultCode: `// Java Example
 public class Main {
     public static void main(String[] args) {
@@ -37,12 +42,19 @@ public class Main {
         
         // Print a message
         System.out.println("Welcome " + name + "! You are " + age + " years old.");
+        
+        // Read input from console
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String userName = scanner.nextLine();
+        System.out.println("Hello, " + userName + "!");
     }
 }`,
   },
   {
     id: 'c',
     name: 'C',
+    fileExtension: '.c',
     defaultCode: `// C Example
 #include <stdio.h>
 
@@ -50,11 +62,16 @@ int main() {
     printf("Hello, SGK14!\\n");
     
     // Variables
-    char name[] = "Student";
+    char name[50];
     int age = 15;
     
     // Print a message
-    printf("Welcome %s! You are %d years old.\\n", name, age);
+    printf("Welcome Student! You are %d years old.\\n", age);
+    
+    // Read input
+    printf("Enter your name: ");
+    scanf("%s", name);
+    printf("Hello, %s!\\n", name);
     
     return 0;
 }`,
@@ -62,6 +79,7 @@ int main() {
   {
     id: 'cpp',
     name: 'C++',
+    fileExtension: '.cpp',
     defaultCode: `// C++ Example
 #include <iostream>
 #include <string>
@@ -71,11 +89,16 @@ int main() {
     cout << "Hello, SGK14!" << endl;
     
     // Variables
-    string name = "Student";
+    string name;
     int age = 15;
     
     // Print a message
-    cout << "Welcome " << name << "! You are " << age << " years old." << endl;
+    cout << "Welcome Student! You are " << age << " years old." << endl;
+    
+    // Read input
+    cout << "Enter your name: ";
+    cin >> name;
+    cout << "Hello, " << name << "!" << endl;
     
     return 0;
 }`,
@@ -83,6 +106,7 @@ int main() {
   {
     id: 'sql',
     name: 'SQL',
+    fileExtension: '.sql',
     defaultCode: `-- SQL Example
 -- Create a table
 CREATE TABLE students (
@@ -102,6 +126,14 @@ VALUES (1, 'John', 9, 'Math'),
 SELECT * FROM students WHERE grade > 8;`,
   },
 ];
+
+// Editor settings
+export const editorSettings = {
+  fontSize: [12, 14, 16, 18, 20, 22],
+  tabSize: [2, 4, 8],
+  defaultFontSize: 14,
+  defaultTabSize: 2
+};
 
 // Default files for web development
 export const defaultFiles = {
@@ -252,3 +284,4 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });`
 };
+
