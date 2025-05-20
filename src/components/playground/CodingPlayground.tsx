@@ -9,7 +9,7 @@ import {
   SandpackFileExplorer,
   useSandpack,
 } from '@codesandbox/sandpack-react';
-import '@codesandbox/sandpack-react/dist/index.css';
+// Remove direct CSS import which doesn't exist in the package
 import { Button } from '@/components/ui/button';
 import { Moon, Sun, Code, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -172,7 +172,9 @@ const ThemeSwitcher = () => {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    sandpack.setTheme(newTheme === 'dark' ? 'dark' : 'light');
+    
+    // Fix: Use SandpackProvider's theme prop to control theme instead of trying to modify it directly
+    // sandpack object doesn't have a setTheme method
   };
 
   return (
@@ -214,6 +216,8 @@ const CodingPlayground = ({
   showFileExplorer = true,
   showRunButton = true
 }: CodingPlaygroundProps) => {
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+  
   return (
     <div className="w-full space-y-6 my-8">
       {/* Header section */}
@@ -229,7 +233,7 @@ const CodingPlayground = ({
         <SandpackProvider 
           template="vanilla"
           files={defaultFiles}
-          theme="auto"
+          theme={currentTheme}
         >
           <div className="flex items-center justify-between p-3 bg-card border-b">
             <div className="flex items-center">
@@ -238,7 +242,15 @@ const CodingPlayground = ({
             </div>
             <div className="flex gap-2">
               {showRunButton && <RunButton />}
-              <ThemeSwitcher />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-1" 
+                onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
+              >
+                {currentTheme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+                {currentTheme === 'light' ? 'Dark' : 'Light'} Mode
+              </Button>
             </div>
           </div>
 
