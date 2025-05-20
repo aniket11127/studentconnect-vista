@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Code } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Navbar = () => {
@@ -30,6 +30,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Curriculum', path: '/curriculum' },
+    { name: 'Coding Playground', path: '/coding-playground', icon: <Code size={16} /> },
     { name: 'AI Chat', path: '/ai-chat' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
@@ -80,13 +81,14 @@ const Navbar = () => {
                 <Link
                   to={link.path}
                   className={cn(
-                    "text-sm font-medium transition-colors px-2 py-1 rounded-md",
+                    "text-sm font-medium transition-colors px-2 py-1 rounded-md flex items-center gap-1",
                     isActive(link.path) 
                       ? "text-primary font-semibold" 
                       : "text-foreground/80 hover:text-primary hover:bg-accent/50"
                   )}
                   aria-label={`Navigate to ${link.name}`}
                 >
+                  {link.icon && <span className="text-primary">{link.icon}</span>}
                   {link.name}
                   {link.name === 'AI Chat' && (
                     <span className="ml-1 px-1.5 py-0.5 text-xs bg-primary/10 text-primary rounded-full">New</span>
@@ -126,7 +128,7 @@ const Navbar = () => {
                     key={link.name}
                     to={link.path}
                     className={cn(
-                      "text-lg font-medium transition-colors p-2 rounded-md", 
+                      "text-lg font-medium transition-colors p-2 rounded-md flex items-center gap-2", 
                       isActive(link.path) 
                         ? "text-primary font-semibold bg-primary/10" 
                         : "hover:text-primary hover:bg-accent/50"
@@ -134,6 +136,7 @@ const Navbar = () => {
                     onClick={closeMenu}
                     aria-label={`Navigate to ${link.name}`}
                   >
+                    {link.icon && <span className="text-primary">{link.icon}</span>}
                     {link.name}
                     {link.name === 'AI Chat' && (
                       <span className="ml-2 px-1.5 py-0.5 text-xs bg-primary/10 text-primary rounded-full">New</span>
