@@ -16,6 +16,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { ExecutionPanel } from './ExecutionPanel';
 import { languageOptions, defaultFiles, editorSettings } from './playgroundConfig';
 import { toast } from '@/hooks/use-toast';
+import JSZip from 'jszip';
 
 // Type definitions
 export type CodeLanguage = 'web' | 'python' | 'java' | 'c' | 'cpp' | 'sql';
@@ -77,20 +78,26 @@ const WebEditor = ({
   const handleExport = () => {
     try {
       // Create a zip file with all web files
-      const JSZip = window.JSZip;
-      if (!JSZip) {
-        toast({
-          title: "Export failed",
-          description: "JSZip library not available",
-          variant: "destructive",
-        });
-        return;
-      }
+      const zip = new JSZip();
+      zip.file("index.html", defaultFiles['/index.html']);
+      zip.file("styles.css", defaultFiles['/styles.css']);
+      zip.file("index.js", defaultFiles['/index.js']);
       
-      toast({
-        title: "Export successful",
-        description: "Your web project has been exported",
-      });
+      zip.generateAsync({ type: "blob" })
+        .then(function(content) {
+          // Create a download link and trigger it
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(content);
+          link.download = "web-project.zip";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          toast({
+            title: "Export successful",
+            description: "Your web project has been exported",
+          });
+        });
     } catch (err) {
       toast({
         title: "Export failed",
@@ -112,6 +119,15 @@ const WebEditor = ({
           <span className="font-medium">SGK14 Web Playground</span>
         </div>
         <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex items-center gap-1"
+            onClick={handleExport}
+          >
+            <Download size={16} />
+            Export
+          </Button>
           <ThemeSwitcher currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
         </div>
       </div>
