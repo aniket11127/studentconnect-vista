@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   SandpackProvider,
@@ -113,49 +112,51 @@ const WebEditor = ({
       files={defaultFiles}
       theme={currentTheme}
     >
-      <div className="flex items-center justify-between p-3 bg-card border-b">
-        <div className="flex items-center">
-          <Code className="text-primary mr-2" size={20} />
-          <span className="font-medium">SGK14 Web Playground</span>
+      <div className="flex flex-col h-full">
+        <div className="flex items-center justify-between p-3 bg-card border-b">
+          <div className="flex items-center">
+            <Code className="text-primary mr-2" size={20} />
+            <span className="font-medium">SGK14 Web Playground</span>
+          </div>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex items-center gap-1"
+              onClick={handleExport}
+            >
+              <Download size={16} />
+              Export
+            </Button>
+            <ThemeSwitcher currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="flex items-center gap-1"
-            onClick={handleExport}
-          >
-            <Download size={16} />
-            Export
-          </Button>
-          <ThemeSwitcher currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
-        </div>
-      </div>
 
-      <SandpackLayout
-        className={cn("!rounded-none !border-0", !showFileExplorer && "!p-0")}
-        style={{ height }}
-      >
-        {showFileExplorer && (
-          <SandpackFileExplorer className="!border-r" />
-        )}
-        <SandpackStack>
-          <SandpackCodeEditor
-            showTabs
-            showLineNumbers
-            showInlineErrors
-            wrapContent
-            closableTabs
-            showRunButton={false}
-          />
-        </SandpackStack>
-        <SandpackStack>
-          <SandpackPreview
-            showNavigator
-            showRefreshButton
-          />
-        </SandpackStack>
-      </SandpackLayout>
+        <SandpackLayout
+          className={cn("!rounded-none !border-0 flex-grow", !showFileExplorer && "!p-0")}
+          style={{ height: "calc(100% - 56px)" }} // Subtract header height
+        >
+          {showFileExplorer && (
+            <SandpackFileExplorer className="!border-r" />
+          )}
+          <SandpackStack className="flex-grow">
+            <SandpackCodeEditor
+              showTabs
+              showLineNumbers
+              showInlineErrors
+              wrapContent
+              closableTabs
+              showRunButton={false}
+            />
+          </SandpackStack>
+          <SandpackStack className="flex-grow">
+            <SandpackPreview
+              showNavigator
+              showRefreshButton
+            />
+          </SandpackStack>
+        </SandpackLayout>
+      </div>
     </SandpackProvider>
   );
 };
@@ -327,23 +328,17 @@ const CodingPlayground = ({
   }, [selectedLanguage, code]);
   
   return (
-    <div className="w-full space-y-6 my-8">
-      {/* Header section */}
-      <div className="space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight text-primary">Interactive Coding Playground</h2>
-        <p className="text-muted-foreground">
-          Write, edit, and experiment with HTML, CSS, JavaScript, Python, Java and more. See your results instantly!
-        </p>
+    <div className="w-full h-full flex flex-col">
+      {/* Language selector */}
+      <div className="mb-4">
+        <LanguageSelector 
+          selectedLanguage={selectedLanguage}
+          onLanguageChange={handleLanguageChange}
+        />
       </div>
 
-      {/* Language selector */}
-      <LanguageSelector 
-        selectedLanguage={selectedLanguage}
-        onLanguageChange={handleLanguageChange}
-      />
-
-      {/* Editor section */}
-      <div className="rounded-xl border shadow-lg overflow-hidden">
+      {/* Editor section - full height */}
+      <div className="rounded-xl overflow-hidden flex-grow">
         {selectedLanguage === 'web' ? (
           <WebEditor 
             showFileExplorer={showFileExplorer} 
@@ -373,14 +368,7 @@ const CodingPlayground = ({
         )}
       </div>
 
-      {/* Instructions */}
-      <div className="text-sm text-muted-foreground">
-        <p>Use this playground to practice your programming skills. Choose a language and start coding!</p>
-        <p className="mt-2">For HTML/CSS/JS, changes update automatically in the preview window. For other languages, click "Run Code".</p>
-        {selectedLanguage !== 'web' && (
-          <p className="mt-1">You can provide input data in the "Input" tab for languages that require stdin (like Python, Java, C/C++).</p>
-        )}
-      </div>
+      {/* Instructions - moved to main page */}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Moon, Sun, Play, Loader, Download, Upload, FileUp, Check, X, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { CodeLanguage } from './CodingPlayground';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { editorSettings } from './playgroundConfig';
 import { toast } from '@/hooks/use-toast';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ExecutionPanelProps {
   language: CodeLanguage;
@@ -119,7 +119,7 @@ export const ExecutionPanel = ({
   };
   
   const editorStyle = {
-    height: `calc(${height} - 80px)`,
+    height: `calc(${height})`,
     overflow: 'auto',
   };
   
@@ -166,7 +166,7 @@ export const ExecutionPanel = ({
   };
   
   return (
-    <div className="w-full">
+    <div className="w-full h-full flex flex-col">
       <div className="flex items-center justify-between p-3 bg-card border-b">
         <div className="flex items-center gap-2">
           <span className="font-medium capitalize">{language} Playground</span>
@@ -255,7 +255,7 @@ export const ExecutionPanel = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 flex-grow">
         {/* Code Editor */}
         <div className={`border-r ${currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'}`} style={editorStyle}>
           <textarea
@@ -271,8 +271,8 @@ export const ExecutionPanel = ({
         </div>
 
         {/* Input/Output Tabs */}
-        <div className={`${currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className={`${currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} flex flex-col h-full`}>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col">
             <TabsList className="w-full grid grid-cols-2">
               <TabsTrigger value="input">Input</TabsTrigger>
               <TabsTrigger value="output">
@@ -280,31 +280,33 @@ export const ExecutionPanel = ({
                 {error && <span className="ml-1 text-red-500">•</span>}
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="input" className="p-0">
+            <TabsContent value="input" className="p-0 flex-grow h-full">
               <textarea
-                className={`w-full p-4 font-mono text-sm focus:outline-none resize-none ${
+                className={`w-full p-4 font-mono text-sm focus:outline-none resize-none h-full ${
                   currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'
                 }`}
-                style={{ height: `calc(${height} - 120px)`, fontSize: `${fontSize}px` }}
+                style={{ fontSize: `${fontSize}px` }}
                 placeholder="Enter input here (for stdin)..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 spellCheck={false}
               />
             </TabsContent>
-            <TabsContent value="output" className="p-0">
-              <pre
-                className={`w-full p-4 font-mono text-sm overflow-auto`}
-                style={{ height: `calc(${height} - 120px)`, fontSize: `${fontSize}px` }}
-              >
-                {displayOutput()}
-              </pre>
+            <TabsContent value="output" className="p-0 flex-grow h-full">
+              <ScrollArea className="h-full">
+                <pre
+                  className={`w-full p-4 font-mono text-sm`}
+                  style={{ fontSize: `${fontSize}px` }}
+                >
+                  {displayOutput()}
+                </pre>
+              </ScrollArea>
             </TabsContent>
           </Tabs>
         </div>
       </div>
       
-      <div className="p-2 text-xs text-muted-foreground border-t">
+      <div className="p-2 text-xs text-muted-foreground border-t mt-auto">
         <div className="flex items-center justify-between">
           <span>{language.toUpperCase()} • {code.split('\n').length} lines</span>
           <span className="flex items-center gap-1">

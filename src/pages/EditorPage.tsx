@@ -10,14 +10,14 @@ const EditorPage = () => {
   }, []);
 
   return (
-    <div className="container max-w-7xl py-10 px-4 md:px-6 mx-auto">
+    <div className="container max-w-7xl py-6 px-2 md:px-6 mx-auto min-h-screen flex flex-col">
       <Helmet>
         <title>Code Editor | SGK14 Learning Platform</title>
         <meta name="description" content="Interactive code editor for learning HTML, CSS, JavaScript, Python, Java, C, C++, and SQL" />
       </Helmet>
 
-      <div className="space-y-4 mb-6">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+      <div className="space-y-2 mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
           SGK14 Code Editor
         </h1>
         <p className="text-lg text-muted-foreground max-w-3xl">
@@ -25,16 +25,16 @@ const EditorPage = () => {
         </p>
       </div>
 
-      <div className="bg-card rounded-xl border p-4 md:p-6 shadow-sm">
+      <div className="bg-card rounded-xl border shadow-sm flex-grow flex flex-col">
         <CodingPlayground 
-          defaultHeight="700px"
+          defaultHeight="calc(100vh - 200px)"
           showFileExplorer={true}
           showRunButton={true}
         />
       </div>
       
-      <div className="mt-8 text-sm text-muted-foreground">
-        <p className="mb-2">Tips:</p>
+      <div className="mt-4 mb-2 text-sm text-muted-foreground">
+        <p className="mb-1">Tips:</p>
         <ul className="list-disc pl-5 space-y-1">
           <li>Choose your programming language from the dropdown menu</li>
           <li>For HTML/CSS/JS, changes update in real-time in the preview</li>
