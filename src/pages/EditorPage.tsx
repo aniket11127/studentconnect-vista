@@ -27,7 +27,7 @@ const EditorPage = () => {
 
       <div className="bg-card rounded-xl border shadow-sm flex-grow flex flex-col">
         <CodingPlayground 
-          defaultHeight="calc(100vh - 200px)"
+          defaultHeight="100%"
           showFileExplorer={true}
           showRunButton={true}
         />

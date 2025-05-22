@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Moon, Sun, Play, Loader, Download, Upload, FileUp, Check, X, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -255,9 +256,9 @@ export const ExecutionPanel = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 flex-grow">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 flex-grow h-full">
         {/* Code Editor */}
-        <div className={`border-r ${currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'}`} style={editorStyle}>
+        <div className={`border-r ${currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'}`} style={{ height: "100%", overflow: "auto" }}>
           <textarea
             className={`w-full h-full p-4 font-mono focus:outline-none resize-none ${
               currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'
@@ -271,7 +272,7 @@ export const ExecutionPanel = ({
         </div>
 
         {/* Input/Output Tabs */}
-        <div className={`${currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} flex flex-col h-full`}>
+        <div className={`${currentTheme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'} flex flex-col h-full border-l border-border`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full h-full flex flex-col">
             <TabsList className="w-full grid grid-cols-2">
               <TabsTrigger value="input">Input</TabsTrigger>

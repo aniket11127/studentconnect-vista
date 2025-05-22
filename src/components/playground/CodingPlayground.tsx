@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   SandpackProvider,
@@ -139,7 +140,7 @@ const WebEditor = ({
           {showFileExplorer && (
             <SandpackFileExplorer className="!border-r" />
           )}
-          <SandpackStack className="flex-grow">
+          <SandpackStack className="flex-grow border-r border-border">
             <SandpackCodeEditor
               showTabs
               showLineNumbers
@@ -147,12 +148,14 @@ const WebEditor = ({
               wrapContent
               closableTabs
               showRunButton={false}
+              style={{ height: "100%" }}
             />
           </SandpackStack>
           <SandpackStack className="flex-grow">
             <SandpackPreview
               showNavigator
               showRefreshButton
+              style={{ height: "100%", minHeight: "100%" }}
             />
           </SandpackStack>
         </SandpackLayout>
@@ -338,11 +341,11 @@ const CodingPlayground = ({
       </div>
 
       {/* Editor section - full height */}
-      <div className="rounded-xl overflow-hidden flex-grow">
+      <div className="rounded-xl overflow-hidden flex-grow flex" style={{ height: defaultHeight === "100%" ? "100%" : defaultHeight }}>
         {selectedLanguage === 'web' ? (
           <WebEditor 
             showFileExplorer={showFileExplorer} 
-            height={defaultHeight}
+            height={"100%"}
             currentTheme={currentTheme}
             setCurrentTheme={setCurrentTheme}
           />
@@ -359,7 +362,7 @@ const CodingPlayground = ({
             executeCode={executeCode}
             currentTheme={currentTheme}
             setCurrentTheme={setCurrentTheme}
-            height={defaultHeight}
+            height={"100%"}
             fontSize={fontSize}
             setFontSize={setFontSize}
             tabSize={tabSize}
@@ -367,8 +370,6 @@ const CodingPlayground = ({
           />
         )}
       </div>
-
-      {/* Instructions - moved to main page */}
     </div>
   );
 };
