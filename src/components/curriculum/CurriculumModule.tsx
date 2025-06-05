@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Download } from 'lucide-react';
+import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Download, Wrench } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -43,6 +44,7 @@ interface CurriculumModuleProps {
   modules: number;
   projects: number;
   topics?: string[];
+  exercises?: string[];
   progress?: number;
   weeks?: {
     weekNumber: number;
@@ -58,6 +60,7 @@ const CurriculumModule = ({
   modules,
   projects,
   topics = [],
+  exercises = [],
   progress = 0,
   weeks = [],
   image
@@ -167,30 +170,55 @@ const CurriculumModule = ({
                 className={`px-4 py-2 text-sm font-medium ${activeTab === 'overview' ? 'border-b-2 border-primary' : ''}`}
                 onClick={() => setActiveTab('overview')}
               >
-                Overview
+                📘 Overview
+              </button>
+              <button 
+                className={`px-4 py-2 text-sm font-medium ${activeTab === 'exercises' ? 'border-b-2 border-primary' : ''}`}
+                onClick={() => setActiveTab('exercises')}
+              >
+                🛠️ Exercises
               </button>
               <button 
                 className={`px-4 py-2 text-sm font-medium ${activeTab === 'schedule' ? 'border-b-2 border-primary' : ''}`}
                 onClick={() => setActiveTab('schedule')}
               >
-                Schedule
+                📅 Schedule
               </button>
               <button 
                 className={`px-4 py-2 text-sm font-medium ${activeTab === 'projects' ? 'border-b-2 border-primary' : ''}`}
                 onClick={() => setActiveTab('projects')}
               >
-                Projects
+                📁 Projects
               </button>
             </div>
 
             {activeTab === 'overview' && topics.length > 0 && (
               <div className="mb-4">
-                <h4 className="text-sm font-medium mb-2">Key Topics</h4>
-                <ul className="text-sm space-y-1">
+                <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                  ✅ Topics & Subtopics
+                </h4>
+                <ul className="text-sm space-y-2">
                   {topics.map((topic, i) => (
-                    <li key={i} className="flex items-center">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2"></span>
-                      {topic}
+                    <li key={i} className="flex items-start gap-2 leading-relaxed">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></span>
+                      <span>{topic}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {activeTab === 'exercises' && exercises.length > 0 && (
+              <div className="mb-4">
+                <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                  <Wrench size={16} />
+                  Practice Exercises
+                </h4>
+                <ul className="text-sm space-y-2">
+                  {exercises.map((exercise, i) => (
+                    <li key={i} className="flex items-start gap-2 leading-relaxed">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 flex-shrink-0"></span>
+                      <span>{exercise}</span>
                     </li>
                   ))}
                 </ul>
@@ -199,7 +227,9 @@ const CurriculumModule = ({
 
             {activeTab === 'schedule' && weeks.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium mb-2">Weekly Schedule</h4>
+                <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                  📅 Weekly Schedule
+                </h4>
                 <div className="space-y-3">
                   {weeks.map((week) => (
                     <div key={week.weekNumber} className="border-l-2 border-primary/20 pl-3">
@@ -213,14 +243,18 @@ const CurriculumModule = ({
 
             {activeTab === 'projects' && (
               <div>
-                <h4 className="text-sm font-medium mb-2">Course Projects</h4>
+                <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                  📁 Course Projects
+                </h4>
                 <div className="space-y-3">
                   <div className="border rounded-md p-3">
                     <h5 className="text-sm font-medium flex items-center gap-2">
                       <Edit size={14} />
-                      AI Assistant Design
+                      Main Project
                     </h5>
-                    <p className="text-xs text-muted-foreground">Create a functioning AI assistant with effective prompts</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {weeks.length > 0 && weeks[weeks.length - 1]?.description}
+                    </p>
                     <div className="mt-2 flex justify-between items-center">
                       <span className="text-xs bg-secondary px-2 py-0.5 rounded">Project 1</span>
                       <Button variant="outline" size="sm" className="h-7 text-xs">
@@ -232,9 +266,11 @@ const CurriculumModule = ({
                   <div className="border rounded-md p-3">
                     <h5 className="text-sm font-medium flex items-center gap-2">
                       <BookCheck size={14} />
-                      Prompt Engineering Guide
+                      Portfolio Project
                     </h5>
-                    <p className="text-xs text-muted-foreground">Develop a comprehensive guide for effective prompting</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Showcase your skills with a comprehensive portfolio project
+                    </p>
                     <div className="mt-2 flex justify-between items-center">
                       <span className="text-xs bg-secondary px-2 py-0.5 rounded">Project 2</span>
                       <Button variant="outline" size="sm" className="h-7 text-xs">
@@ -258,6 +294,7 @@ const CurriculumModule = ({
                   modules,
                   projects,
                   topics,
+                  exercises,
                   progress,
                   weeks,
                   image: moduleImage

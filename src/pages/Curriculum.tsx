@@ -10,199 +10,237 @@ import { Search } from 'lucide-react';
 const curriculumData = {
   'Class 8-9': [
     {
-      name: 'MS Office Suite',
-      description: 'Complete Microsoft Office training covering Word, Excel, and PowerPoint for document creation, data analysis, and presentations',
+      name: 'MS Office (MS Word, Excel, PowerPoint)',
+      description: 'Master Microsoft Office Suite with comprehensive training in Word, Excel, and PowerPoint for professional document creation and presentations',
       modules: 8,
       projects: 4,
       progress: 0,
       topics: [
-        'MS Word - Document formatting and templates',
-        'MS Excel - Spreadsheets, formulas, and charts', 
-        'MS PowerPoint - Professional presentations',
-        'File management and collaboration',
-        'Advanced features and automation'
+        '📝 MS Word: Text formatting, bullets & numbering, page layout, header-footer, tables, mail merge and templates',
+        '📊 MS Excel: Cells, formulas, basic functions (SUM, AVERAGE, IF), charts and graphs, sorting/filtering, basic data entry',
+        '🎯 PowerPoint: Slide design, transitions, animations, inserting multimedia, SmartArt and table presentation'
+      ],
+      exercises: [
+        '🛠️ Create a formatted resume (MS Word)',
+        '🛠️ Make a monthly budget (Excel)',
+        '🛠️ Create a presentation on "My Dream Career" (PPT)'
       ],
       weeks: [
-        { weekNumber: 1, title: 'MS Word Fundamentals', description: 'Document creation, formatting, and professional templates' },
-        { weekNumber: 2, title: 'MS Excel Essentials', description: 'Spreadsheet basics, formulas, and data visualization' },
-        { weekNumber: 3, title: 'PowerPoint Mastery', description: 'Creating engaging presentations with animations and transitions' },
-        { weekNumber: 4, title: 'Integration & Projects', description: 'Combining Office tools for comprehensive projects' }
+        { weekNumber: 1, title: 'MS Word Fundamentals', description: 'Text formatting, page layout, and professional document creation' },
+        { weekNumber: 2, title: 'MS Excel Essentials', description: 'Spreadsheet basics, formulas, charts, and data management' },
+        { weekNumber: 3, title: 'PowerPoint Mastery', description: 'Professional presentations with animations and multimedia' },
+        { weekNumber: 4, title: 'Integration Project', description: 'Design a personal portfolio report using Word + Excel + PPT' }
       ],
       image: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Microsoft_Office_Word_%282019%E2%80%93present%29.svg'
     },
     {
-      name: 'HTML - Web Design Basics',
-      description: 'Introduction to web development fundamentals with HTML structure, elements, and basic webpage creation',
+      name: 'HTML (Basics of Web Design)',
+      description: 'Foundation of web development with HTML structure, elements, and basic webpage creation for beginners',
       modules: 6,
       projects: 3,
       progress: 0,
       topics: [
-        'HTML document structure and syntax',
-        'Text formatting and semantic elements',
-        'Links, images, and multimedia',
-        'Tables and forms basics',
-        'Web accessibility principles'
+        '🌐 HTML tags, elements, structure',
+        '📄 Headings, paragraphs, lists',
+        '🔗 Links, images, tables, forms',
+        '📦 Inline vs block elements'
+      ],
+      exercises: [
+        '🛠️ Create a simple profile webpage',
+        '🛠️ Design a contact form using <form>, <input>, etc.',
+        '🛠️ Use table to show your class schedule'
       ],
       weeks: [
-        { weekNumber: 1, title: 'HTML Foundations', description: 'Understanding web structure and basic HTML elements' },
-        { weekNumber: 2, title: 'Content Creation', description: 'Adding text, images, and links to web pages' },
-        { weekNumber: 3, title: 'Interactive Elements', description: 'Forms, tables, and user interaction basics' }
+        { weekNumber: 1, title: 'HTML Structure', description: 'Understanding HTML tags, elements, and basic structure' },
+        { weekNumber: 2, title: 'Content Creation', description: 'Working with text, lists, links, and images' },
+        { weekNumber: 3, title: 'Forms & Tables', description: 'Creating interactive forms and data tables' },
+        { weekNumber: 4, title: 'First Website Project', description: 'Build "My First Website" with home, about, and contact pages' }
       ],
       image: 'https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg'
     },
     {
-      name: 'Python Foundation',
-      description: 'Programming fundamentals with Python covering basic syntax, data types, and problem-solving concepts',
+      name: 'Python (Foundation Level)',
+      description: 'Programming fundamentals with Python covering basic syntax, control structures, and problem-solving concepts',
       modules: 10,
       projects: 5,
       progress: 0,
       topics: [
-        'Python syntax and variables',
-        'Data types and basic operations',
-        'Control structures (if/else, loops)',
-        'Functions and basic algorithms',
-        'Simple input/output programs'
+        '🐍 Variables, data types',
+        '⚡ Operators, expressions',
+        '🔀 if, else, elif (decision making)',
+        '🔄 Loops: for, while',
+        '🔧 Functions and input/output',
+        '📝 Simple list and strings'
+      ],
+      exercises: [
+        '🛠️ Calculator program',
+        '🛠️ Number guessing game',
+        '🛠️ Print multiplication tables using loops'
       ],
       weeks: [
         { weekNumber: 1, title: 'Python Basics', description: 'Variables, data types, and basic operations' },
-        { weekNumber: 2, title: 'Control Flow', description: 'Conditions, loops, and decision making' },
+        { weekNumber: 2, title: 'Control Flow', description: 'Decision making with if/else and loops' },
         { weekNumber: 3, title: 'Functions', description: 'Creating reusable code with functions' },
-        { weekNumber: 4, title: 'Problem Solving', description: 'Building simple programs and games' }
+        { weekNumber: 4, title: 'Projects', description: 'Student Report Card Generator and Simple quiz app' }
       ],
       image: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg'
     }
   ],
   'Class 10': [
     {
-      name: 'HTML Intermediate',
-      description: 'Advanced HTML concepts including semantic elements, forms, multimedia integration, and modern web standards',
+      name: 'HTML (Intermediate Level)',
+      description: 'Advanced HTML concepts including semantic elements, form validation, multimedia integration, and responsive layout basics',
       modules: 8,
       projects: 4,
       progress: 0,
       topics: [
-        'HTML5 semantic elements',
-        'Advanced form controls and validation',
-        'Audio, video, and multimedia embedding',
-        'Canvas and SVG basics',
-        'Web standards and best practices'
+        '🏗️ Semantic HTML',
+        '✅ Forms with validation',
+        '📺 Embedding YouTube, maps',
+        '📱 Responsive layout basics'
+      ],
+      exercises: [
+        '🛠️ Create semantic webpage structure',
+        '🛠️ Build forms with client-side validation',
+        '🛠️ Embed multimedia content'
       ],
       weeks: [
         { weekNumber: 1, title: 'Semantic HTML5', description: 'Modern HTML structure with semantic elements' },
-        { weekNumber: 2, title: 'Advanced Forms', description: 'Complex form controls and client-side validation' },
-        { weekNumber: 3, title: 'Multimedia Integration', description: 'Embedding audio, video, and interactive content' },
-        { weekNumber: 4, title: 'Web Standards', description: 'Accessibility, SEO, and performance optimization' }
+        { weekNumber: 2, title: 'Advanced Forms', description: 'Form validation and interactive elements' },
+        { weekNumber: 3, title: 'Multimedia Integration', description: 'Embedding videos, maps, and audio' },
+        { weekNumber: 4, title: 'School Website Project', description: 'Design a complete School Website (Home, Gallery, Contact)' }
       ],
       image: 'https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg'
     },
     {
-      name: 'CSS - Styling Introduction',
-      description: 'Comprehensive CSS fundamentals covering selectors, properties, layouts, and visual design principles',
+      name: 'CSS (Introduction to Styling)',
+      description: 'Comprehensive CSS fundamentals covering selectors, box model, colors, and basic layout techniques including Flexbox',
       modules: 10,
       projects: 5,
       progress: 0,
       topics: [
-        'CSS syntax, selectors, and cascade',
-        'Text styling and typography',
-        'Colors, backgrounds, and borders',
-        'Box model and spacing',
-        'Basic animations and transitions'
+        '🎨 CSS Syntax, selectors, properties',
+        '📦 Box model, margins/padding',
+        '🌈 Colors, gradients, borders',
+        '📐 Flexbox & positioning basics'
+      ],
+      exercises: [
+        '🛠️ Style your HTML resume',
+        '🛠️ Create color themes using CSS',
+        '🛠️ Build responsive card layouts'
       ],
       weeks: [
-        { weekNumber: 1, title: 'CSS Fundamentals', description: 'Selectors, properties, and the cascade' },
-        { weekNumber: 2, title: 'Typography & Colors', description: 'Text styling and color theory' },
-        { weekNumber: 3, title: 'Layout Basics', description: 'Box model, positioning, and spacing' },
-        { weekNumber: 4, title: 'Visual Effects', description: 'Animations, transitions, and decorative elements' }
+        { weekNumber: 1, title: 'CSS Fundamentals', description: 'Syntax, selectors, and basic properties' },
+        { weekNumber: 2, title: 'Box Model & Colors', description: 'Layout fundamentals and color theory' },
+        { weekNumber: 3, title: 'Flexbox Basics', description: 'Modern layout with Flexbox' },
+        { weekNumber: 4, title: 'Portfolio Project', description: 'Personal Portfolio Website using HTML + CSS' }
       ],
       image: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg'
     },
     {
-      name: 'Python Intermediate',
-      description: 'Advanced Python programming with data structures, file handling, and real-world application development',
+      name: 'Python (Intermediate Level)',
+      description: 'Advanced Python programming with data structures, file operations, and modular programming concepts',
       modules: 12,
       projects: 6,
       progress: 0,
       topics: [
-        'Lists, dictionaries, and tuples',
-        'String manipulation and methods',
-        'File input/output operations',
-        'Exception handling',
-        'Modules and libraries introduction'
+        '📋 Lists, tuples, dictionaries',
+        '📁 File handling',
+        '🔧 Functions (with arguments, return)',
+        '📚 Simple modules and libraries (math, random)'
+      ],
+      exercises: [
+        '🛠️ Create a marksheet from user input',
+        '🛠️ Word counter for a paragraph',
+        '🛠️ File operations with text processing'
       ],
       weeks: [
-        { weekNumber: 1, title: 'Data Structures', description: 'Working with lists, dictionaries, and complex data' },
+        { weekNumber: 1, title: 'Data Structures', description: 'Working with lists, tuples, and dictionaries' },
         { weekNumber: 2, title: 'File Operations', description: 'Reading, writing, and processing files' },
-        { weekNumber: 3, title: 'Error Handling', description: 'Exception handling and debugging techniques' },
-        { weekNumber: 4, title: 'Project Development', description: 'Building complete applications with Python' }
+        { weekNumber: 3, title: 'Advanced Functions', description: 'Functions with parameters and modules' },
+        { weekNumber: 4, title: 'Management System', description: 'Build a Student Management CLI App' }
       ],
       image: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg'
     }
   ],
   'Class 11-12': [
     {
-      name: 'Advanced Python Programming',
-      description: 'Master-level Python covering Object-Oriented Programming, file handling, GUI development, and advanced concepts',
+      name: 'Advanced Python (OOP, File Handling, GUI)',
+      description: 'Master-level Python covering Object-Oriented Programming, GUI development, API integration, and advanced programming concepts',
       modules: 15,
       projects: 8,
       progress: 0,
       topics: [
-        'Object-Oriented Programming (Classes, Objects, Inheritance)',
-        'Advanced file handling and data processing',
-        'GUI development with Tkinter',
-        'Database connectivity and operations',
-        'Web scraping and API integration',
-        'Data analysis with pandas and matplotlib'
+        '🏗️ Object-Oriented Programming (OOP)',
+        '👥 Classes & objects',
+        '🔄 Inheritance, polymorphism',
+        '⚠️ Exception handling',
+        '🖥️ Intro to GUI using tkinter',
+        '🌐 Working with APIs (basic)'
+      ],
+      exercises: [
+        '🛠️ Build a class for Bank Account',
+        '🛠️ Handle divide-by-zero exception',
+        '🛠️ Create simple GUI applications'
       ],
       weeks: [
         { weekNumber: 1, title: 'OOP Fundamentals', description: 'Classes, objects, inheritance, and polymorphism' },
-        { weekNumber: 2, title: 'File & Data Processing', description: 'Advanced file operations and data manipulation' },
-        { weekNumber: 3, title: 'GUI Development', description: 'Creating desktop applications with Tkinter' },
-        { weekNumber: 4, title: 'Web & APIs', description: 'Web scraping and working with APIs' },
-        { weekNumber: 5, title: 'Data Science Intro', description: 'Data analysis and visualization basics' }
+        { weekNumber: 2, title: 'Error Handling', description: 'Exception handling and debugging techniques' },
+        { weekNumber: 3, title: 'GUI Development', description: 'Creating desktop applications with tkinter' },
+        { weekNumber: 4, title: 'API Integration', description: 'Working with external APIs and data' },
+        { weekNumber: 5, title: 'Major Projects', description: 'Weather App using API (Class 12) & GUI-based To-Do List (Class 11)' }
       ],
       image: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg'
     },
     {
-      name: 'SQL Database Management',
-      description: 'Complete database management with SQL covering queries, joins, database design, and advanced operations',
+      name: 'SQL (Database Basics)',
+      description: 'Complete database management with SQL covering database design, queries, joins, and database management systems',
       modules: 12,
       projects: 6,
       progress: 0,
       topics: [
-        'Database design and normalization',
-        'SQL queries (SELECT, INSERT, UPDATE, DELETE)',
-        'Joins (INNER, OUTER, LEFT, RIGHT)',
-        'Aggregate functions and grouping',
-        'Stored procedures and functions',
-        'Database security and optimization'
+        '🗃️ Introduction to DBMS',
+        '⚡ SQL commands: CREATE, INSERT, UPDATE, DELETE',
+        '🔍 SELECT, WHERE, ORDER BY, GROUP BY',
+        '🔗 Joins and subqueries (basic)',
+        '📋 Data types and constraints'
+      ],
+      exercises: [
+        '🛠️ Create student database',
+        '🛠️ Query marks greater than 90',
+        '🛠️ Use joins to merge student & subject tables'
       ],
       weeks: [
-        { weekNumber: 1, title: 'Database Fundamentals', description: 'Database design, tables, and relationships' },
-        { weekNumber: 2, title: 'Basic SQL Queries', description: 'SELECT statements, filtering, and sorting' },
-        { weekNumber: 3, title: 'Advanced Queries', description: 'Joins, subqueries, and complex operations' },
-        { weekNumber: 4, title: 'Database Programming', description: 'Stored procedures, functions, and triggers' }
+        { weekNumber: 1, title: 'Database Fundamentals', description: 'Introduction to DBMS and database design' },
+        { weekNumber: 2, title: 'Basic SQL Commands', description: 'CREATE, INSERT, UPDATE, DELETE operations' },
+        { weekNumber: 3, title: 'Advanced Queries', description: 'SELECT with WHERE, ORDER BY, GROUP BY' },
+        { weekNumber: 4, title: 'Joins & Project', description: 'Table joins and Student Database Management System (CRUD + Report)' }
       ],
       image: 'https://www.svgrepo.com/show/331760/sql-database-generic.svg'
     },
     {
-      name: 'HTML/CSS Responsive Design',
-      description: 'Advanced web design with responsive layouts, Flexbox, CSS Grid, and modern frontend development techniques',
+      name: 'HTML/CSS (Advanced Responsive Design)',
+      description: 'Advanced web design with responsive layouts, CSS Grid, Flexbox, animations, and modern frontend development techniques',
       modules: 14,
       projects: 7,
       progress: 0,
       topics: [
-        'Responsive design principles and mobile-first approach',
-        'CSS Flexbox for flexible layouts',
-        'CSS Grid for complex grid systems',
-        'Media queries and breakpoints',
-        'CSS frameworks and preprocessors',
-        'Performance optimization and best practices'
+        '📱 Responsive design (media queries)',
+        '📐 Flexbox & Grid',
+        '✨ CSS animations',
+        '🎵 HTML5 multimedia (audio/video)'
+      ],
+      exercises: [
+        '🛠️ Make a pricing table using Flexbox',
+        '🛠️ Responsive navbar for mobile',
+        '🛠️ CSS Grid photo gallery'
       ],
       weeks: [
-        { weekNumber: 1, title: 'Responsive Fundamentals', description: 'Mobile-first design and viewport concepts' },
-        { weekNumber: 2, title: 'Flexbox Mastery', description: 'Creating flexible and adaptive layouts' },
-        { weekNumber: 3, title: 'CSS Grid Systems', description: 'Advanced grid layouts and positioning' },
-        { weekNumber: 4, title: 'Modern CSS', description: 'CSS variables, animations, and advanced techniques' },
-        { weekNumber: 5, title: 'Framework Integration', description: 'Using CSS frameworks and build tools' }
+        { weekNumber: 1, title: 'Responsive Design', description: 'Media queries and mobile-first approach' },
+        { weekNumber: 2, title: 'Flexbox Mastery', description: 'Advanced Flexbox layouts and components' },
+        { weekNumber: 3, title: 'CSS Grid Systems', description: 'Complex layouts with CSS Grid' },
+        { weekNumber: 4, title: 'Animations & Multimedia', description: 'CSS animations and HTML5 media elements' },
+        { weekNumber: 5, title: 'Final Project', description: 'Complete Responsive Blog or Event Website' }
       ],
       image: 'https://cdn-icons-png.flaticon.com/512/732/732190.png'
     }
@@ -299,6 +337,7 @@ const Curriculum = () => {
                     modules={module.modules}
                     projects={module.projects}
                     topics={module.topics}
+                    exercises={module.exercises}
                     progress={module.progress}
                     weeks={module.weeks}
                     image={module.image}
@@ -320,8 +359,10 @@ const Curriculum = () => {
               {Object.entries(curriculumData).map(([className, modules]) => (
                 <div key={className} className="border-t pt-8">
                   <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <span className="text-primary">📚</span>
-                    {className}
+                    <span className="text-primary">
+                      {className === 'Class 8-9' ? '👩‍🏫' : className === 'Class 10' ? '🎓' : '🎓'}
+                    </span>
+                    {className} Curriculum
                   </h2>
                   <div className="space-y-6">
                     {modules.map((module, index) => (
@@ -332,6 +373,7 @@ const Curriculum = () => {
                         modules={module.modules}
                         projects={module.projects}
                         topics={module.topics}
+                        exercises={module.exercises}
                         progress={module.progress}
                         weeks={module.weeks}
                         image={module.image}
