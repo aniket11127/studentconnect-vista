@@ -1,13 +1,10 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Download, Wrench } from 'lucide-react';
+import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Wrench } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import ProgressBar from '@/components/ui/ProgressBar';
-import { downloadCurriculumResource } from '@/utils/downloadUtils';
-import { toast } from 'sonner';
 
 // Map module names to appropriate icons
 const iconMap = {
@@ -91,11 +88,6 @@ const CurriculumModule = ({
   
   const moduleImage = getModuleImage();
   
-  const handleDownloadResources = () => {
-    toast.info(`Preparing ${name} curriculum materials...`);
-    downloadCurriculumResource(name);
-  };
-
   return (
     <Collapsible className="w-full">
       <Card className="hover:shadow-md transition-shadow duration-300">
@@ -152,15 +144,6 @@ const CurriculumModule = ({
             showValue={true} 
             label="Completion" 
           />
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="mt-4 w-full flex items-center justify-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-200"
-            onClick={handleDownloadResources}
-          >
-            <Download className="h-4 w-4" />
-            Download Course Overview
-          </Button>
         </CardContent>
 
         <CollapsibleContent>
@@ -285,8 +268,8 @@ const CurriculumModule = ({
         </CollapsibleContent>
 
         <CardFooter>
-          <div className="w-full flex flex-col sm:flex-row gap-2">
-            <Button variant="outline" className="w-full sm:flex-1" asChild>
+          <div className="w-full">
+            <Button variant="outline" className="w-full" asChild>
               <Link to={`/module/${moduleSlug}`} state={{ 
                 moduleData: {
                   name,
@@ -303,14 +286,6 @@ const CurriculumModule = ({
                 View Module
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Link>
-            </Button>
-            <Button 
-              variant="secondary" 
-              className="w-full sm:w-auto flex items-center gap-2"
-              onClick={handleDownloadResources}
-            >
-              <Download className="h-4 w-4" />
-              Resources
             </Button>
           </div>
         </CardFooter>

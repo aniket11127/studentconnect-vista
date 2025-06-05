@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useParams, Link } from 'react-router-dom';
-import { ChevronLeft, BookOpen, Download, FileText, Code, Database, Award, Brain, Calendar, Clock, Users, BookCheck, CheckCircle, File } from 'lucide-react';
+import { ChevronLeft, BookOpen, FileText, Code, Database, Award, Brain, Calendar, Clock, Users, BookCheck, CheckCircle, File } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -213,13 +213,9 @@ const ModuleDetail = () => {
                 </div>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div>
                 <Button size="lg" onClick={handleEnroll}>
                   Enroll Now
-                </Button>
-                <Button variant="outline" size="lg" onClick={handleDownloadResources}>
-                  <Download className="mr-2 h-4 w-4" />
-                  Course Resources
                 </Button>
               </div>
             </div>
