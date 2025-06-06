@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CurriculumModule from '@/components/curriculum/CurriculumModule';
@@ -225,22 +224,21 @@ const curriculumData = {
       projects: 7,
       progress: 0,
       topics: [
-        '📱 Responsive design (media queries)',
-        '📐 Flexbox & Grid',
-        '✨ CSS animations',
-        '🎵 HTML5 multimedia (audio/video)'
+        '📱 Responsive design using media queries',
+        '📐 CSS Flexbox and Grid layout systems',
+        '✨ CSS animations and transitions',
+        '🎵 HTML5 multimedia elements (audio, video)'
       ],
       exercises: [
-        '🛠️ Make a pricing table using Flexbox',
-        '🛠️ Responsive navbar for mobile',
+        '🛠️ Build a pricing table layout using Flexbox',
+        '🛠️ Create a fully responsive mobile navigation bar',
         '🛠️ CSS Grid photo gallery'
       ],
       weeks: [
         { weekNumber: 1, title: 'Responsive Design', description: 'Media queries and mobile-first approach' },
         { weekNumber: 2, title: 'Flexbox Mastery', description: 'Advanced Flexbox layouts and components' },
         { weekNumber: 3, title: 'CSS Grid Systems', description: 'Complex layouts with CSS Grid' },
-        { weekNumber: 4, title: 'Animations & Multimedia', description: 'CSS animations and HTML5 media elements' },
-        { weekNumber: 5, title: 'Final Project', description: 'Complete Responsive Blog or Event Website' }
+        { weekNumber: 4, title: 'Animations & Multimedia', description: 'CSS animations and HTML5 media elements' }
       ],
       image: 'https://cdn-icons-png.flaticon.com/512/732/732190.png'
     }
