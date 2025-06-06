@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, BookOpen, FileText, Code, Database, Award, Edit, BookCheck, Brain, Wrench } from 'lucide-react';
@@ -11,6 +12,7 @@ const iconMap = {
   'MS Word': FileText,
   'MS Excel': FileText,
   'HTML & CSS': Code,
+  'HTML/CSS': Code,
   'Web Development': Code,
   'Python': Code,
   'SQL': Database,
@@ -69,7 +71,13 @@ const CurriculumModule = ({
     ([key]) => name.includes(key)
   )?.[1] || iconMap.default;
 
-  const moduleSlug = name.toLowerCase().replace(/\s+/g, '-');
+  // Fix slug generation to handle special characters properly
+  const moduleSlug = name
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '') // Remove special characters except words, spaces, and hyphens
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .trim(); // Remove leading/trailing whitespace
   
   // Get appropriate image for the module
   const getModuleImage = () => {

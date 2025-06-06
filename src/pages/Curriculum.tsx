@@ -221,7 +221,7 @@ const curriculumData = {
       name: 'HTML/CSS (Advanced Responsive Design)',
       description: 'Advanced web design with responsive layouts, CSS Grid, Flexbox, animations, and modern frontend development techniques',
       modules: 14,
-      projects: 7,
+      projects: 1,
       progress: 0,
       topics: [
         '📱 Responsive design using media queries',
@@ -238,7 +238,7 @@ const curriculumData = {
         { weekNumber: 1, title: 'Responsive Design', description: 'Media queries and mobile-first approach' },
         { weekNumber: 2, title: 'Flexbox Mastery', description: 'Advanced Flexbox layouts and components' },
         { weekNumber: 3, title: 'CSS Grid Systems', description: 'Complex layouts with CSS Grid' },
-        { weekNumber: 4, title: 'Animations & Multimedia', description: 'CSS animations and HTML5 media elements' }
+        { weekNumber: 4, title: 'Final Project', description: 'Design and build a complete Responsive Blog or Event Website' }
       ],
       image: 'https://cdn-icons-png.flaticon.com/512/732/732190.png'
     }
