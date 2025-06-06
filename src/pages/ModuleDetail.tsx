@@ -450,7 +450,7 @@ const ModuleDetail = () => {
                 <div className="space-y-6">
                   <div className="flex justify-end">
                     <Button onClick={handleDownloadResources} className="flex items-center gap-2">
-                      <Download className="h-4 w-4" />
+                      <File className="h-4 w-4" />
                       Download All Resources
                     </Button>
                   </div>
@@ -478,7 +478,7 @@ const ModuleDetail = () => {
                             className="w-full" 
                             onClick={() => downloadResource(resource.fileName, resource.type)}
                           >
-                            <Download className="h-4 w-4 mr-2" />
+                            <File className="h-4 w-4 mr-2" />
                             Download
                           </Button>
                         </CardContent>
