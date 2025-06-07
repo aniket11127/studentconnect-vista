@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/layout/NavbarWithAI';
@@ -41,7 +40,7 @@ const AIChat = () => {
     {
       id: '1',
       role: 'bot',
-      content: 'Hello! I\'m SGK14\'s AI Mentor. How can I help you with your studies today?',
+      content: 'Hello! I\'m SGK14\'s AI Mentor powered by DeepSeek. How can I help you with your studies today?',
       timestamp: new Date(),
     },
   ]);
@@ -72,7 +71,7 @@ const AIChat = () => {
     setApiStatus('checking');
     try {
       // Simple ping message to test connectivity
-      const { data, error } = await supabase.functions.invoke('chat-with-gemini', {
+      const { data, error } = await supabase.functions.invoke('chat-with-nvidia', {
         body: {
           message: "ping test",
           studentClass: "test",
@@ -117,8 +116,8 @@ const AIChat = () => {
       console.log("Sending message to AI:", message);
       console.log("With params - Class:", selectedClass, "Subject:", selectedSubject);
       
-      // Call the Supabase Edge Function
-      const { data, error } = await supabase.functions.invoke('chat-with-gemini', {
+      // Call the Supabase Edge Function for NVIDIA API
+      const { data, error } = await supabase.functions.invoke('chat-with-nvidia', {
         body: {
           message,
           studentClass: selectedClass,
@@ -225,7 +224,7 @@ const AIChat = () => {
       <main className="flex-1 pt-24 pb-20">
         <div className="container max-w-4xl">
           <h1 className="text-3xl font-bold mb-2">AI Student Mentor</h1>
-          <p className="text-muted-foreground mb-6">Ask any study questions, get help with assignments, or seek career guidance.</p>
+          <p className="text-muted-foreground mb-6">Ask any study questions, get help with assignments, or seek career guidance. Powered by DeepSeek AI.</p>
           
           {apiStatus === 'error' && (
             <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 mb-4 flex items-start">
