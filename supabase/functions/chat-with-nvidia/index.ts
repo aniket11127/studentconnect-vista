@@ -37,9 +37,6 @@ serve(async (req) => {
 
     console.log("Using NVIDIA API key:", nvidiaApiKey.substring(0, 10) + "...");
 
-    // Validate API key by making a test request
-    console.log("Validating API key...");
-    
     // Create the system prompt based on student context
     let systemPrompt = "You are SGK14's AI Mentor, a helpful and knowledgeable assistant designed to help students with their studies. You provide clear, accurate, and educational responses.";
     
