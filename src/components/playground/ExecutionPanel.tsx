@@ -1,30 +1,13 @@
+
 import React, { useState } from "react";
-import {
-    Moon,
-    Sun,
-    Play,
-    Loader,
-    Download,
-    Upload,
-    FileUp,
-    Check,
-    X,
-    AlertTriangle,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeLanguage } from "./CodingPlayground";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { editorSettings } from "./playgroundConfig";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { executeCode } from "@/lib/codeExecution";
+import { executeCode, CodeExecutionResult } from "@/lib/codeExecution";
+import { CodeEditorToolbar } from "./CodeEditorToolbar";
+import { CodeTemplates } from "./CodeTemplates";
 
 interface ExecutionPanelProps {
     language: CodeLanguage;
@@ -72,7 +55,6 @@ export const ExecutionPanel = ({
     // Handle file download
     const handleDownload = () => {
         try {
-            // Determine file extension based on language
             let fileExtension = ".txt";
             if (language === "python") fileExtension = ".py";
             else if (language === "java") fileExtension = ".java";
@@ -81,19 +63,15 @@ export const ExecutionPanel = ({
             else if (language === "sql") fileExtension = ".sql";
 
             const fileName = `sgk14_${language}_code${fileExtension}`;
-
-            // Create a blob with the code content
             const blob = new Blob([code], { type: "text/plain" });
             const url = URL.createObjectURL(blob);
 
-            // Create a temporary anchor element to initiate download
             const a = document.createElement("a");
             a.href = url;
             a.download = fileName;
             document.body.appendChild(a);
             a.click();
 
-            // Clean up
             setTimeout(() => {
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
@@ -135,8 +113,6 @@ export const ExecutionPanel = ({
             });
         };
         reader.readAsText(file);
-
-        // Reset the input value to allow uploading the same file again
         e.target.value = "";
     };
 
@@ -151,14 +127,15 @@ export const ExecutionPanel = ({
                     description: result.error,
                     variant: "destructive",
                 });
+                setActiveTab("output"); // Switch to output tab to show error
             } else {
                 setExecutionStats({
                     time: result.executionTime,
                     memory: result.memory,
                 });
+                setActiveTab("output"); // Switch to output tab to show results
             }
 
-            // Update the parent component's state
             propExecuteCode();
         } catch (err) {
             toast({
@@ -169,150 +146,70 @@ export const ExecutionPanel = ({
         }
     };
 
-    const editorStyle = {
-        height: `calc(${height})`,
-        overflow: "auto",
-    };
-
-    const getStatusIcon = () => {
-        if (isExecuting) return <Loader size={16} className="animate-spin" />;
-        if (error) return <AlertTriangle size={16} className="text-red-500" />;
-        if (output) return <Check size={16} className="text-green-500" />;
-        return null;
-    };
-
     const displayOutput = () => {
         if (error) {
-            return <span className="text-red-500">{error}</span>;
+            return (
+                <div className="text-red-500 font-mono">
+                    <div className="font-semibold mb-2">❌ Execution Error:</div>
+                    <pre className="whitespace-pre-wrap">{error}</pre>
+                </div>
+            );
         }
         if (output) {
             return (
                 <div>
-                    <pre className="whitespace-pre-wrap">{output}</pre>
+                    <div className="text-green-600 font-semibold mb-2">✅ Output:</div>
+                    <pre className="whitespace-pre-wrap font-mono">{output}</pre>
                     {executionStats && (
-                        <div className="mt-2 text-xs text-muted-foreground">
-                            <div>Execution Time: {executionStats.time}ms</div>
-                            <div>Memory Used: {executionStats.memory}KB</div>
+                        <div className="mt-4 pt-2 border-t text-xs text-muted-foreground">
+                            <div>⏱️ Execution Time: {executionStats.time}ms</div>
+                            <div>💾 Memory Used: {executionStats.memory}KB</div>
                         </div>
                     )}
                 </div>
             );
         }
-        return <span className="text-muted-foreground">No output yet</span>;
+        return (
+            <div className="text-muted-foreground text-center py-8">
+                <div className="text-4xl mb-2">🚀</div>
+                <div>Run your code to see the output here</div>
+            </div>
+        );
     };
 
     return (
         <div className="w-full h-full flex flex-col">
-            <div className="flex items-center justify-between p-3 bg-card border-b">
-                <div className="flex items-center gap-2">
-                    <span className="font-medium capitalize">
-                        {language} Playground
-                    </span>
-                    {getStatusIcon()}
-                </div>
-                <div className="flex gap-2">
-                    <div className="hidden sm:flex items-center gap-2">
-                        <Select
-                            value={fontSize.toString()}
-                            onValueChange={(val) => setFontSize(parseInt(val))}
-                        >
-                            <SelectTrigger className="w-[80px] h-8">
-                                <SelectValue placeholder="Font" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {editorSettings.fontSize.map((size) => (
-                                    <SelectItem
-                                        key={size}
-                                        value={size.toString()}
-                                    >
-                                        {size}px
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+            <CodeEditorToolbar
+                language={language}
+                code={code}
+                setCode={setCode}
+                isExecuting={isExecuting}
+                onExecute={handleExecuteCode}
+                output={output}
+                error={error}
+                currentTheme={currentTheme}
+                setCurrentTheme={setCurrentTheme}
+                fontSize={fontSize}
+                setFontSize={setFontSize}
+                tabSize={tabSize}
+                setTabSize={setTabSize}
+                onDownload={handleDownload}
+                onUpload={handleUpload}
+                executionTime={executionStats?.time}
+                memory={executionStats?.memory}
+            />
 
-                        <Select
-                            value={tabSize.toString()}
-                            onValueChange={(val) => setTabSize(parseInt(val))}
-                        >
-                            <SelectTrigger className="w-[80px] h-8">
-                                <SelectValue placeholder="Tab" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {editorSettings.tabSize.map((size) => (
-                                    <SelectItem
-                                        key={size}
-                                        value={size.toString()}
-                                    >
-                                        {size} spaces
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    <input
-                        type="file"
-                        id="file-upload"
-                        accept=".txt,.py,.java,.c,.cpp,.sql"
-                        className="hidden"
-                        onChange={handleUpload}
-                    />
-
-                    <div className="flex gap-1">
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-8 w-8"
-                            onClick={() =>
-                                document.getElementById("file-upload")?.click()
-                            }
-                            title="Upload Code"
-                        >
-                            <FileUp size={16} />
-                        </Button>
-
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-8 w-8"
-                            onClick={handleDownload}
-                            title="Download Code"
-                        >
-                            <Download size={16} />
-                        </Button>
-                    </div>
-
-                    <Button
-                        className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
-                        onClick={handleExecuteCode}
-                        disabled={isExecuting}
-                    >
-                        {isExecuting ? (
-                            <Loader size={16} className="animate-spin" />
-                        ) : (
-                            <Play size={16} />
-                        )}
-                        Run Code
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-1"
-                        onClick={() =>
-                            setCurrentTheme(
-                                currentTheme === "light" ? "dark" : "light"
-                            )
-                        }
-                    >
-                        {currentTheme === "light" ? (
-                            <Moon size={16} />
-                        ) : (
-                            <Sun size={16} />
-                        )}
-                        {currentTheme === "light" ? "Dark" : "Light"}
-                    </Button>
-                </div>
+            <div className="p-4">
+                <CodeTemplates
+                    language={language}
+                    onTemplateSelect={(templateCode) => {
+                        setCode(templateCode);
+                        toast({
+                            title: "Template loaded",
+                            description: "Code template has been loaded into the editor",
+                        });
+                    }}
+                />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-0 flex-grow h-full">
@@ -329,11 +226,17 @@ export const ExecutionPanel = ({
                                 ? "bg-gray-900 text-white"
                                 : "bg-white text-black"
                         }`}
-                        style={{ fontSize: `${fontSize}px`, tabSize: tabSize }}
+                        style={{ 
+                            fontSize: `${fontSize}px`, 
+                            tabSize: tabSize,
+                            lineHeight: 1.5
+                        }}
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
                         spellCheck={false}
-                        placeholder={`Write your ${language} code here...`}
+                        placeholder={`// Welcome to SGK14 ${language.toUpperCase()} Editor
+// Start typing your code here...
+// Use the templates above for quick examples!`}
                     />
                 </div>
 
@@ -351,11 +254,14 @@ export const ExecutionPanel = ({
                         className="w-full h-full flex flex-col"
                     >
                         <TabsList className="w-full grid grid-cols-2">
-                            <TabsTrigger value="input">Input</TabsTrigger>
+                            <TabsTrigger value="input">📝 Input</TabsTrigger>
                             <TabsTrigger value="output">
-                                Output
+                                📤 Output
                                 {error && (
                                     <span className="ml-1 text-red-500">•</span>
+                                )}
+                                {output && !error && (
+                                    <span className="ml-1 text-green-500">•</span>
                                 )}
                             </TabsTrigger>
                         </TabsList>
@@ -363,14 +269,20 @@ export const ExecutionPanel = ({
                             value="input"
                             className="p-0 flex-grow h-full"
                         >
+                            <div className="p-3 border-b text-sm text-muted-foreground">
+                                💡 Enter input data for your program (stdin)
+                            </div>
                             <textarea
-                                className={`w-full p-4 font-mono text-sm focus:outline-none resize-none h-full ${
+                                className={`w-full p-4 font-mono text-sm focus:outline-none resize-none ${
                                     currentTheme === "dark"
                                         ? "bg-gray-900 text-white"
                                         : "bg-white text-black"
                                 }`}
-                                style={{ fontSize: `${fontSize}px` }}
-                                placeholder="Enter input here (for stdin)..."
+                                style={{ 
+                                    fontSize: `${fontSize}px`,
+                                    height: "calc(100% - 60px)"
+                                }}
+                                placeholder="Enter input here (each line will be sent to your program)..."
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 spellCheck={false}
@@ -381,12 +293,12 @@ export const ExecutionPanel = ({
                             className="p-0 flex-grow h-full"
                         >
                             <ScrollArea className="h-full">
-                                <pre
-                                    className={`w-full p-4 font-mono text-sm`}
+                                <div
+                                    className="w-full p-4 text-sm"
                                     style={{ fontSize: `${fontSize}px` }}
                                 >
                                     {displayOutput()}
-                                </pre>
+                                </div>
                             </ScrollArea>
                         </TabsContent>
                     </Tabs>
@@ -396,24 +308,17 @@ export const ExecutionPanel = ({
             <div className="p-2 text-xs text-muted-foreground border-t mt-auto">
                 <div className="flex items-center justify-between">
                     <span>
-                        {language.toUpperCase()} • {code.split("\n").length}{" "}
-                        lines
+                        📄 {language.toUpperCase()} • {code.split("\n").length} lines • {code.length} characters
                     </span>
                     <span className="flex items-center gap-1">
                         {isExecuting ? (
-                            <>Running...</>
+                            <>⏳ Running...</>
                         ) : output && !error ? (
-                            <>
-                                <Check size={12} className="text-green-500" />{" "}
-                                Executed successfully
-                            </>
+                            <>✅ Executed successfully</>
                         ) : error ? (
-                            <>
-                                <X size={12} className="text-red-500" />{" "}
-                                Execution failed
-                            </>
+                            <>❌ Execution failed</>
                         ) : (
-                            <>Ready</>
+                            <>🎯 Ready to run</>
                         )}
                     </span>
                 </div>
