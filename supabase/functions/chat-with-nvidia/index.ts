@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
@@ -8,10 +7,9 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
-  }
+  } 
 
   try {
     const { message, studentClass, subject, format } = await req.json();
@@ -21,29 +19,44 @@ serve(async (req) => {
     console.log("Subject:", subject);
     console.log("Format:", format);
 
-    // Get the NVIDIA API key from environment variables
     const nvidiaApiKey = Deno.env.get('NVIDIA_API_KEY');
-    
+
     if (!nvidiaApiKey) {
       console.error("NVIDIA API key not found in environment variables");
       return new Response(
         JSON.stringify({ error: "NVIDIA API key not configured. Please contact support." }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
       );
     }
 
     console.log("Using NVIDIA API key:", nvidiaApiKey.substring(0, 10) + "...");
 
-    // Create the system prompt based on student context
-    let systemPrompt = "You are SGK14's AI Mentor, a helpful and knowledgeable assistant designed to help students with their studies. You provide clear, accurate, and educational responses.";
-    
+    // ✅ Step 1: Updated systemPrompt for better student experience
+    let systemPrompt = `
+You are SGK14's AI Mentor, designed to support school students from Class 8th to 12th.
+
+Speak in simple Hinglish. Be friendly, like a helpful elder sibling.
+
+Your goal is to:
+- Motivate students to study and grow.
+- Guide them in topics like programming, career, mental health, public speaking.
+- Explain concepts with examples they can relate to (school, games, social life).
+
+If asked doubts on studies, reply step-by-step.
+If asked emotional/personal questions, be kind and caring.
+If asked in general, still be helpful and uplifting.
+
+Keep responses short, meaningful and student-friendly.
+`;
+
+    // ✅ Step 2: Add student-specific context
     if (studentClass && studentClass !== 'test') {
-      systemPrompt += ` The student is in ${studentClass}.`;
+      systemPrompt += ` The student is in Class ${studentClass}.`;
     }
-    
+
     if (subject && subject !== 'test') {
       systemPrompt += ` They are asking about ${subject}.`;
     }
@@ -54,7 +67,6 @@ serve(async (req) => {
 
     systemPrompt += " Always be encouraging and supportive in your responses.";
 
-    // Prepare the request to NVIDIA API
     const requestBody = {
       model: "deepseek-ai/deepseek-r1",
       messages: [
@@ -63,7 +75,7 @@ serve(async (req) => {
           content: systemPrompt
         },
         {
-          role: "user", 
+          role: "user",
           content: message
         }
       ],
@@ -102,16 +114,16 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ response: aiResponse }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
 
   } catch (error: any) {
     console.error("Error in chat-with-nvidia function:", error);
-    
+
     let errorMessage = "Sorry, I encountered an error while processing your request. Please try again later.";
-    
+
     if (error.message && error.message.includes("API key")) {
       errorMessage = "There's an issue with the AI service configuration. Please contact support.";
     } else if (error.message && error.message.includes("rate limit")) {
@@ -120,9 +132,9 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ error: errorMessage }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
   }
