@@ -49,7 +49,9 @@ If asked doubts on studies, reply step-by-step.
 If asked emotional/personal questions, be kind and caring.
 If asked in general, still be helpful and uplifting.
 
-Keep responses short, meaningful and student-friendly.
+Give your output in clean HTML format with heading tags (h1, h2), bold text, lists (ul/li), and links. Do not explain anything outside HTML block.
+
+Keep responses meaningful and student-friendly.
 `;
 
     // ✅ Step 2: Add student-specific context
@@ -120,22 +122,36 @@ Keep responses short, meaningful and student-friendly.
     );
 
   } catch (error: any) {
-    console.error("Error in chat-with-nvidia function:", error);
+  console.error("⚠️ Server Error:", error);
 
-    let errorMessage = "Sorry, I encountered an error while processing your request. Please try again later.";
-
-    if (error.message && error.message.includes("API key")) {
-      errorMessage = "There's an issue with the AI service configuration. Please contact support.";
-    } else if (error.message && error.message.includes("rate limit")) {
-      errorMessage = "We've reached our usage limit. Please try again in a few minutes.";
+  return new Response(
+    JSON.stringify({
+      success: false,
+      error: error?.message || 'Something went wrong',
+    }),
+    {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     }
+  );
+}
+  // catch (error: any) {
+  //   console.error("Error in chat-with-nvidia function:", error);
 
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    );
-  }
+  //   let errorMessage = "Sorry, I encountered an error while processing your request. Please try again later.";
+
+  //   if (error.message && error.message.includes("API key")) {
+  //     errorMessage = "There's an issue with the AI service configuration. Please contact support.";
+  //   } else if (error.message && error.message.includes("rate limit")) {
+  //     errorMessage = "We've reached our usage limit. Please try again in a few minutes.";
+  //   }
+
+  //   return new Response(
+  //     JSON.stringify({ error: errorMessage }),
+  //     {
+  //       status: 500,
+  //       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  //     }
+  //   );
+  // }
 });
