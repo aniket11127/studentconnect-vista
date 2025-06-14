@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import Navbar from '@/components/layout/NavbarWithAI';
-import Footer from '@/components/layout/Footer';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Users, Award, Lightbulb } from 'lucide-react';
@@ -97,7 +96,6 @@ const About = () => {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 };
