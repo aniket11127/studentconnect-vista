@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Navbar from '@/components/layout/NavbarWithAI';
 import Footer from '@/components/layout/Footer';
@@ -81,7 +82,7 @@ const About = () => {
               </div>
             </div>
             
-            <div className="text-center mb-20">
+            <div className="text-center">
               <h2 className="text-2xl md:text-3xl font-bold mb-4">Our Story</h2>
               <p className="text-muted-foreground max-w-3xl mx-auto mb-6">
                 SGK14 was founded in 2020 with a vision to revolutionize education for MP Board students. 
@@ -92,24 +93,6 @@ const About = () => {
                 Today, we've helped over 10,000 students develop essential skills and secure meaningful 
                 opportunities, with a 95% placement rate for our advanced program graduates.
               </p>
-            </div>
-            
-            <div className="bg-secondary/50 p-12 rounded-3xl text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Join Us?</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-                Start your journey toward building essential digital skills and preparing for a successful career.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button size="lg" asChild>
-                  <Link to="/courses">
-                    Explore Courses
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <Link to="/contact">Contact Us</Link>
-                </Button>
-              </div>
             </div>
           </div>
         </section>
