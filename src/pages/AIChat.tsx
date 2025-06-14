@@ -225,22 +225,10 @@ const AIChat = () => {
       <main className="flex-1 pt-24 pb-20">
         <div className="container max-w-4xl">
           <h1 className="text-3xl font-bold mb-2">AI Student Mentor</h1>
-          <p className="text-muted-foreground mb-6">Ask any study questions, get help with assignments, or seek career guidance. Powered by DeepSeek AI via NVIDIA.</p>
-          
-          {apiStatus === 'ready' && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 flex items-start">
-              <div className="h-5 w-5 bg-green-500 rounded-full shrink-0 mt-0.5 mr-3"></div>
-              <div>
-                <h3 className="font-medium text-green-800">AI Service Ready</h3>
-                <p className="text-sm text-green-700 mt-1">
-                  Connected to DeepSeek AI. You can now start chatting!
-                </p>
-              </div>
-            </div>
-          )}
+          <p className="text-muted-foreground mb-8">Ask any study questions, get help with assignments, or seek career guidance. Powered by DeepSeek AI via NVIDIA.</p>
           
           {apiStatus === 'error' && (
-            <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 mb-4 flex items-start">
+            <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 mb-6 flex items-start">
               <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5 mr-3" />
               <div>
                 <h3 className="font-medium text-destructive">AI Service Unavailable</h3>
