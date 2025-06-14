@@ -18,6 +18,15 @@ import Signup from './pages/Signup';
 import NotFound from './pages/NotFound';
 import CodingPlayground from './pages/CodingPlayground';
 import EditorPage from './pages/EditorPage';
+import Careers from './pages/Careers';
+import Blog from './pages/Blog';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import HelpCenter from './pages/HelpCenter';
+import Community from './pages/Community';
+import Certification from './pages/Certification';
+import ResumeBuilder from './pages/ResumeBuilder';
+import CareerGuidance from './pages/CareerGuidance';
 import './App.css';
 
 function App() {
@@ -44,6 +53,15 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/coding-playground" element={<CodingPlayground />} />
                 <Route path="/editor" element={<EditorPage />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/help" element={<HelpCenter />} />
+                <Route path="/community" element={<Community />} />
+                <Route path="/certification" element={<Certification />} />
+                <Route path="/resume-builder" element={<ResumeBuilder />} />
+                <Route path="/career" element={<CareerGuidance />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
