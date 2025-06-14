@@ -1,14 +1,13 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, Users, Download, Edit, Template, Zap } from 'lucide-react';
+import { FileText, Users, Download, Edit, Zap } from 'lucide-react';
 
 const ResumeBuilder = () => {
   const features = [
     {
-      icon: Template,
+      icon: FileText,
       title: 'Professional Templates',
       description: 'Choose from 10+ ATS-friendly templates designed specifically for students and fresh graduates.',
     },
