@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './components/ui/theme-provider';
 import { AuthProvider } from './hooks/useAuth';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ProtectedEnrolledRoute from './components/auth/ProtectedEnrolledRoute';
 import NavbarWithAI from './components/layout/NavbarWithAI';
 import Footer from './components/layout/Footer';
 import Index from './pages/Index';
@@ -27,6 +28,8 @@ import Community from './pages/Community';
 import Certification from './pages/Certification';
 import ResumeBuilder from './pages/ResumeBuilder';
 import CareerGuidance from './pages/CareerGuidance';
+import Dashboard from './pages/Dashboard';
+import Enroll from './pages/Enroll';
 import './App.css';
 
 function App() {
@@ -38,21 +41,12 @@ function App() {
             <NavbarWithAI />
             <main className="flex-grow">
               <Routes>
+                {/* Public routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/curriculum" element={<Curriculum />} />
                 <Route path="/module/:moduleSlug" element={<ModuleDetail />} />
-                <Route path="/certificates" element={
-                  <ProtectedRoute>
-                    <MyCertificates />
-                  </ProtectedRoute>
-                } />
-                <Route path="/ai-chat" element={<AIChat />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/coding-playground" element={<CodingPlayground />} />
-                <Route path="/editor" element={<EditorPage />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -62,6 +56,47 @@ function App() {
                 <Route path="/certification" element={<Certification />} />
                 <Route path="/resume-builder" element={<ResumeBuilder />} />
                 <Route path="/career" element={<CareerGuidance />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                {/* Enrollment onboarding */}
+                <Route path="/enroll" element={
+                  <ProtectedRoute>
+                    <Enroll />
+                  </ProtectedRoute>
+                } />
+                {/* Student Portal Routes (enrolled only) */}
+                <Route path="/dashboard" element={
+                  <ProtectedEnrolledRoute>
+                    <Dashboard />
+                  </ProtectedEnrolledRoute>
+                } />
+                <Route path="/certificates" element={
+                  <ProtectedEnrolledRoute>
+                    <MyCertificates />
+                  </ProtectedEnrolledRoute>
+                } />
+                <Route path="/ai-chat" element={
+                  <ProtectedEnrolledRoute>
+                    <AIChat />
+                  </ProtectedEnrolledRoute>
+                } />
+                <Route path="/editor" element={
+                  <ProtectedEnrolledRoute>
+                    <EditorPage />
+                  </ProtectedEnrolledRoute>
+                } />
+                <Route path="/coding-playground" element={
+                  <ProtectedEnrolledRoute>
+                    <CodingPlayground />
+                  </ProtectedEnrolledRoute>
+                } />
+                {/* Portal Curriculum could also be protected */}
+                <Route path="/videos" element={
+                  <ProtectedEnrolledRoute>
+                    {/* TODO: Implement Videos page */}
+                    <div className="pt-24">Videos Page Coming Soon</div>
+                  </ProtectedEnrolledRoute>
+                } />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

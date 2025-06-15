@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from "@/hooks/useAuth";
 
 type FormValues = {
   name: string;
@@ -15,23 +17,19 @@ type FormValues = {
 
 const Contact = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
+  const { user } = useAuth();
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        toast.success('Your message has been sent successfully!');
-        reset();
-      } else {
-        toast.error('Failed to send your message. Please try again.');
-      }
+      // Always store message in Supabase contact_messages
+      await supabase.from("contact_messages").insert([{
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        user_id: user?.id ?? null,
+      }]);
+      toast.success('Your message has been sent successfully!');
+      reset();
     } catch (error) {
       toast.error('An error occurred while sending your message.');
     }
@@ -55,7 +53,6 @@ const Contact = () => {
             We'd love to hear from you! Please fill out the form below to get in touch.
           </p>
         </section>
-
         <div className="max-w-lg mx-auto">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
@@ -71,7 +68,6 @@ const Contact = () => {
               />
               {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message as string}</p>}
             </div>
-
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-foreground">
                 Your Email
@@ -91,7 +87,6 @@ const Contact = () => {
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message as string}</p>}
             </div>
-
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-foreground">
                 Message
@@ -105,7 +100,6 @@ const Contact = () => {
               />
               {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message as string}</p>}
             </div>
-
             <Button type="submit" className="w-full">
               Send Message
             </Button>
