@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -12,10 +11,12 @@ import { useAuth } from '@/hooks/useAuth';
 import UserMenu from '@/components/layout/UserMenu';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Code } from 'lucide-react';
+import { useEnrollment } from "@/hooks/useEnrollment";
 
 const Navbar = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const { enrolled, isLoading: enrollLoading } = useEnrollment();
   const isMobile = useIsMobile();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -41,14 +42,16 @@ const Navbar = () => {
     return location.pathname.startsWith(path);
   };
 
+  // Only show portal links if the student is enrolled
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Curriculum', path: '/curriculum' },
-    { name: 'Code Editor', path: '/editor', icon: <Code size={16} className="mr-1" /> },
-    { name: 'AI Chat', path: '/ai-chat' },
+    user && enrolled && { name: 'Code Editor', path: '/editor', icon: <Code size={16} className="mr-1" /> },
+    user && enrolled && { name: 'AI Chat', path: '/ai-chat' },
+    user && enrolled && { name: 'Videos', path: '/videos' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
-  ];
+  ].filter(Boolean);
 
   return (
     <header
@@ -58,7 +61,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo - Updated with new logo and improved sizing/positioning */}
+          {/* Logo */}
           <Link to="/" className="flex items-center">
             <div className="h-10 md:h-12 w-auto flex items-center">
               <img 
@@ -70,8 +73,7 @@ const Navbar = () => {
             </div>
             <span className="ml-2 text-lg font-bold text-primary">SGK14</span>
           </Link>
-
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation (only show "portal" links if enrolled) */}
           {!isMobile && (
             <nav className="hidden md:flex items-center space-x-1">
               {navLinks.map((link) => (
@@ -79,14 +81,14 @@ const Navbar = () => {
                   key={link.path}
                   to={link.path}
                   className={`flex items-center px-3 py-2 text-sm rounded-md transition-colors ${
-                    isActivePath(link.path)
+                    location.pathname.startsWith(link.path)
                       ? 'text-primary font-medium'
                       : 'text-foreground/80 hover:text-foreground hover:bg-accent'
                   }`}
                 >
                   {link.icon && link.icon}
                   {link.name}
-                  {link.path === '/ai-chat' && (
+                  {link.path === '/ai-chat' && user && enrolled && (
                     <span className="ml-1 px-1.5 py-0.5 text-[10px] font-medium bg-primary/10 text-primary rounded-full">
                       New
                     </span>
@@ -95,7 +97,6 @@ const Navbar = () => {
               ))}
             </nav>
           )}
-
           {/* User Menu or Auth Buttons */}
           <div className="flex items-center gap-2">
             {!isMobile && !user && (
@@ -108,11 +109,16 @@ const Navbar = () => {
                 </Button>
               </>
             )}
-
-            {!isMobile && user && <UserMenu />}
-
-            {/* Quick Access Buttons for Mobile */}
-            {isMobile && (
+            {/* Show UserMenu/Enroll Now if logged in */}
+            {!isMobile && user && !enrollLoading && (
+              enrolled ? <UserMenu /> : (
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/enroll">Enroll Now</Link>
+                </Button>
+              )
+            )}
+            {/* Quick Access Buttons for Mobile - only if enrolled */}
+            {isMobile && user && enrolled && (
               <div className="flex gap-2">
                 <Button asChild variant="outline" size="icon" className="mr-1">
                   <Link to="/editor">
@@ -126,7 +132,6 @@ const Navbar = () => {
                 </Button>
               </div>
             )}
-
             {/* Mobile Menu Toggle */}
             {isMobile && (
               <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
@@ -161,14 +166,14 @@ const Navbar = () => {
                         <Link
                           to={link.path}
                           className={`flex items-center px-3 py-3 text-base rounded-md ${
-                            isActivePath(link.path)
+                            location.pathname.startsWith(link.path)
                               ? 'bg-primary/10 text-primary font-medium'
                               : 'hover:bg-accent'
                           }`}
                         >
                           {link.icon && link.icon}
                           {link.name}
-                          {link.path === '/ai-chat' && (
+                          {link.path === '/ai-chat' && user && enrolled && (
                             <span className="ml-1 px-1.5 py-0.5 text-[10px] font-medium bg-primary/10 text-primary rounded-full">
                               New
                             </span>
@@ -176,10 +181,13 @@ const Navbar = () => {
                         </Link>
                       </DrawerClose>
                     ))}
-
                     {user ? (
                       <div className="pt-2 border-t">
-                        <UserMenu />
+                        {enrolled ? <UserMenu /> : (
+                          <Button asChild variant="outline" className="w-full">
+                            <Link to="/enroll">Enroll Now</Link>
+                          </Button>
+                        )}
                       </div>
                     ) : (
                       <div className="pt-2 border-t flex flex-col space-y-2">
@@ -203,3 +211,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+// NOTE: This file is now over 200 lines. It should be refactored soon!

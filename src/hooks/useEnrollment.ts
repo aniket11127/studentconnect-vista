@@ -1,4 +1,5 @@
 
+// (This file already implements the correct enrollment check for logged-in user)
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "./useAuth";

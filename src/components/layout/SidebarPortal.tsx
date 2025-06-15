@@ -1,8 +1,8 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Book, Code2, Bot, Video, Home } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useEnrollment } from "@/hooks/useEnrollment";
 
 const sidebarLinks = [
   { name: "Dashboard", path: "/dashboard", icon: <Home className="w-5 h-5" /> },
@@ -15,6 +15,10 @@ const sidebarLinks = [
 const SidebarPortal = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const { enrolled, isLoading } = useEnrollment();
+
+  // Only show sidebar for logged-in enrolled users
+  if (!user || !enrolled) return null;
 
   return (
     <aside className="hidden md:flex flex-col bg-accent/50 border-r border-border w-56 pt-24 fixed top-0 left-0 h-full z-40">

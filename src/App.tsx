@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './components/ui/theme-provider';
@@ -58,13 +57,13 @@ function App() {
                 <Route path="/career" element={<CareerGuidance />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                {/* Enrollment onboarding */}
+                {/* Enrollment onboarding - must be authenticated but not enrolled */}
                 <Route path="/enroll" element={
                   <ProtectedRoute>
                     <Enroll />
                   </ProtectedRoute>
                 } />
-                {/* Student Portal Routes (enrolled only) */}
+                {/* Student Portal (auth + enrolled only) */}
                 <Route path="/dashboard" element={
                   <ProtectedEnrolledRoute>
                     <Dashboard />
@@ -90,7 +89,6 @@ function App() {
                     <CodingPlayground />
                   </ProtectedEnrolledRoute>
                 } />
-                {/* Portal Curriculum could also be protected */}
                 <Route path="/videos" element={
                   <ProtectedEnrolledRoute>
                     {/* TODO: Implement Videos page */}
