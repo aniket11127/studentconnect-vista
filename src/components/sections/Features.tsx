@@ -56,19 +56,19 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-20 bg-secondary/50">
+    <section className="section-padding-mobile bg-secondary/50">
       <div className="container">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-4">
+        <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12 lg:mb-16">
+          <h2 className="leading-tight mb-4 text-center">
             Key Features Designed for Your Success
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-center">
             Our platform offers comprehensive tools and resources tailored specifically 
             for Students to excel in their academic and professional journeys.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {features.map((feature, index) => (
             <FeatureCard
               key={index}

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   SandpackProvider,
@@ -63,7 +62,7 @@ const ThemeSwitcher = ({ currentTheme, setCurrentTheme }: {
   );
 };
 
-// WebEditor component for HTML/CSS/JS
+// WebEditor component for HTML/CSS/JS - Updated for mobile responsiveness
 const WebEditor = ({ 
   showFileExplorer = true, 
   height = "600px",
@@ -114,51 +113,58 @@ const WebEditor = ({
       theme={currentTheme}
     >
       <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-3 bg-card border-b">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-card border-b gap-2">
           <div className="flex items-center">
             <Code className="text-primary mr-2" size={20} />
-            <span className="font-medium">SGK14 Web Playground</span>
+            <span className="font-medium text-sm sm:text-base">SGK14 Web Playground</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <Button 
               variant="outline" 
               size="sm" 
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 text-xs sm:text-sm flex-1 sm:flex-none"
               onClick={handleExport}
             >
-              <Download size={16} />
+              <Download size={14} />
               Export
             </Button>
             <ThemeSwitcher currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
           </div>
         </div>
 
-        <SandpackLayout
-          className={cn("!rounded-none !border-0 flex-grow", !showFileExplorer && "!p-0")}
-          style={{ height: "calc(100% - 56px)" }} // Subtract header height
-        >
-          {showFileExplorer && (
-            <SandpackFileExplorer className="!border-r" />
-          )}
-          <SandpackStack className="flex-grow border-r border-border">
-            <SandpackCodeEditor
-              showTabs
-              showLineNumbers
-              showInlineErrors
-              wrapContent
-              closableTabs
-              showRunButton={false}
-              style={{ height: "100%" }}
-            />
-          </SandpackStack>
-          <SandpackStack className="flex-grow">
-            <SandpackPreview
-              showNavigator
-              showRefreshButton
-              style={{ height: "100%", minHeight: "100%" }}
-            />
-          </SandpackStack>
-        </SandpackLayout>
+        {/* Mobile-first responsive layout */}
+        <div className="flex flex-col md:flex-row flex-grow" style={{ height: "calc(100% - 60px)" }}>
+          {/* Mobile: Vertical stack, Desktop: Horizontal layout */}
+          <SandpackLayout
+            className={cn("!rounded-none !border-0 flex-grow flex flex-col md:flex-row", !showFileExplorer && "!p-0")}
+          >
+            {showFileExplorer && (
+              <div className="md:w-1/4 border-b md:border-b-0 md:border-r">
+                <SandpackFileExplorer className="!border-0" />
+              </div>
+            )}
+            <div className="flex flex-col md:flex-row flex-grow">
+              <SandpackStack className="flex-grow border-b md:border-b-0 md:border-r border-border min-h-[200px] md:min-h-0">
+                <SandpackCodeEditor
+                  showTabs
+                  showLineNumbers
+                  showInlineErrors
+                  wrapContent
+                  closableTabs
+                  showRunButton={false}
+                  style={{ height: "100%", fontSize: "14px" }}
+                />
+              </SandpackStack>
+              <SandpackStack className="flex-grow min-h-[200px] md:min-h-0">
+                <SandpackPreview
+                  showNavigator
+                  showRefreshButton
+                  style={{ height: "100%", minHeight: "200px" }}
+                />
+              </SandpackStack>
+            </div>
+          </SandpackLayout>
+        </div>
       </div>
     </SandpackProvider>
   );
@@ -340,8 +346,11 @@ const CodingPlayground = ({
         />
       </div>
 
-      {/* Editor section - full height */}
-      <div className="rounded-xl overflow-hidden flex-grow flex" style={{ height: defaultHeight === "100%" ? "100%" : defaultHeight }}>
+      {/* Editor section - responsive height */}
+      <div className="rounded-xl overflow-hidden flex-grow flex" style={{ 
+        height: defaultHeight === "100%" ? "100%" : defaultHeight,
+        minHeight: "400px" // Ensure minimum height on mobile
+      }}>
         {selectedLanguage === 'web' ? (
           <WebEditor 
             showFileExplorer={showFileExplorer} 

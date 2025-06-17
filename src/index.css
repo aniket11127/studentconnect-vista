@@ -77,18 +77,59 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
-  /* Modern font styling */
-  h1, h2, h3, h4, h5, h6 {
+  /* Mobile-first responsive typography */
+  h1 {
     @apply font-medium tracking-tight;
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1.2;
+  }
+  
+  h2 {
+    @apply font-medium tracking-tight;
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    line-height: 1.3;
+  }
+  
+  h3 {
+    @apply font-medium tracking-tight;
+    font-size: clamp(1.25rem, 3vw, 1.875rem);
+    line-height: 1.4;
+  }
+  
+  h4 {
+    @apply font-medium tracking-tight;
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+    line-height: 1.4;
+  }
+  
+  p {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    line-height: 1.6;
   }
   
   /* Responsive container improvements */
   .container {
-    @apply px-4 md:px-6 mx-auto;
+    @apply px-4 sm:px-6 lg:px-8 mx-auto;
+    max-width: 1280px;
+  }
+  
+  /* Mobile-first button improvements */
+  .btn-mobile {
+    @apply min-h-[44px] px-4 py-3 text-base font-medium rounded-lg transition-all duration-200;
+    min-width: 120px;
   }
   
   /* Glassmorphism effect */
   .glass {
     @apply bg-background/80 backdrop-blur-md border border-border/50;
+  }
+  
+  /* Mobile spacing utilities */
+  .section-padding-mobile {
+    @apply py-8 sm:py-12 lg:py-16;
+  }
+  
+  .card-padding-mobile {
+    @apply p-4 sm:p-5 lg:p-6;
   }
 }
