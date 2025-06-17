@@ -18,7 +18,7 @@ const FeatureCard = ({
   return (
     <div
       className={cn(
-        'group p-6 rounded-2xl border border-border bg-card hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300 flex flex-col items-start gap-5',
+        'group p-6 rounded-2xl border border-border bg-card hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300 flex flex-col items-center text-center gap-5',
         className
       )}
     >
