@@ -93,26 +93,28 @@ export const CodeEditorToolbar = ({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 bg-card border-b">
-      <div className="flex items-center gap-2">
-        <span className="font-medium capitalize">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 md:p-4 bg-card border-b gap-3 sm:gap-2">
+      <div className="flex items-center gap-2 w-full sm:w-auto">
+        <span className="font-medium capitalize text-sm md:text-base">
           {language} Playground
         </span>
-        <ExecutionStatus
-          isExecuting={isExecuting}
-          output={output}
-          error={error}
-          executionTime={executionTime}
-          memory={memory}
-        />
+        <div className="hidden sm:block">
+          <ExecutionStatus
+            isExecuting={isExecuting}
+            output={output}
+            error={error}
+            executionTime={executionTime}
+            memory={memory}
+          />
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
         {/* Settings Popover */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <Settings size={16} />
+            <Button variant="outline" size="sm" className="h-9 w-9 md:h-10 md:w-10">
+              <Settings size={14} className="md:w-4 md:h-4" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64">
@@ -152,7 +154,7 @@ export const CodeEditorToolbar = ({
           </PopoverContent>
         </Popover>
 
-        <Separator orientation="vertical" className="h-6" />
+        <Separator orientation="vertical" className="h-6 hidden sm:block" />
 
         {/* File Operations */}
         <input
@@ -165,70 +167,82 @@ export const CodeEditorToolbar = ({
         
         <Button
           variant="outline"
-          size="icon"
-          className="h-8 w-8"
+          size="sm"
+          className="h-9 w-9 md:h-10 md:w-10 min-h-[44px] sm:min-h-0"
           onClick={() => document.getElementById('file-upload')?.click()}
           title="Upload File"
         >
-          <FileUp size={16} />
+          <FileUp size={14} className="md:w-4 md:h-4" />
         </Button>
 
         <Button
           variant="outline"
-          size="icon"
-          className="h-8 w-8"
+          size="sm"
+          className="h-9 w-9 md:h-10 md:w-10 min-h-[44px] sm:min-h-0"
           onClick={onDownload}
           title="Download Code"
         >
-          <Download size={16} />
+          <Download size={14} className="md:w-4 md:h-4" />
         </Button>
 
         <Button
           variant="outline"
-          size="icon"
-          className="h-8 w-8"
+          size="sm"
+          className="h-9 w-9 md:h-10 md:w-10 min-h-[44px] sm:min-h-0"
           onClick={handleCopyCode}
           title="Copy Code"
         >
-          <Copy size={16} />
+          <Copy size={14} className="md:w-4 md:h-4" />
         </Button>
 
         <Button
           variant="outline"
-          size="icon"
-          className="h-8 w-8"
+          size="sm"
+          className="h-9 w-9 md:h-10 md:w-10 min-h-[44px] sm:min-h-0"
           onClick={handleClearCode}
           title="Clear Code"
         >
-          <RotateCcw size={16} />
+          <RotateCcw size={14} className="md:w-4 md:h-4" />
         </Button>
 
-        <Separator orientation="vertical" className="h-6" />
+        <Separator orientation="vertical" className="h-6 hidden sm:block" />
 
         {/* Execute Button */}
         <Button
-          className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
+          className="flex items-center gap-1 bg-green-600 hover:bg-green-700 px-3 py-2 md:px-4 md:py-2 min-h-[44px] text-sm md:text-base"
           onClick={onExecute}
           disabled={isExecuting}
         >
           {isExecuting ? (
-            <Loader size={16} className="animate-spin" />
+            <Loader size={14} className="animate-spin md:w-4 md:h-4" />
           ) : (
-            <Play size={16} />
+            <Play size={14} className="md:w-4 md:h-4" />
           )}
-          Run Code
+          <span className="hidden sm:inline">Run Code</span>
+          <span className="sm:hidden">Run</span>
         </Button>
 
         {/* Theme Toggle */}
         <Button
           variant="outline"
-          size="icon"
-          className="h-8 w-8"
+          size="sm"
+          className="h-9 w-9 md:h-10 md:w-10 min-h-[44px] sm:min-h-0"
           onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
           title="Toggle Theme"
         >
-          {currentTheme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+          {currentTheme === 'light' ? <Moon size={14} className="md:w-4 md:h-4" /> : <Sun size={14} className="md:w-4 md:h-4" />}
         </Button>
+      </div>
+
+      {/* Mobile execution status */}
+      <div className="sm:hidden w-full">
+        <ExecutionStatus
+          isExecuting={isExecuting}
+          output={output}
+          error={error}
+          executionTime={executionTime}
+          memory={memory}
+        />
       </div>
     </div>
   );
