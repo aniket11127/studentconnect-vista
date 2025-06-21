@@ -47,6 +47,7 @@ export const ExecutionPanel = ({
     setTabSize,
 }: ExecutionPanelProps) => {
     const [activeTab, setActiveTab] = useState<string>("input");
+    const [showMobileToggle, setShowMobileToggle] = useState<boolean>(false);
     const [executionStats, setExecutionStats] = useState<{
         time: number;
         memory: number;
@@ -127,13 +128,13 @@ export const ExecutionPanel = ({
                     description: result.error,
                     variant: "destructive",
                 });
-                setActiveTab("output"); // Switch to output tab to show error
+                setActiveTab("output");
             } else {
                 setExecutionStats({
                     time: result.executionTime,
                     memory: result.memory,
                 });
-                setActiveTab("output"); // Switch to output tab to show results
+                setActiveTab("output");
             }
 
             propExecuteCode();
@@ -149,17 +150,17 @@ export const ExecutionPanel = ({
     const displayOutput = () => {
         if (error) {
             return (
-                <div className="text-red-500 font-mono">
+                <div className="text-red-500 font-mono text-sm">
                     <div className="font-semibold mb-2">❌ Execution Error:</div>
-                    <pre className="whitespace-pre-wrap">{error}</pre>
+                    <pre className="whitespace-pre-wrap text-xs sm:text-sm">{error}</pre>
                 </div>
             );
         }
         if (output) {
             return (
                 <div>
-                    <div className="text-green-600 font-semibold mb-2">✅ Output:</div>
-                    <pre className="whitespace-pre-wrap font-mono">{output}</pre>
+                    <div className="text-green-600 font-semibold mb-2 text-sm">✅ Output:</div>
+                    <pre className="whitespace-pre-wrap font-mono text-xs sm:text-sm">{output}</pre>
                     {executionStats && (
                         <div className="mt-4 pt-2 border-t text-xs text-muted-foreground">
                             <div>⏱️ Execution Time: {executionStats.time}ms</div>
@@ -172,13 +173,14 @@ export const ExecutionPanel = ({
         return (
             <div className="text-muted-foreground text-center py-8">
                 <div className="text-4xl mb-2">🚀</div>
-                <div>Run your code to see the output here</div>
+                <div className="text-sm">Run your code to see the output here</div>
             </div>
         );
     };
 
     return (
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full flex flex-col bg-background">
+            {/* Responsive Toolbar */}
             <CodeEditorToolbar
                 language={language}
                 code={code}
@@ -199,7 +201,8 @@ export const ExecutionPanel = ({
                 memory={executionStats?.memory}
             />
 
-            <div className="p-3 md:p-4">
+            {/* Code Templates */}
+            <div className="px-3 py-2 border-b bg-card/50">
                 <CodeTemplates
                     language={language}
                     onTemplateSelect={(templateCode) => {
@@ -212,31 +215,55 @@ export const ExecutionPanel = ({
                 />
             </div>
 
-            {/* Mobile-first responsive layout */}
-            <div className="flex flex-col md:grid md:grid-cols-2 gap-0 flex-grow h-full">
-                {/* Code Editor */}
-                <div
-                    className={`order-1 md:order-1 border-b md:border-b-0 md:border-r ${
-                        currentTheme === "dark" ? "bg-gray-900" : "bg-white"
-                    } min-h-[300px] md:min-h-0`}
-                    style={{ height: "auto", minHeight: "300px" }}
+            {/* Mobile Toggle for Editor/Output */}
+            <div className="sm:hidden p-2 border-b bg-card">
+                <div className="flex gap-2">
+                    <Button
+                        variant={!showMobileToggle ? "default" : "outline"}
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => setShowMobileToggle(false)}
+                    >
+                        📝 Editor
+                    </Button>
+                    <Button
+                        variant={showMobileToggle ? "default" : "outline"}
+                        size="sm"
+                        className="flex-1"
+                        onClick={() => setShowMobileToggle(true)}
+                    >
+                        📤 Output
+                        {error && <span className="ml-1 text-red-500">•</span>}
+                        {output && !error && <span className="ml-1 text-green-500">•</span>}
+                    </Button>
+                </div>
+            </div>
+
+            {/* Main Content Area - Responsive Grid */}
+            <div className="flex-1 flex flex-col sm:grid sm:grid-cols-2 gap-0 min-h-0">
+                {/* Code Editor Section */}
+                <div 
+                    className={`flex flex-col min-h-0 border-b sm:border-b-0 sm:border-r border-border bg-background ${
+                        showMobileToggle ? 'hidden sm:flex' : 'flex'
+                    }`}
                 >
-                    <div className="p-2 md:p-3 border-b text-xs md:text-sm text-muted-foreground bg-card">
-                        💻 Code Editor - Scroll horizontally if needed
+                    <div className="p-2 border-b text-xs text-muted-foreground bg-card/30">
+                        💻 Code Editor
                     </div>
-                    <div className="relative h-full">
+                    <div className="flex-1 relative min-h-0">
                         <textarea
-                            className={`w-full h-full p-3 md:p-4 font-mono focus:outline-none resize-none ${
+                            className={`w-full h-full p-3 font-mono focus:outline-none resize-none border-0 ${
                                 currentTheme === "dark"
                                     ? "bg-gray-900 text-white"
                                     : "bg-white text-black"
-                            } min-h-[250px]`}
+                            }`}
                             style={{ 
-                                fontSize: `${Math.max(fontSize - 2, 12)}px`, 
+                                fontSize: `${Math.max(fontSize - 3, 11)}px`,
                                 tabSize: tabSize,
-                                lineHeight: 1.5,
-                                overflowX: "auto",
-                                whiteSpace: "pre"
+                                lineHeight: 1.4,
+                                whiteSpace: "pre-wrap",
+                                wordWrap: "break-word",
+                                fontFamily: "Monaco, Menlo, 'Ubuntu Mono', monospace"
                             }}
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
@@ -248,71 +275,71 @@ export const ExecutionPanel = ({
                     </div>
                 </div>
 
-                {/* Input/Output Tabs */}
-                <div
-                    className={`order-2 md:order-2 ${
-                        currentTheme === "dark"
-                            ? "bg-gray-900 text-white"
-                            : "bg-white text-black"
-                    } flex flex-col h-auto md:h-full border-t md:border-t-0 md:border-l border-border min-h-[300px]`}
+                {/* Input/Output Section */}
+                <div 
+                    className={`flex flex-col min-h-0 bg-background ${
+                        !showMobileToggle ? 'hidden sm:flex' : 'flex'
+                    }`}
                 >
                     <Tabs
                         value={activeTab}
                         onValueChange={setActiveTab}
-                        className="w-full h-full flex flex-col"
+                        className="w-full h-full flex flex-col min-h-0"
                     >
-                        <TabsList className="w-full grid grid-cols-2 m-2 md:m-3 rounded-lg h-10 md:h-12">
-                            <TabsTrigger 
-                                value="input" 
-                                className="text-xs md:text-sm px-2 md:px-3 py-2 md:py-3 min-h-[40px] md:min-h-[44px]"
-                            >
-                                📝 Input
-                            </TabsTrigger>
-                            <TabsTrigger 
-                                value="output"
-                                className="text-xs md:text-sm px-2 md:px-3 py-2 md:py-3 min-h-[40px] md:min-h-[44px]"
-                            >
-                                📤 Output
-                                {error && (
-                                    <span className="ml-1 text-red-500">•</span>
-                                )}
-                                {output && !error && (
-                                    <span className="ml-1 text-green-500">•</span>
-                                )}
-                            </TabsTrigger>
-                        </TabsList>
+                        {/* Horizontal Scrollable Tabs */}
+                        <div className="border-b bg-card/30 overflow-x-auto">
+                            <TabsList className="w-full sm:w-auto grid grid-cols-2 sm:inline-flex h-10 m-2 rounded-lg">
+                                <TabsTrigger 
+                                    value="input" 
+                                    className="text-xs sm:text-sm px-2 sm:px-4 py-2 whitespace-nowrap"
+                                >
+                                    📝 Input
+                                </TabsTrigger>
+                                <TabsTrigger 
+                                    value="output"
+                                    className="text-xs sm:text-sm px-2 sm:px-4 py-2 whitespace-nowrap"
+                                >
+                                    📤 Output
+                                    {error && <span className="ml-1 text-red-500">•</span>}
+                                    {output && !error && <span className="ml-1 text-green-500">•</span>}
+                                </TabsTrigger>
+                            </TabsList>
+                        </div>
+
+                        {/* Tab Content */}
                         <TabsContent
                             value="input"
-                            className="p-0 flex-grow h-full mx-2 md:mx-3 mb-2 md:mb-3 mt-0"
+                            className="flex-1 p-0 m-0 min-h-0"
                         >
-                            <div className="p-2 md:p-3 border-b text-xs md:text-sm text-muted-foreground bg-accent/20 rounded-t">
-                                💡 Enter input data for your program (stdin)
+                            <div className="h-full flex flex-col">
+                                <div className="p-2 border-b text-xs text-muted-foreground bg-accent/20">
+                                    💡 Enter input data for your program (stdin)
+                                </div>
+                                <textarea
+                                    className={`flex-1 p-3 font-mono text-xs sm:text-sm focus:outline-none resize-none border-0 ${
+                                        currentTheme === "dark"
+                                            ? "bg-gray-900 text-white"
+                                            : "bg-white text-black"
+                                    }`}
+                                    style={{ 
+                                        fontSize: `${Math.max(fontSize - 3, 11)}px`,
+                                        fontFamily: "Monaco, Menlo, 'Ubuntu Mono', monospace",
+                                        whiteSpace: "pre-wrap"
+                                    }}
+                                    placeholder="Enter input here (each line will be sent to your program)..."
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    spellCheck={false}
+                                />
                             </div>
-                            <textarea
-                                className={`w-full p-3 md:p-4 font-mono text-xs md:text-sm focus:outline-none resize-none border rounded-b ${
-                                    currentTheme === "dark"
-                                        ? "bg-gray-900 text-white border-gray-700"
-                                        : "bg-white text-black border-gray-200"
-                                } min-h-[200px]`}
-                                style={{ 
-                                    fontSize: `${Math.max(fontSize - 2, 12)}px`,
-                                    height: "calc(100% - 50px)"
-                                }}
-                                placeholder="Enter input here (each line will be sent to your program)..."
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                spellCheck={false}
-                            />
                         </TabsContent>
+
                         <TabsContent
                             value="output"
-                            className="p-0 flex-grow h-full mx-2 md:mx-3 mb-2 md:mb-3 mt-0"
+                            className="flex-1 p-0 m-0 min-h-0"
                         >
-                            <ScrollArea className="h-full border rounded">
-                                <div
-                                    className="w-full p-3 md:p-4 text-xs md:text-sm min-h-[200px]"
-                                    style={{ fontSize: `${Math.max(fontSize - 2, 12)}px` }}
-                                >
+                            <ScrollArea className="h-full">
+                                <div className="p-3 text-xs sm:text-sm min-h-full">
                                     {displayOutput()}
                                 </div>
                             </ScrollArea>
@@ -321,12 +348,13 @@ export const ExecutionPanel = ({
                 </div>
             </div>
 
-            <div className="p-2 md:p-3 text-xs text-muted-foreground border-t mt-auto bg-card">
+            {/* Status Bar */}
+            <div className="p-2 text-xs text-muted-foreground border-t bg-card/30">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                    <span className="text-center sm:text-left">
-                        📄 {language.toUpperCase()} • {code.split("\n").length} lines • {code.length} characters
+                    <span>
+                        📄 {language.toUpperCase()} • {code.split("\n").length} lines • {code.length} chars
                     </span>
-                    <span className="flex items-center gap-1 text-center sm:text-right">
+                    <span className="flex items-center gap-1">
                         {isExecuting ? (
                             <>⏳ Running...</>
                         ) : output && !error ? (

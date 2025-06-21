@@ -62,7 +62,7 @@ const ThemeSwitcher = ({ currentTheme, setCurrentTheme }: {
   );
 };
 
-// WebEditor component for HTML/CSS/JS - Updated for mobile responsiveness
+// WebEditor component for HTML/CSS/JS - Fully responsive
 const WebEditor = ({ 
   showFileExplorer = true, 
   height = "600px",
@@ -76,7 +76,6 @@ const WebEditor = ({
 }) => {
   const handleExport = () => {
     try {
-      // Create a zip file with all web files
       const zip = new JSZip();
       zip.file("index.html", defaultFiles['/index.html']);
       zip.file("styles.css", defaultFiles['/styles.css']);
@@ -84,7 +83,6 @@ const WebEditor = ({
       
       zip.generateAsync({ type: "blob" })
         .then(function(content) {
-          // Create a download link and trigger it
           const link = document.createElement('a');
           link.href = URL.createObjectURL(content);
           link.download = "web-project.zip";
@@ -112,17 +110,18 @@ const WebEditor = ({
       files={defaultFiles}
       theme={currentTheme}
     >
-      <div className="flex flex-col h-full">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-card border-b gap-2">
+      <div className="flex flex-col h-full w-full">
+        {/* Responsive Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 bg-card border-b gap-3 sm:gap-2">
           <div className="flex items-center">
             <Code className="text-primary mr-2" size={20} />
             <span className="font-medium text-sm sm:text-base">SGK14 Web Playground</span>
           </div>
-          <div className="flex gap-2 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Button 
               variant="outline" 
               size="sm" 
-              className="flex items-center gap-1 text-xs sm:text-sm flex-1 sm:flex-none"
+              className="flex items-center gap-1 text-xs sm:text-sm w-full sm:w-auto justify-center"
               onClick={handleExport}
             >
               <Download size={14} />
@@ -132,36 +131,50 @@ const WebEditor = ({
           </div>
         </div>
 
-        {/* Mobile-first responsive layout */}
-        <div className="flex flex-col md:flex-row flex-grow" style={{ height: "calc(100% - 60px)" }}>
-          {/* Mobile: Vertical stack, Desktop: Horizontal layout */}
-          <SandpackLayout
-            className={cn("!rounded-none !border-0 flex-grow flex flex-col md:flex-row", !showFileExplorer && "!p-0")}
-          >
+        {/* Responsive Layout Container */}
+        <div className="flex-1 flex flex-col lg:flex-row h-full min-h-0">
+          <SandpackLayout className="flex-1 !rounded-none !border-0 !p-0 flex flex-col lg:flex-row min-h-0">
+            {/* File Explorer - Mobile: collapsed, Desktop: sidebar */}
             {showFileExplorer && (
-              <div className="md:w-1/4 border-b md:border-b-0 md:border-r">
-                <SandpackFileExplorer className="!border-0" />
+              <div className="lg:w-64 lg:min-w-64 border-b lg:border-b-0 lg:border-r border-border">
+                <SandpackFileExplorer className="!border-0 h-full" />
               </div>
             )}
-            <div className="flex flex-col md:flex-row flex-grow">
-              <SandpackStack className="flex-grow border-b md:border-b-0 md:border-r border-border min-h-[200px] md:min-h-0">
-                <SandpackCodeEditor
-                  showTabs
-                  showLineNumbers
-                  showInlineErrors
-                  wrapContent
-                  closableTabs
-                  showRunButton={false}
-                  style={{ height: "100%", fontSize: "14px" }}
-                />
-              </SandpackStack>
-              <SandpackStack className="flex-grow min-h-[200px] md:min-h-0">
-                <SandpackPreview
-                  showNavigator
-                  showRefreshButton
-                  style={{ height: "100%", minHeight: "200px" }}
-                />
-              </SandpackStack>
+            
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col lg:flex-row min-h-0">
+              {/* Code Editor */}
+              <div className="flex-1 lg:flex-[1] min-h-0 border-b lg:border-b-0 lg:border-r border-border">
+                <SandpackStack className="h-full">
+                  <SandpackCodeEditor
+                    showTabs
+                    showLineNumbers
+                    showInlineErrors
+                    wrapContent
+                    closableTabs
+                    showRunButton={false}
+                    style={{ 
+                      height: "100%", 
+                      fontSize: "13px",
+                      fontFamily: "Monaco, Menlo, 'Ubuntu Mono', monospace"
+                    }}
+                  />
+                </SandpackStack>
+              </div>
+              
+              {/* Preview Panel */}
+              <div className="flex-1 lg:flex-[1] min-h-0">
+                <SandpackStack className="h-full">
+                  <SandpackPreview
+                    showNavigator
+                    showRefreshButton
+                    style={{ 
+                      height: "100%",
+                      minHeight: "300px"
+                    }}
+                  />
+                </SandpackStack>
+              </div>
             </div>
           </SandpackLayout>
         </div>
@@ -192,7 +205,6 @@ const CodingPlayground = ({
     setOutput('');
     setError(null);
     
-    // Set default code for the selected language
     if (language !== 'web') {
       const defaultCode = languageOptions.find(lang => lang.id === language)?.defaultCode || '';
       setCode(defaultCode);
@@ -208,8 +220,6 @@ const CodingPlayground = ({
     setOutput('');
     
     try {
-      // For real execution, we would use Judge0 API or similar
-      // This is a more dynamic simulation for demonstration
       const executeResult = executePythonCode(code, input, selectedLanguage);
       setTimeout(() => {
         setOutput(executeResult.output);
@@ -217,7 +227,7 @@ const CodingPlayground = ({
           setError(executeResult.error);
         }
         setIsExecuting(false);
-      }, 800); // Simulate execution delay
+      }, 800);
       
     } catch (err) {
       setError('An error occurred while executing your code.');
@@ -225,32 +235,27 @@ const CodingPlayground = ({
     }
   };
   
-  // This function simulates code execution based on the actual code content
+  // Execute simulation function
   const executePythonCode = (code: string, input: string, language: CodeLanguage) => {
     let result = {
       output: '',
       error: null as string | null
     };
     
-    // Parse the actual code to provide dynamic responses
     if (language === 'python') {
-      // Check for print statements in the code
       const printMatches = code.match(/print\s*\((.*)\)/g);
       
       if (printMatches) {
-        // Extract content from print statements
         const printContents = printMatches.map(match => {
           const content = match.match(/print\s*\((.*)\)/)?.[1];
           if (content) {
-            // Simple string extraction (not a real parser)
             if (content.startsWith('"') && content.endsWith('"')) {
-              return content.slice(1, -1); // Remove quotes
+              return content.slice(1, -1);
             } else if (content.startsWith("'") && content.endsWith("'")) {
-              return content.slice(1, -1); // Remove quotes
+              return content.slice(1, -1);
             } else if (!isNaN(Number(content))) {
-              return content; // Number
+              return content;
             } else {
-              // Simple variable simulation
               if (content === 'input()' && input.trim()) {
                 return input.trim();
               }
@@ -269,20 +274,16 @@ const CodingPlayground = ({
         result.error = "No output generated. Did you forget to use print()?";
       }
       
-      // Simple syntax error checking
       if (code.includes('print(') && !code.includes(')')) {
         result.error = "SyntaxError: unexpected EOF while parsing";
         result.output = "";
       }
       
-      // Check for input usage
       if (code.includes('input(') && input.trim()) {
-        // Simple simulation of input
         const lines = input.split('\n');
         result.output = `Using input: ${lines[0]}\n${result.output}`;
       }
     } else if (language === 'java') {
-      // Similar parsing for Java
       if (code.includes('System.out.print')) {
         const printMatches = code.match(/System\.out\.print(?:ln)?\s*\((.*)\)/g);
         if (printMatches) {
@@ -296,10 +297,8 @@ const CodingPlayground = ({
         result.error = "No output generated. Did you use System.out.print?";
       }
     } else if (language === 'c' || language === 'cpp') {
-      // Simple C/C++ parsing
       if (code.includes('printf') || code.includes('cout')) {
         result.output = "Output from C/C++ code (simulated)";
-        // Extract from printf or cout statements
         if (language === 'c' && code.match(/printf\s*\("(.*)"\)/)) {
           result.output = code.match(/printf\s*\("(.*)"\)/)?.[1] || "C output";
         } else if (language === 'cpp' && code.match(/cout\s*<<\s*"(.*)"/)) {
@@ -310,7 +309,6 @@ const CodingPlayground = ({
       }
     } else if (language === 'sql') {
       if (code.toLowerCase().includes('select')) {
-        // Extract table name from query to customize response
         const tableMatch = code.match(/from\s+(\w+)/i);
         const tableName = tableMatch ? tableMatch[1] : "table";
         result.output = `Query executed on ${tableName}:\n\nid | name | value\n--------------------\n1  | data1 | 100\n2  | data2 | 200`;
@@ -337,24 +335,27 @@ const CodingPlayground = ({
   }, [selectedLanguage, code]);
   
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Language selector */}
-      <div className="mb-4">
+    <div className="w-full h-full flex flex-col bg-background">
+      {/* Language selector - full width on mobile */}
+      <div className="p-3 sm:p-4 border-b bg-card">
         <LanguageSelector 
           selectedLanguage={selectedLanguage}
           onLanguageChange={handleLanguageChange}
         />
       </div>
 
-      {/* Editor section - responsive height */}
-      <div className="rounded-xl overflow-hidden flex-grow flex" style={{ 
-        height: defaultHeight === "100%" ? "100%" : defaultHeight,
-        minHeight: "400px" // Ensure minimum height on mobile
-      }}>
+      {/* Main Editor Container */}
+      <div 
+        className="flex-1 flex flex-col min-h-0 w-full"
+        style={{ 
+          height: defaultHeight === "100%" ? "100%" : `calc(${defaultHeight} - 80px)`,
+          minHeight: "500px"
+        }}
+      >
         {selectedLanguage === 'web' ? (
           <WebEditor 
             showFileExplorer={showFileExplorer} 
-            height={"100%"}
+            height="100%"
             currentTheme={currentTheme}
             setCurrentTheme={setCurrentTheme}
           />
@@ -371,7 +372,7 @@ const CodingPlayground = ({
             executeCode={executeCode}
             currentTheme={currentTheme}
             setCurrentTheme={setCurrentTheme}
-            height={"100%"}
+            height="100%"
             fontSize={fontSize}
             setFontSize={setFontSize}
             tabSize={tabSize}
