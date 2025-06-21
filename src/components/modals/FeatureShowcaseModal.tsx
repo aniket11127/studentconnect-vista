@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { X, Code, MessageCircle, Play, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
 
 interface FeatureShowcaseModalProps {
   isOpen: boolean;
@@ -33,25 +32,22 @@ const FeatureShowcaseModal = ({ isOpen, onClose }: FeatureShowcaseModalProps) =>
     }
   ];
 
-  const handleCloseAttempt = () => {
-    toast.error("Please log in to access SGK14 tools.");
-  };
-
   return (
-    <Dialog open={isOpen} onOpenChange={() => {}}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className="sm:max-w-[400px] max-w-[90vw] w-full p-0 bg-white rounded-2xl shadow-2xl border-0 overflow-hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        className="sm:max-w-[450px] max-w-[90vw] w-full p-0 bg-white rounded-[18px] shadow-2xl border-0 overflow-hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
         style={{
           boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
-          borderRadius: '16px'
+          borderRadius: '18px'
         }}
       >
         {/* Close button */}
         <button
-          onClick={handleCloseAttempt}
-          className="absolute right-4 top-4 z-10 p-1.5 rounded-full bg-gray-100/80 hover:bg-gray-200/80 transition-colors"
+          onClick={onClose}
+          className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/80 hover:bg-white transition-all duration-200 hover:shadow-sm"
+          style={{ top: '12px', right: '12px' }}
         >
-          <X className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+          <X className="w-4 h-4 text-gray-400 hover:text-gray-600 transition-colors" />
         </button>
 
         {/* Compact header with gradient background */}
