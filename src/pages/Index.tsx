@@ -16,7 +16,7 @@ const Index = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Show modal for non-logged-in users after 7 seconds with session storage check
+  // Show modal for non-logged-in users after 6 seconds with session storage check
   useEffect(() => {
     if (!loading && !user) {
       // Check if popup was already closed in this session
@@ -25,7 +25,7 @@ const Index = () => {
       if (!popupClosed) {
         const timer = setTimeout(() => {
           setShowModal(true);
-        }, 7000); // Show modal after 7 seconds
+        }, 6000); // Show modal after 6 seconds
 
         return () => clearTimeout(timer);
       }

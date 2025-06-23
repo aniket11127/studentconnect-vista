@@ -132,4 +132,19 @@
   .card-padding-mobile {
     @apply p-4 sm:p-5 lg:p-6;
   }
+
+  /* Mobile-specific positioning for modal */
+  @media (max-width: 640px) {
+    .mobile\:top-auto {
+      top: auto !important;
+    }
+    
+    .mobile\:bottom-4 {
+      bottom: 1rem !important;
+    }
+    
+    .mobile\:translate-y-0 {
+      transform: translateX(-50%) translateY(0) !important;
+    }
+  }
 }
