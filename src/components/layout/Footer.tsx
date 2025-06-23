@@ -30,12 +30,12 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-secondary/50 py-16">
+    <footer className="bg-secondary/50 py-12 lg:py-16 mt-8">
       <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Logo and info - Updated with new logo */}
-          <div className="space-y-5">
-            <Link to="/" className="flex items-center gap-2 font-bold text-xl" aria-label="SGK14 - Home">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          {/* Logo and info - Updated contact information */}
+          <div className="space-y-5 text-center md:text-left">
+            <Link to="/" className="flex items-center justify-center md:justify-start gap-2 font-bold text-xl" aria-label="SGK14 - Home">
               <div className="h-12 w-auto">
                 <img 
                   src="/lovable-uploads/a7b92d72-5b5a-4c45-b8d6-df9a520a09df.png" 
@@ -47,27 +47,49 @@ const Footer = () => {
               </div>
               <span className="text-primary font-semibold">SGK14</span>
             </Link>
-            <p className="text-muted-foreground text-sm max-w-xs">
+            <p className="text-muted-foreground text-sm max-w-xs mx-auto md:mx-0">
               Empowering MP Board students with essential digital skills and career guidance for a successful future.
             </p>
-            <div className="space-y-2 text-sm">
-              <a href="mailto:info@sgk14.com" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="Email us">
-                <Mail size={16} className="text-primary" />
-                info@sgk14.com
+            <div className="space-y-3 text-sm">
+              <a 
+                href="mailto:info.sgk14@gmail.com" 
+                className="flex items-center justify-center md:justify-start gap-3 text-muted-foreground hover:text-foreground hover:underline transition-all duration-200" 
+                aria-label="Email us"
+                target="_blank"
+                rel="noopener"
+              >
+                <Mail size={18} className="text-primary flex-shrink-0" />
+                <span>info.sgk14@gmail.com</span>
               </a>
-              <a href="tel:+919876543210" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="Call us">
-                <Phone size={16} className="text-primary" />
-                +91 98765 43210
+              <a 
+                href="tel:+917869094321" 
+                className="flex items-center justify-center md:justify-start gap-3 text-muted-foreground hover:text-foreground hover:underline transition-all duration-200" 
+                aria-label="Call us"
+                target="_blank"
+                rel="noopener"
+              >
+                <Phone size={18} className="text-primary flex-shrink-0" />
+                <span>+91 78690 94321</span>
               </a>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <MapPin size={16} className="text-primary" />
-                Indore, Madhya Pradesh
+              <div className="flex items-center justify-center md:justify-start gap-3 text-muted-foreground">
+                <MapPin size={18} className="text-primary flex-shrink-0" />
+                <span>Vijay Nagar, Indore, Madhya Pradesh</span>
+              </div>
+            </div>
+            
+            {/* Privacy Verified Badge */}
+            <div className="flex items-center justify-center md:justify-start gap-2 pt-2">
+              <div className="flex items-center gap-1.5 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium border border-green-200">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Privacy Verified
               </div>
             </div>
           </div>
 
           {/* Company links */}
-          <div>
+          <div className="text-center md:text-left">
             <h3 className="font-medium text-base mb-5">Company</h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -84,7 +106,7 @@ const Footer = () => {
           </div>
 
           {/* Skills links - Replaced Courses with Skills */}
-          <div>
+          <div className="text-center md:text-left">
             <h3 className="font-medium text-base mb-5">Skills</h3>
             <ul className="space-y-3">
               {footerLinks.skills.map((link) => (
@@ -101,7 +123,7 @@ const Footer = () => {
           </div>
 
           {/* Resources links */}
-          <div>
+          <div className="text-center md:text-left">
             <h3 className="font-medium text-base mb-5">Resources</h3>
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
@@ -118,8 +140,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-12 lg:mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground text-center md:text-left">
             © {currentYear} SGK14. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
