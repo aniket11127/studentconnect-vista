@@ -16,16 +16,27 @@ const Index = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Show modal for non-logged-in users after a short delay
+  // Show modal for non-logged-in users after 7 seconds with session storage check
   useEffect(() => {
     if (!loading && !user) {
-      const timer = setTimeout(() => {
-        setShowModal(true);
-      }, 1500); // Show modal after 1.5 seconds
+      // Check if popup was already closed in this session
+      const popupClosed = sessionStorage.getItem('popupClosed');
+      
+      if (!popupClosed) {
+        const timer = setTimeout(() => {
+          setShowModal(true);
+        }, 7000); // Show modal after 7 seconds
 
-      return () => clearTimeout(timer);
+        return () => clearTimeout(timer);
+      }
     }
   }, [user, loading]);
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    // Set session storage flag to prevent showing again in same session
+    sessionStorage.setItem('popupClosed', 'true');
+  };
 
   return (
     <div>
@@ -37,7 +48,7 @@ const Index = () => {
       {/* Feature Showcase Modal for non-logged-in users */}
       <FeatureShowcaseModal 
         isOpen={showModal} 
-        onClose={() => setShowModal(false)} 
+        onClose={handleCloseModal} 
       />
     </div>
   );
