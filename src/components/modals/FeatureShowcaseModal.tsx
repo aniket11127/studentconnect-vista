@@ -66,7 +66,7 @@ const FeatureShowcaseModal = ({ isOpen, onClose }: FeatureShowcaseModalProps) =>
               🚀 Get Full Access in Just 1 Step!
             </DialogTitle>
             <p className="text-center text-white/95 text-sm leading-relaxed">
-              Thousands of MP Board students are already learning.
+              Thousands of students are already learning.
             </p>
           </DialogHeader>
         </div>
