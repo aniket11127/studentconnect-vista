@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './components/ui/theme-provider';
@@ -15,6 +16,7 @@ import MyCertificates from './pages/MyCertificates';
 import AIChat from './pages/AIChat';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 import CodingPlayground from './pages/CodingPlayground';
 import EditorPage from './pages/EditorPage';
@@ -61,6 +63,12 @@ function App() {
                 <Route path="/enroll" element={
                   <ProtectedRoute>
                     <Enroll />
+                  </ProtectedRoute>
+                } />
+                {/* Profile page - authenticated users only */}
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Profile />
                   </ProtectedRoute>
                 } />
                 {/* Student Portal (auth + enrolled only) */}
