@@ -36,15 +36,17 @@ const FeatureShowcaseModal = ({ isOpen, onClose }: FeatureShowcaseModalProps) =>
   ];
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose} modal={false}>
       <DialogContent 
-        className="sm:max-w-[450px] max-w-[95vw] w-full max-h-[90vh] overflow-y-auto p-0 bg-white border-0 shadow-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mobile:top-auto mobile:bottom-4 mobile:translate-y-0 animate-fade-in"
+        className="sm:max-w-[450px] max-w-[95vw] w-full max-h-[90vh] overflow-y-auto p-0 bg-white border-0 shadow-2xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mobile:top-auto mobile:bottom-4 mobile:translate-y-0 mobile:left-1/2 mobile:-translate-x-1/2 animate-fade-in z-50"
         style={{
           borderRadius: '16px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.15), 0 8px 16px rgba(0,0,0,0.1)',
           animationDelay: '0.3s',
           animationFillMode: 'both'
         }}
+        onPointerDownOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
       >
         {/* Close button positioned outside header */}
         <button

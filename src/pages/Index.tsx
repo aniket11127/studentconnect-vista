@@ -16,17 +16,32 @@ const Index = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Show modal for non-logged-in users after 6 seconds with session storage check
+  // Show modal for non-logged-in users after 7 seconds with session storage check
   useEffect(() => {
     if (!loading && !user) {
-      // Check if popup was already closed in this session
-      const popupClosed = sessionStorage.getItem('popupClosed');
+      // Check if popup was already shown in this session
+      const popupShown = sessionStorage.getItem('sgk14-popup-shown');
       
-      if (!popupClosed) {
-        const timer = setTimeout(() => {
-          setShowModal(true);
-        }, 6000); // Show modal after 6 seconds
+      if (!popupShown) {
+        const showPopup = () => {
+          try {
+            setShowModal(true);
+            sessionStorage.setItem('sgk14-popup-shown', 'true');
+          } catch (error) {
+            console.error('Error showing popup:', error);
+            // Retry once after 1 second
+            setTimeout(() => {
+              try {
+                setShowModal(true);
+                sessionStorage.setItem('sgk14-popup-shown', 'true');
+              } catch (retryError) {
+                console.error('Retry failed for popup:', retryError);
+              }
+            }, 1000);
+          }
+        };
 
+        const timer = setTimeout(showPopup, 7000); // Show modal after 7 seconds
         return () => clearTimeout(timer);
       }
     }
@@ -34,8 +49,7 @@ const Index = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    // Set session storage flag to prevent showing again in same session
-    sessionStorage.setItem('popupClosed', 'true');
+    // Session flag is already set when modal is shown, so we keep it intact
   };
 
   return (
