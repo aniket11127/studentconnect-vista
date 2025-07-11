@@ -1,7 +1,7 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
-
+import { ThemeProvider } from './components/ui/theme-provider';
 import { AuthProvider } from './hooks/useAuth';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ProtectedEnrolledRoute from './components/auth/ProtectedEnrolledRoute';
@@ -35,6 +35,7 @@ import './App.css';
 
 function App() {
   return (
+    <ThemeProvider defaultTheme="light" storageKey="sgk14-theme">
       <AuthProvider>
         <Router>
           <div className="flex flex-col min-h-screen">
@@ -110,6 +111,7 @@ function App() {
           <Toaster />
         </Router>
       </AuthProvider>
+    </ThemeProvider>
   );
 }
 
